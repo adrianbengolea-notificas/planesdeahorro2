@@ -18,29 +18,33 @@ export async function continueConversation(history: ChatMessage[]): Promise<Chat
     const caseData = assistantOutput.structuredData as CaseEvaluation;
     
     try {
-      // Guardar en Firestore y luego enviar email
+      // 1. Guardar en Firestore. Esta es la parte crítica para el usuario.
       const { firestore } = initializeFirebase();
       const caseEvaluationsCollection = collection(firestore, 'case_evaluations');
       
-      // Await es necesario para asegurar que el guardado ocurra antes de enviar el email
-      // y para poder capturar el error y notificar al usuario en el chat.
       await addDoc(caseEvaluationsCollection, {
         ...caseData,
         createdAt: serverTimestamp(),
         status: 'pendiente de revisión',
       });
 
-      // Enviar email solo después de que el guardado fue exitoso
-      await sendCaseEvaluationEmail(caseData);
-
     } catch (error) {
-      console.error("Error al guardar en Firestore o enviar el email:", error);
-      // Devuelve un mensaje de error al usuario en la interfaz de chat si algo falla.
+      console.error("Error al guardar el caso en Firestore:", error);
+      // Si Firestore falla, es un error crítico. Notificar al usuario.
       return {
         id: `error-${Date.now()}`,
         role: 'system',
-        content: 'Hubo un error al procesar y guardar tu caso. Por favor, intenta de nuevo más tarde.',
+        content: 'Hubo un error al guardar tu caso. Por favor, intenta de nuevo más tarde o contacta al estudio directamente.',
       };
+    }
+
+    // 2. Enviar el email. Esto es una notificación interna.
+    // Si falla, no debería mostrar un error al usuario, ya que su caso fue guardado.
+    try {
+        await sendCaseEvaluationEmail(caseData);
+    } catch (emailError) {
+        // Registrar el error para monitoreo, pero no interrumpir el flujo del usuario.
+        console.error("Error al enviar el email de notificación del caso:", emailError);
     }
   }
 
