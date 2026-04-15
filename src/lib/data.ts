@@ -1,4 +1,4 @@
-import type { Ruling, Article, FAQ, FrequentProblem } from './types';
+import type { Article, FAQ, FrequentProblem } from './types';
 
 export const frequentProblems: FrequentProblem[] = [
   {
@@ -30,53 +30,6 @@ export const frequentProblems: FrequentProblem[] = [
     slug: 'aumento-cuota',
     title: 'Aumento Excesivo de Cuota',
     description: 'Reclamos por aumentos desmedidos en el valor de la cuota mensual del plan.',
-  },
-];
-
-export const latestRulings: Ruling[] = [
-  {
-    slug: 'fallo-medida-cautelar-aumento-cuota-2024',
-    title: 'Medida Cautelar Favorable por Aumento de Cuota en Plan de Ahorro',
-    summary:
-      'Se obtiene medida cautelar que ordena a la administradora readecuar el valor de la cuota a valores de Diciembre de 2023, protegiendo al consumidor de aumentos desproporcionados.',
-    court: 'Juzgado de Primera Instancia en lo Civil y Comercial de La Plata',
-    date: '2024-05-15',
-    tags: ['medida cautelar', 'aumento de cuota', 'protección al consumidor'],
-    content: `
-### HECHOS
-El actor, suscriptor de un plan de ahorro para la adquisición de un vehículo automotor, inició acción de amparo contra la administradora del plan debido a los aumentos exponenciales en el valor de la cuota mensual, que se tornaron de imposible cumplimiento. Argumentó que los aumentos superaban ampliamente los índices de inflación y la variación de su propio salario.
-
-### DECISIÓN
-El juez a cargo del Juzgado de Primera Instancia en lo Civil y Comercial de La Plata hizo lugar a la medida cautelar solicitada. Se consideró que existía verosimilitud en el derecho invocado por el actor y peligro en la demora, dado que la continuidad de los aumentos podría llevar a la pérdida del plan o al secuestro del vehículo.
-
-### RESOLUCIÓN
-Se ordenó a la administradora del plan de ahorro:
-1.  **Retrotraer el valor de la cuota** al monto vigente en Diciembre de 2023.
-2.  Aplicar para los futuros aumentos el **Índice de Variación Salarial (IVS)** publicado por el INDEC, en lugar del valor móvil del vehículo.
-3.  Abstenerse de iniciar cualquier acción de ejecución o secuestro prendario mientras dure el proceso.
-
-Este fallo representa un importante precedente para miles de ahorristas en situaciones similares, estableciendo un límite a la discrecionalidad de las administradoras para fijar el valor de las cuotas.
-    `,
-  },
-  {
-    slug: 'fallo-nulidad-clausula-gastos-administrativos',
-    title: 'Nulidad de Cláusula de Gastos Administrativos Excesivos',
-    summary:
-      'La Cámara de Apelaciones declara la nulidad de una cláusula contractual que imponía gastos administrativos y de seguro desproporcionados, ordenando el reintegro al consumidor.',
-    court: 'Cámara de Apelaciones de Córdoba, Sala II',
-    date: '2024-04-22',
-    tags: ['cláusulas abusivas', 'gastos administrativos', 'reintegro'],
-    content: 'Contenido completo del fallo sobre la nulidad de la cláusula de gastos administrativos...',
-  },
-  {
-    slug: 'fallo-demora-entrega-vehiculo-2023',
-    title: 'Condena por Demora Injustificada en la Entrega del Vehículo',
-    summary:
-      'Un tribunal de Rosario condena a una administradora y a la automotriz a indemnizar a un cliente por daño moral y punitivo debido a una demora de más de 12 meses en la entrega del vehículo adjudicado.',
-    court: 'Tribunales Provinciales de Rosario, Circuito N°2',
-    date: '2023-11-30',
-    tags: ['demora en la entrega', 'daño moral', 'daño punitivo'],
-    content: 'Contenido completo del fallo sobre la demora en la entrega del vehículo...',
   },
 ];
 

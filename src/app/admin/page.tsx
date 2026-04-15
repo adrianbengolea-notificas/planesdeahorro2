@@ -44,7 +44,9 @@ export default function AdminDashboardPage() {
              <p className="text-sm text-muted-foreground mb-4">
               Mantenga la sección de jurisprudencia actualizada con las últimas novedades.
             </p>
-            <Button variant="secondary" disabled>Próximamente</Button>
+            <Button asChild>
+              <Link href="/admin/fallos">Gestionar Fallos</Link>
+            </Button>
           </CardContent>
         </Card>
         

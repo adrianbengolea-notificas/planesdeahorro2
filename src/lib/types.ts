@@ -1,11 +1,17 @@
-export interface Ruling {
+import type { Timestamp } from 'firebase/firestore';
+
+export interface Fallo {
+  id: string; // Document ID from Firestore
   slug: string;
   title: string;
   summary: string;
-  court: string;
-  date: string;
+  tribunal: string;
+  date: string; // ISO date string
   tags: string[];
   content: string;
+  published: boolean;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
 }
 
 export interface Article {

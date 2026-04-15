@@ -1,32 +1,48 @@
-import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
-import { latestRulings } from '@/lib/data';
+'use client';
+
+import { notFound, useParams } from 'next/navigation';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { collection, query, where, limit } from 'firebase/firestore';
+import type { Fallo } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Gavel, Tag } from 'lucide-react';
+import { Calendar, Gavel, Loader2, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 
-type Props = {
-  params: { slug: string };
-};
+export default function RulingDetailPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const firestore = useFirestore();
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const ruling = latestRulings.find((p) => p.slug === params.slug);
+  const falloQuery = useMemoFirebase(() => {
+    if (!firestore || !slug) return null;
+    return query(
+      collection(firestore, 'fallos'),
+      where('slug', '==', slug),
+      where('published', '==', true),
+      limit(1)
+    );
+  }, [firestore, slug]);
 
-  if (!ruling) {
-    return {
-      title: 'Fallo no encontrado',
-    };
+  const { data: fallos, isLoading } = useCollection<Fallo>(falloQuery);
+  const ruling = fallos?.[0];
+
+  if (isLoading) {
+    return (
+        <div className="bg-card py-12 md:py-20">
+            <div className="container mx-auto px-4 max-w-4xl">
+                <Skeleton className="h-10 w-3/4 mb-4" />
+                <Skeleton className="h-6 w-1/2 mb-6" />
+                <div className="space-y-4 mt-8">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                </div>
+            </div>
+        </div>
+    );
   }
-
-  return {
-    title: `${ruling.title} | JurisPlan`,
-    description: ruling.summary,
-  };
-}
-
-export default function RulingDetailPage({ params }: { params: { slug: string } }) {
-  const ruling = latestRulings.find((p) => p.slug === params.slug);
 
   if (!ruling) {
     notFound();
@@ -41,11 +57,11 @@ export default function RulingDetailPage({ params }: { params: { slug: string } 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Gavel className="h-4 w-4" />
-                <span>{ruling.court}</span>
+                <span>{ruling.tribunal}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                <time dateTime={ruling.date}>{new Date(ruling.date).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+                <time dateTime={ruling.date}>{new Date(ruling.date).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</time>
               </div>
             </div>
             <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -72,10 +88,4 @@ export default function RulingDetailPage({ params }: { params: { slug: string } 
       </div>
     </div>
   );
-}
-
-export async function generateStaticParams() {
-  return latestRulings.map((post) => ({
-    slug: post.slug,
-  }));
 }

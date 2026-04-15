@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/accordion';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, FileText, Gavel, ShieldQuestion } from 'lucide-react';
-import { latestRulings, doctrinalArticles, frequentProblems, faqs } from '@/lib/data';
+import { doctrinalArticles, frequentProblems, faqs } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function Home() {
@@ -85,26 +85,8 @@ export default function Home() {
           <h2 className="font-headline text-3xl md:text-4xl font-bold text-center text-primary mb-12">
             Jurisprudencia Destacada
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {latestRulings.slice(0, 3).map((ruling) => (
-              <Card key={ruling.slug} className="flex flex-col border-2 border-transparent hover:border-primary transition-colors duration-300">
-                <CardHeader>
-                  <Gavel className="w-8 h-8 mb-2 text-primary" />
-                  <CardTitle className="font-headline text-lg leading-tight">{ruling.title}</CardTitle>
-                  <p className="text-sm text-muted-foreground pt-1">{ruling.court} - {new Date(ruling.date).toLocaleDateString('es-AR')}</p>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground line-clamp-4">{ruling.summary}</p>
-                </CardContent>
-                <CardFooter>
-                   <Button asChild variant="secondary" className="w-full">
-                    <Link href={`/fallos/${ruling.slug}`}>Leer Fallo Completo</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center mt-12">
+          <div className="text-center">
+            <p className="text-muted-foreground mb-4">El contenido de fallos ahora se gestiona dinámicamente.</p>
             <Button asChild>
               <Link href="/fallos">Ver todos los fallos</Link>
             </Button>
