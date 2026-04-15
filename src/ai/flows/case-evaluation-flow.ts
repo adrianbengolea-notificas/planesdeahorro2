@@ -54,7 +54,7 @@ const CaseEvaluationOutputSchema = z.object({
 export type CaseEvaluation = z.infer<typeof CaseEvaluationOutputSchema>;
 
 // Esquema para la salida de la conversación (la respuesta del chat)
-export const ConversationOutputSchema = z.object({
+const ConversationOutputSchema = z.object({
   nextMessage: z.string().describe("El siguiente mensaje del asistente para continuar la conversación."),
   quickReplies: z.array(z.string()).optional().describe("Sugerencias de respuestas rápidas para el usuario."),
   isFinished: z.boolean().describe("Indica si el asistente ha recopilado toda la información y la conversación ha terminado."),
