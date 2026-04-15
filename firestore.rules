@@ -102,9 +102,10 @@ service cloud.firestore {
      * @principle Controls public visibility of content via a document field, with admin-only writes.
      */
     match /fallos/{falloId} {
-      // Public can read published documents; Admins can read any document.
-      // Client-side queries MUST filter for `published == true` for non-admins.
-      allow read: if (resource.data.published == true) || isAdmin();
+      // Public can GET a single document if published, or Admins can get any.
+      allow get: if (resource.data.published == true) || isAdmin();
+      // Public can LIST docs only if they query for published=true. Admins can list all.
+      allow list: if isAdmin() || request.query.where.published == true;
       allow create: if isAdmin();
       allow update, delete: if isAdmin() && resource != null;
     }
@@ -119,7 +120,8 @@ service cloud.firestore {
      * @principle Controls public visibility and ensures relational integrity for authorship.
      */
     match /doctrina/{doctrinaId} {
-      allow read: if (resource.data.published == true) || isAdmin();
+      allow get: if (resource.data.published == true) || isAdmin();
+      allow list: if isAdmin() || request.query.where.published == true;
       // On create, the authorId must match the creating admin's UID.
       allow create: if isAdmin() && request.resource.data.authorId == request.auth.uid;
       // On update, the authorId must not be changed.
@@ -137,7 +139,8 @@ service cloud.firestore {
      * @principle Controls public visibility of content via a document field, with admin-only writes.
      */
     match /faqs/{faqId} {
-      allow read: if (resource.data.published == true) || isAdmin();
+      allow get: if (resource.data.published == true) || isAdmin();
+      allow list: if isAdmin() || request.query.where.published == true;
       allow create: if isAdmin();
       allow update, delete: if isAdmin() && resource != null;
     }
@@ -152,7 +155,8 @@ service cloud.firestore {
      * @principle Controls public visibility of content via a document field, with admin-only writes.
      */
     match /legal_problem_sections/{sectionId} {
-      allow read: if (resource.data.published == true) || isAdmin();
+      allow get: if (resource.data.published == true) || isAdmin();
+      allow list: if isAdmin() || request.query.where.published == true;
       allow create: if isAdmin();
       allow update, delete: if isAdmin() && resource != null;
     }
