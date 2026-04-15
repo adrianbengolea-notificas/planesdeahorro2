@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { AppHeader } from '@/components/header';
 import { AppFooter } from '@/components/footer';
 import { WhatsAppButton } from '@/components/whatsapp-button';
+import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
   title: 'JurisPlan LegalTech - Expertos en Planes de Ahorro',
@@ -27,11 +28,13 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
-        <AppHeader />
-        <main className="flex-grow">{children}</main>
-        <AppFooter />
-        <WhatsAppButton />
-        <Toaster />
+        <FirebaseClientProvider>
+          <AppHeader />
+          <main className="flex-grow">{children}</main>
+          <AppFooter />
+          <WhatsAppButton />
+          <Toaster />
+        </FirebaseClientProvider>
       </body>
     </html>
   );
