@@ -1,3 +1,16 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-background",
+      "description": "An abstract image representing legal concepts and technology",
+      "imageUrl": "https://picsum.photos/seed/jurisplan1/1920/1080",
+      "imageHint": "legal justice"
+    },
+    {
+      "id": "about-me-portrait",
+      "description": "A professional portrait of the lawyer",
+      "imageUrl": "https://picsum.photos/seed/lawyer_portrait/400/400",
+      "imageHint": "professional portrait"
+    }
+  ]
 }
