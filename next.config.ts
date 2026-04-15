@@ -30,6 +30,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    // Las llamadas a la IA pueden tardar más tiempo. Aumentamos el límite.
+    serverActions: {
+      maxDuration: 120,
+    }
+  }
 };
 
 export default nextConfig;
