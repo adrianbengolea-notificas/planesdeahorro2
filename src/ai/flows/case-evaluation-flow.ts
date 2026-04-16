@@ -1,4 +1,4 @@
-'use server';
+import 'server-only';
 /**
  * @fileOverview Flujo de Genkit para la evaluación de casos de planes de ahorro.
  * Este flujo impulsa una conversación de chat para recopilar información y

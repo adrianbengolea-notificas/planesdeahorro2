@@ -1,4 +1,4 @@
-'use server';
+import 'server-only';
 /**
  * @fileOverview This file implements a Genkit flow for drafting an initial outline
  * for a legal doctrine article based on a provided topic or keywords.
