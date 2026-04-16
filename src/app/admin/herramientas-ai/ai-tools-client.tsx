@@ -6,9 +6,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader2 } from 'lucide-react';
-import { summarizeLegalRuling } from '@/ai/flows/summarize-legal-ruling-flow';
-import { draftDoctrineArticleOutline } from '@/ai/flows/draft-doctrine-article-outline.ts';
 import { useToast } from '@/hooks/use-toast';
+import { draftOutlineAction, summarizeRulingAction } from '@/actions/ai-actions';
 
 export function AiToolsClient() {
   const [rulingText, setRulingText] = useState('');
@@ -29,8 +28,9 @@ export function AiToolsClient() {
     startSummarizing(async () => {
       setSummary('');
       try {
-        const result = await summarizeLegalRuling({ rulingText });
-        setSummary(result.summary);
+        const result = await summarizeRulingAction({ rulingText });
+        const formattedResult = `Resumen:\n${result.summary}\n\nEtiquetas: ${result.tags.join(', ')}`;
+        setSummary(formattedResult);
       } catch (error) {
         console.error(error);
         toast({ variant: 'destructive', title: 'Error al generar el resumen.', description: 'Por favor, intente de nuevo más tarde.' });
@@ -46,7 +46,7 @@ export function AiToolsClient() {
     startDrafting(async () => {
       setOutline('');
       try {
-        const result = await draftDoctrineArticleOutline({ topicOrKeywords: topic });
+        const result = await draftOutlineAction({ topicOrKeywords: topic });
         setOutline(result.outline);
       } catch (error) {
         console.error(error);

@@ -22,7 +22,7 @@ import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { deleteDocumentNonBlocking } from '@/firebase/non-blocking-updates';
-import { summarizeLegalRuling } from '@/ai/flows/summarize-legal-ruling-flow';
+import { summarizeRulingAction } from '@/actions/ai-actions';
 
 
 const falloSchema = z.object({
@@ -98,7 +98,7 @@ export function FalloForm({ initialData }: FalloFormProps) {
     }
     startAnalyzing(async () => {
       try {
-        const result = await summarizeLegalRuling({ rulingText: content });
+        const result = await summarizeRulingAction({ rulingText: content });
         form.setValue('summary', result.summary, { shouldValidate: true });
         form.setValue('tags', result.tags.join(', '), { shouldValidate: true });
         toast({
