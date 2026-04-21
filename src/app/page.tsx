@@ -19,7 +19,7 @@ const stats = [
   { value: '+10', label: 'Años de experiencia' },
   { value: '+500', label: 'Consultas atendidas' },
   { value: 'PBA', label: 'Provincia de Buenos Aires' },
-  { value: 'Gratuita', label: 'Primera consulta' },
+  { value: '01', label: 'Contanos tu caso' },
 ];
 
 const differentiators = [
@@ -73,7 +73,7 @@ export default function Home() {
             Abogado — Provincia de Buenos Aires
           </p>
           <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] max-w-4xl">
-            Adrián Bengolea
+            Dr. Adrián Bengolea
             <br />
             <span className="text-accent">Reclamos por planes de ahorro</span>
           </h1>
@@ -87,7 +87,7 @@ export default function Home() {
               size="lg"
               className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base px-8 h-12"
             >
-              <Link href="/evaluar-caso">Evaluar mi Caso Gratis</Link>
+              <Link href="/evaluar-caso">Contanos tu caso</Link>
             </Button>
             <Button
               asChild
@@ -188,14 +188,14 @@ export default function Home() {
 
           <div className="mt-16 pt-10 border-t border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <p className="font-headline text-2xl md:text-3xl font-bold max-w-lg leading-tight">
-              Evaluamos su caso con inteligencia artificial para que llegue mejor preparado.
+              La IA ordena tu relato para que el Dr. Bengolea analice tu situación con la información completa.
             </p>
             <Button
               asChild
               size="lg"
               className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold shrink-0 h-12 px-8"
             >
-              <Link href="/evaluar-caso">Probar Diagnóstico IA</Link>
+              <Link href="/evaluar-caso">Contanos tu caso con IA</Link>
             </Button>
           </div>
         </div>
@@ -268,21 +268,21 @@ export default function Home() {
         </div>
         <div className="relative z-10 container mx-auto px-4 text-center">
           <p className="text-accent font-medium tracking-[0.3em] uppercase text-[11px] mb-6">
-            Consulta Gratuita
+            Contanos tu caso
           </p>
           <h2 className="font-headline text-4xl md:text-6xl font-bold mb-6 max-w-3xl mx-auto leading-tight">
             ¿Listo para defender sus derechos?
           </h2>
           <div className="w-12 h-[2px] bg-accent mx-auto mb-8" />
           <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed">
-            No espere más. Una consulta gratuita y confidencial puede marcar la diferencia en su situación. Evaluamos su caso sin compromiso.
+            No espere más. Un primer contacto confidencial puede marcar la diferencia en su situación. Dejá registrado tu caso sin compromiso.
           </p>
           <Button
             asChild
             size="lg"
             className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg h-14 px-10"
           >
-            <Link href="/evaluar-caso">Iniciar Evaluación Gratuita</Link>
+            <Link href="/evaluar-caso">Contanos tu caso</Link>
           </Button>
         </div>
       </section>

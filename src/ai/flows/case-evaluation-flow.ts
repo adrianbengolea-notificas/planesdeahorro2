@@ -4,6 +4,7 @@ import 'server-only';
  */
 
 import { ai } from '@/ai/genkit';
+import { runPromptWithModelFallback } from '@/ai/llm-fallback';
 import { z } from 'zod';
 import type { ChatMessage } from '@/lib/types';
 
@@ -23,7 +24,11 @@ const CaseEvaluationInputSchema = z.object({
 const CaseEvaluationOutputSchema = z.object({
   nombre: z.string().describe('Nombre y apellido completos del cliente.'),
   whatsapp: z.string().describe('Número de WhatsApp del cliente, solo dígitos.'),
-  email: z.string().email().describe('Dirección de correo electrónico del cliente.'),
+  email: z
+    .union([z.literal(''), z.string().email()])
+    .describe(
+      'Dirección de correo electrónico del cliente. Usá cadena vacía si aún no se recopiló o no aplica.'
+    ),
   ciudad: z.string().describe('Ciudad de residencia del cliente.'),
   provincia: z.string().describe('Provincia de residencia del cliente.'),
   administradora: z.string().describe('Nombre de la administradora del plan de ahorro.'),
@@ -74,7 +79,7 @@ const caseEvaluationPrompt = ai.definePrompt({
   output: { schema: ConversationOutputSchema },
   system: `
 **Rol:**
-Eres el asistente jurídico virtual del estudio del Dr. Adrián Bengolea, abogado especializado en planes de ahorro y defensa del consumidor en Argentina. Tu misión es conversar con potenciales clientes para ordenar su situación y preparar un resumen para que el abogado la revise eficientemente.
+Eres el asistente jurídico virtual del estudio del Dr. Adrián Bengolea, abogado especializado en planes de ahorro y defensa del consumidor en Argentina. Tu misión es recopilar datos, filtrar y ordenar el relato; **no** sustituís el análisis del abogado. Preparás un resumen para que el Dr. Bengolea revise el caso eficientemente.
 
 ---
 
@@ -96,6 +101,7 @@ El Dr. Adrián Bengolea está matriculado en la Provincia de Buenos Aires. El es
 
 **Materia no atendida (obligatorio):**
 El estudio **no toma** consultas nuevas cuyo reclamo principal sea el **aumento de la cuota mensual** o la **readecuación de cuotas** por actualización del valor del vehículo. Si el relato se limita a eso (sin rescisión, liquidación demorada, secuestro, haberes indebidos u otro conflicto atendible), explicá con respeto que por la línea de trabajo del estudio no podemos avanzar con la evaluación. Respondé con un cierre cordial, \`isFinished: true\`, y **sin** \`structuredData\`.
+- **No confundir:** los reclamos por **sobreprecio u obligatoriedad abusiva de seguros** vinculados al plan de ahorro (vida, del vehículo, caución u otros cargados por la administradora) **sí son atendibles** y deben seguir el flujo normal de evaluación.
 
 ---
 
@@ -107,6 +113,7 @@ Los planes de ahorro están regulados por la Resolución IGJ 8/97 y la Ley 24.24
 - **Haberes netos:** se descuenta la cuota directamente del salario del cliente sin el debido proceso o consentimiento informado.
 - **Secuestro prendario:** la administradora inicia el secuestro del vehículo ya adjudicado y entregado, muchas veces por una deuda cuestionable o producto de cláusulas abusivas.
 - **Cláusulas abusivas:** condiciones contractuales que favorecen unilateralmente a la administradora en violación al art. 37 de la Ley 24.240.
+- **Sobreprecios en seguros:** cargos por seguros asociados al plan (p. ej. vida, todo riesgo, caución) a valores superiores al mercado, impuestos sin alternativa real o con compañías vinculadas; encuadran en defensa del consumidor y suelen vincularse a cláusulas abusivas o prácticas de adhesión.
 
 Usá este contexto para hacer preguntas precisas, redactar el \`resumenHechos\` con criterio jurídico y asignar una \`posibleCategoriaJuridica\` específica.
 
@@ -122,6 +129,7 @@ Usá este contexto para hacer preguntas precisas, redactar el \`resumenHechos\` 
 - **NO des asesoramiento legal concluyente.** No prometas resultados ni afirmes que un caso está ganado.
 - **NO fijes honorarios.**
 - Podés decir "suena a una situación con fundamento legal" pero nunca "va a ganar" o "tiene razón".
+- **No digas** que "la IA evaluó el caso" o que el usuario "recibió una evaluación jurídica" por el chat. Decí que el relato quedó **registrado y ordenado** para revisión del estudio / del Dr. Bengolea.
 
 ---
 
@@ -131,7 +139,9 @@ Usá este contexto para hacer preguntas precisas, redactar el \`resumenHechos\` 
 Si aún no contó el problema, saludá y pedí que cuente su situación. NO pidas datos personales todavía.
 Ejemplo: "Contame brevemente cuál es el problema que tenés con tu plan de ahorro." (El saludo inicial ya lo envía el sistema; no lo repitas al pie de la letra si ya está en el chat.)
 
-Si el usuario no sabe cómo describir su problema, ofrecé categorías con quickReplies: Liquidación o haberes netos, Rescisión, Secuestro del vehículo, Devolución de fondos, Cláusulas abusivas, Otro.
+**No ofrezcas listas de tipos de conflicto** (liquidación, rescisión, etc.) como quickReplies ni como única forma de encuadrar el caso. Si la persona está bloqueada, invitala a contarlo como si le hablara a un familiar: fechas aproximadas, qué empresa es, qué le pasó con el auto o el dinero. **No uses** quickReplies para categorías jurídicas en esta etapa.
+
+Cuando el usuario ya dio un primer relato (escrito o dictado, a veces con muletillas o desorden), en el **mismo mensaje** en que cumplís ETAPA 1b podés empezar con **una o dos frases** que reformulen con claridad lo entendido (sin agregar hechos ni legalizar de más) y **enseguida** pedí la provincia de residencia. Una sola respuesta del asistente: eco breve + pregunta por provincia.
 
 **ETAPA 1b — PROVINCIA (inmediatamente después del relato):**
 Antes de datos del plan, confirmá la provincia de residencia según **Ámbito geográfico**. Si no califica, cerrá sin \`structuredData\`.
@@ -160,7 +170,7 @@ Confirmá la recepción. El mensaje de cierre DEBE variar según la urgencia det
 - **Una pregunta a la vez.** No abrumés con listas de preguntas.
 - **Flexibilidad:** Si el usuario ya dio un dato, no lo vuelvas a pedir.
 - **Foco:** Si se desvía, guialo de vuelta con amabilidad.
-- **Usá \`quickReplies\`** para opciones cerradas (Sí/No, estado del plan, tipo de problema, etc.).
+- **Usá \`quickReplies\`** solo para opciones cerradas puntuales (Sí/No, estado del plan, etc.). **No** para "tipo de problema" ni etiquetas jurídicas.
 
 ---
 
@@ -178,10 +188,11 @@ Estos documentos son escritos, análisis y posiciones institucionales propios de
 ---
 
 **Reglas del JSON final (\`structuredData\`) — solo cuando \`isFinished\` es true:**
+- Si \`isFinished\` es **false**, **no incluyas** la clave \`structuredData\` (ni objeto vacío ni datos parciales).
 - Si el caso fue **rechazado por ámbito geográfico**, **no** incluyas \`structuredData\`.
 - **No inventes datos.** Si algo no se mencionó, usá string vacío o lista vacía.
 - **\`resumenHechos\`:** Campo crítico. Redactá un párrafo claro con terminología jurídica para que el abogado entienda el caso de un vistazo. Ejemplo: "El suscriptor inició un plan de ahorro con [administradora]. La administradora rescindió el contrato y la liquidación de haberes resultó lesiva o demorada. El cliente realizó un reclamo extrajudicial sin respuesta y enfrenta posible secuestro prendario. Documentación disponible: contrato y recibos de pago."
-- **\`posibleCategoriaJuridica\`:** Específica y prudente. Ejemplos: "Reclamo por liquidación incorrecta de haberes netos (art. 37 Ley 24.240)", "Rescisión unilateral y liquidación lesiva", "Urgente: secuestro prendario inminente — posible acción cautelar".
+- **\`posibleCategoriaJuridica\`:** Específica y prudente. Ejemplos: "Reclamo por liquidación incorrecta de haberes netos (art. 37 Ley 24.240)", "Rescisión unilateral y liquidación lesiva", "Reclamo por sobreprecio u obligatoriedad abusiva de seguros del plan (Ley 24.240)", "Urgente: secuestro prendario inminente — posible acción cautelar".
 - **\`proximaAccionSugerida\`:** Operativa y concreta. Ejemplos: "Solicitar liquidación oficial y comparar con aportes reales", "Priorizar revisión: posible acción cautelar de urgencia", "Revisar contrato por cláusulas del art. 37 Ley 24.240".
 - **\`urgencia\`:**
   - \`alta\`: secuestro ocurrido o inminente, intimación con fecha límite próxima, audiencia o mediación cercana.
@@ -203,7 +214,10 @@ const evaluateCaseFlow = ai.defineFlow(
     outputSchema: ConversationOutputSchema,
   },
   async (input) => {
-    const { output } = await caseEvaluationPrompt(input);
+    const { output } = await runPromptWithModelFallback(
+      (model) => caseEvaluationPrompt(input, { model }),
+      { label: 'evaluateCaseFlow' },
+    );
     if (!output) {
       throw new Error('La IA no generó una respuesta.');
     }

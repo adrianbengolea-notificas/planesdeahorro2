@@ -39,7 +39,7 @@ export function ProblemPageLayout({ title, children }: ProblemPageLayoutProps) {
             <aside className="lg:col-span-1">
               <div className="sticky top-24 border border-border bg-card p-8">
                 <p className="text-[11px] font-medium tracking-[0.25em] uppercase text-accent mb-4">
-                  Consulta Gratuita
+                  Contanos tu caso
                 </p>
                 <h2 className="font-headline text-2xl font-bold text-primary mb-4 leading-tight">
                   ¿Tiene este problema?
@@ -52,10 +52,10 @@ export function ProblemPageLayout({ title, children }: ProblemPageLayoutProps) {
                   size="lg"
                   className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
                 >
-                  <Link href="/evaluar-caso">Evaluar mi Caso Gratis</Link>
+                  <Link href="/evaluar-caso">Contanos tu caso</Link>
                 </Button>
                 <p className="text-center text-xs text-muted-foreground mt-4">
-                  Consulta 100% confidencial.
+                  100% confidencial.
                 </p>
               </div>
             </aside>

@@ -4,13 +4,12 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { AppHeader } from '@/components/header';
 import { ConditionalFooter } from '@/components/conditional-footer';
-import { WhatsAppButton } from '@/components/whatsapp-button';
 import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Adrián Bengolea – Reclamos por planes de ahorro',
-    template: '%s | Adrián Bengolea – Reclamos por planes de ahorro',
+    default: 'Dr. Adrián Bengolea – Reclamos por planes de ahorro',
+    template: '%s | Dr. Adrián Bengolea – Reclamos por planes de ahorro',
   },
   description:
     'Reclamos y asesoramiento legal en conflictos con planes de ahorro automotriz en Argentina. Liquidación, rescisión, cláusulas abusivas y más.',
@@ -36,7 +35,6 @@ export default function RootLayout({
           <AppHeader />
           <main className="flex-grow">{children}</main>
           <ConditionalFooter />
-          <WhatsAppButton />
           <Toaster />
         </FirebaseClientProvider>
       </body>

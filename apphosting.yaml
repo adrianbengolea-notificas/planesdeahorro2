@@ -5,3 +5,12 @@ runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
+
+# Genkit (`src/ai/genkit.ts`) usa GEMINI_API_KEY, GOOGLE_API_KEY o GOOGLE_GENAI_API_KEY en runtime.
+# Crear el secreto antes del próximo rollout: `firebase apphosting:secrets:set GEMINI_API_KEY`
+# (o definir la variable en consola: App Hosting → tu backend → Settings → Environment).
+env:
+  - variable: GEMINI_API_KEY
+    secret: GEMINI_API_KEY
+    availability:
+      - RUNTIME

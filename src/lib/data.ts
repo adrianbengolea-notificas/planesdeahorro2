@@ -276,12 +276,12 @@ export const faqSections: FaqSection[] = [
   {
     id: 'estudio',
     title: 'Consultá con el estudio',
-    description: 'Solo sobre cómo trabaja el estudio: la consulta inicial sin cargo y qué podés esperar.',
+    description: 'Solo sobre cómo trabaja el estudio: el primer contacto y qué podés esperar.',
     items: [
       {
-        question: '¿La primera consulta tiene costo?',
+        question: '¿El primer contacto con el estudio tiene costo?',
         answer:
-          'No. La primera evaluación de tu caso es gratuita y sin compromiso. Ahí entendemos tu situación, te orientamos si podemos intervenir y, si encaja, te explicamos cómo serían los honorarios para las etapas siguientes.\n\nLas dudas sobre cómo funciona el plan de ahorro en general están repartidas en las secciones de arriba; esta parte es solo el canal con el estudio.',
+          'No. Podés iniciar el contacto con el estudio sin compromiso. El asistente recopila y ordena la información para que el Dr. Bengolea analice tu situación; ahí vemos si podemos intervenir y, si encaja, te explicamos cómo serían los honorarios para las etapas siguientes.\n\nLas dudas sobre cómo funciona el plan de ahorro en general están repartidas en las secciones de arriba; esta parte es solo el canal con el estudio.',
         highlight: true,
       },
     ],

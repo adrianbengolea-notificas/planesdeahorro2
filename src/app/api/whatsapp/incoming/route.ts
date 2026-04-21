@@ -21,15 +21,15 @@ import type { ChatMessage } from '@/lib/types';
 
 const SESSION_COLLECTION = 'whatsapp_case_sessions';
 
-const PENDING_MENU_TEXT = `Este número atiende más de un servicio. Para la evaluación gratuita de tu plan de ahorro (Dr. Adrián Bengolea, residentes en Provincia de Buenos Aires), respondé:
-1 — Sí, quiero la evaluación
+const PENDING_MENU_TEXT = `Este número atiende más de un servicio. Para contarnos tu caso sobre el plan de ahorro (Dr. Adrián Bengolea, residentes en Provincia de Buenos Aires), respondé:
+1 — Sí, quiero continuar
 2 — No era para este trámite / otro servicio
 
 Si venís de un enlace con la frase "EVAL CASO", podés escribirla y seguimos directo.
 En cualquier momento podés escribir MENU para ver esto de nuevo.`;
 
 const OTHER_SERVICE_TEXT =
-  'Listo. Si este chat no era para el estudio de planes de ahorro, podés usar el mismo número según te indique la otra plataforma. Si más adelante querés la evaluación del plan, escribí MENU.';
+  'Listo. Si este chat no era para el estudio de planes de ahorro, podés usar el mismo número según te indique la otra plataforma. Si más adelante querés contarnos tu caso sobre el plan, escribí MENU.';
 
 type StoredChatMessage = {
   id: string;
@@ -131,7 +131,7 @@ export async function POST(req: NextRequest) {
 
   if (type && type !== 'text' && type !== 'interactive') {
     await send(
-      'Para la evaluación del plan de ahorro necesitamos que escribas en texto (podés describir el problema en una o varias frases).'
+      'Para seguir con tu caso sobre el plan de ahorro necesitamos que escribas en texto (podés describir el problema en una o varias frases).'
     );
     return NextResponse.json({ ok: true });
   }

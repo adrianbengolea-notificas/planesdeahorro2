@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useRef, useEffect, useTransition } from 'react';
+import { useState, useRef, useEffect, useTransition, useCallback } from 'react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Bot, Loader2, Send, User, RotateCcw } from 'lucide-react';
+import { Bot, Loader2, Mic, Send, Square, User, RotateCcw } from 'lucide-react';
 import { continueConversation } from '@/actions/evaluate-case';
+import { validateCaseSpeechTopic } from '@/actions/validate-case-speech-topic';
 import {
   CASE_EVAL_INITIAL_ASSISTANT_CONTENT,
   CASE_EVAL_INITIAL_QUICK_REPLIES,
@@ -15,6 +16,19 @@ import {
 import type { ChatMessage } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { CASE_EVAL_MAX_VOICE_SECONDS, useCaseEvalSpeech } from './use-case-eval-speech';
+
+function formatVoiceCountdown(totalSec: number): string {
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
 
 const initialMessage: ChatMessage = {
   id: 'inicio',
@@ -34,6 +48,24 @@ export function ChatClient() {
   const [isPending, startTransition] = useTransition();
   const [sessionId] = useState<string>(generateSessionId);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const validateSpoken = useCallback(async (spokenText: string) => {
+    const { ok } = await validateCaseSpeechTopic(spokenText);
+    return ok;
+  }, []);
+
+  const {
+    isSupported: voiceSupported,
+    isListening,
+    remainingSec,
+    speechError,
+    setSpeechError,
+    startListening,
+    stopListening,
+    invalidateVoiceSession,
+    liveDisplay,
+  } = useCaseEvalSpeech(setInput, { validateSpoken });
+
+  const fieldValue = isListening ? liveDisplay : input;
 
   useEffect(() => {
     // Auto-scroll to bottom
@@ -46,8 +78,12 @@ export function ChatClient() {
   }, [messages]);
 
   const handleSend = (messageContent?: string) => {
-    const content = (messageContent || input).trim();
+    if (isListening) return;
+
+    const content = (messageContent ?? fieldValue).trim();
     if (!content) return;
+
+    setSpeechError(null);
 
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
@@ -68,8 +104,12 @@ export function ChatClient() {
   const isFinished = messages[messages.length - 1]?.isFinished || false;
 
   const handleReset = () => {
-      setMessages([initialMessage]);
-  }
+    invalidateVoiceSession();
+    stopListening();
+    setSpeechError(null);
+    setMessages([initialMessage]);
+    setInput('');
+  };
 
   return (
     <Card className="shadow-lg w-full max-w-4xl mx-auto">
@@ -153,37 +193,109 @@ export function ChatClient() {
         </ScrollArea>
       </CardContent>
       <CardFooter className="flex-col items-start gap-4 pt-4">
-        {!isFinished && messages[messages.length - 1]?.role === 'assistant' && messages[messages.length - 1].quickReplies && (
+        {!isFinished &&
+          messages[messages.length - 1]?.role === 'assistant' &&
+          (messages[messages.length - 1].quickReplies?.length ?? 0) > 0 && (
             <div className="flex flex-wrap gap-2">
-                {messages[messages.length - 1].quickReplies?.map((reply) => (
-                    <Button key={reply} variant="outline" size="sm" onClick={() => handleSend(reply)} disabled={isPending}>
-                        {reply}
-                    </Button>
-                ))}
-            </div>
-        )}
-       
-        {!isFinished && (
-             <form
-                onSubmit={(e) => {
-                e.preventDefault();
-                handleSend();
-                }}
-                className="flex w-full items-center space-x-2"
-            >
-                <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Escribe tu respuesta..."
-                disabled={isPending}
-                />
-                <Button type="submit" size="icon" disabled={isPending || !input.trim()}>
-                {isPending ? <Loader2 className="animate-spin" /> : <Send />}
-                <span className="sr-only">Enviar</span>
+              {messages[messages.length - 1].quickReplies?.map((reply) => (
+                <Button
+                  key={reply}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleSend(reply)}
+                  disabled={isPending || isListening}
+                >
+                  {reply}
                 </Button>
-            </form>
+              ))}
+            </div>
+          )}
+
+        {speechError && (
+          <p className="text-sm text-destructive w-full" role="alert">
+            {speechError}
+          </p>
         )}
 
+        {!isFinished && (
+          <TooltipProvider delayDuration={300}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSend();
+              }}
+              className="flex w-full flex-col gap-2"
+            >
+              <div className="flex w-full items-center gap-2">
+                <Input
+                  value={fieldValue}
+                  onChange={(e) => {
+                    if (!isListening) setInput(e.target.value);
+                  }}
+                  readOnly={isListening}
+                  placeholder={
+                    isListening
+                      ? 'Dictando… al terminar validamos que sea sobre tu plan de ahorro.'
+                      : 'Escribí tu respuesta…'
+                  }
+                  disabled={isPending}
+                  className="flex-1 min-w-0"
+                  aria-label="Tu mensaje"
+                />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant={isListening ? 'secondary' : 'outline'}
+                      className={cn(
+                        'shrink-0',
+                        isListening && 'ring-2 ring-primary ring-offset-2 ring-offset-background animate-pulse'
+                      )}
+                      disabled={isPending || !voiceSupported}
+                      onClick={() => (isListening ? stopListening() : startListening(fieldValue))}
+                      aria-pressed={isListening}
+                      aria-label={
+                        isListening ? 'Detener dictado' : 'Dictar con el micrófono (máximo 2 minutos)'
+                      }
+                    >
+                      {isListening ? <Square className="h-4 w-4 fill-current" /> : <Mic className="h-4 w-4" />}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-xs">
+                    {voiceSupported ? (
+                      <p>
+                        Dictado por voz: hasta {CASE_EVAL_MAX_VOICE_SECONDS / 60} minutos (Chrome o Edge). Al cortar,
+                        validamos que el relato sea sobre planes de ahorro; si no, no se agrega al mensaje.
+                      </p>
+                    ) : (
+                      <p>Tu navegador no permite dictado. Escribí el mensaje o probá con Chrome o Edge.</p>
+                    )}
+                  </TooltipContent>
+                </Tooltip>
+                <Button
+                  type="submit"
+                  size="icon"
+                  disabled={isPending || isListening || !fieldValue.trim()}
+                >
+                  {isPending ? <Loader2 className="animate-spin" /> : <Send />}
+                  <span className="sr-only">Enviar</span>
+                </Button>
+              </div>
+              {isListening && (
+                <p className="text-xs text-muted-foreground tabular-nums" aria-live="polite">
+                  Grabando: {formatVoiceCountdown(remainingSec)} · se detiene sola al llegar a 0:00
+                </p>
+              )}
+              {!voiceSupported && (
+                <p className="text-xs text-muted-foreground">
+                  El dictado por voz no está disponible en este navegador; podés escribir el relato. En Chrome o Edge suele
+                  estar disponible.
+                </p>
+              )}
+            </form>
+          </TooltipProvider>
+        )}
       </CardFooter>
     </Card>
   );

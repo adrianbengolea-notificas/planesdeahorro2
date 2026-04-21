@@ -56,7 +56,7 @@ export async function sendClientCaseUpdateEmail(options: {
 
   switch (options.kind) {
     case 'en_analisis':
-      subject = 'Adrián Bengolea — Estamos revisando tu consulta';
+      subject = 'Dr. Adrián Bengolea — Estamos revisando tu consulta';
       coreHtml = `
         <p>Hola ${safeName},</p>
         <p>Te confirmamos que recibimos los datos de tu consulta y el equipo está revisando tu caso.</p>
@@ -64,28 +64,28 @@ export async function sendClientCaseUpdateEmail(options: {
       `;
       break;
     case 'aceptado':
-      subject = 'Adrián Bengolea — Próximos pasos en tu consulta';
+      subject = 'Dr. Adrián Bengolea — Próximos pasos en tu consulta';
       coreHtml = `
         <p>Hola ${safeName},</p>
         <p>Gracias por la información enviada. Podemos avanzar con el siguiente paso respecto de tu consulta.</p>
       `;
       break;
     case 'rechazado':
-      subject = 'Adrián Bengolea — Actualización sobre tu consulta';
+      subject = 'Dr. Adrián Bengolea — Actualización sobre tu consulta';
       coreHtml = `
         <p>Hola ${safeName},</p>
         <p>Te agradecemos el contacto. A continuación te detallamos la respuesta del estudio:</p>
       `;
       break;
     case 'derivado':
-      subject = 'Adrián Bengolea — Información sobre tu consulta';
+      subject = 'Dr. Adrián Bengolea — Información sobre tu consulta';
       coreHtml = `
         <p>Hola ${safeName},</p>
         <p>Te compartimos la siguiente información respecto de tu consulta:</p>
       `;
       break;
     case 'cerrado':
-      subject = 'Adrián Bengolea — Cierre de tu consulta';
+      subject = 'Dr. Adrián Bengolea — Cierre de tu consulta';
       coreHtml = `
         <p>Hola ${safeName},</p>
         <p>Damos por finalizada la gestión inicial vinculada a tu consulta en este canal.</p>
@@ -103,7 +103,7 @@ export async function sendClientCaseUpdateEmail(options: {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: `Adrián Bengolea <${from}>`,
+      from: `Dr. Adrián Bengolea <${from}>`,
       to: [options.to.trim()],
       subject,
       html: body,
@@ -136,7 +136,7 @@ export async function sendCaseEvaluationEmail(caseData: CaseEvaluation) {
 
   const body = `
     <h1>Nueva Evaluación de Caso Recibida</h1>
-    <p>Se ha recibido una nueva consulta a través del asistente de evaluación de Adrián Bengolea.</p>
+    <p>Se ha recibido una nueva consulta a través del asistente de evaluación del Dr. Adrián Bengolea.</p>
     
     <h2>Datos del Cliente</h2>
     <ul>
@@ -175,7 +175,7 @@ export async function sendCaseEvaluationEmail(caseData: CaseEvaluation) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: `Adrián Bengolea <${FROM_EMAIL}>`,
+      from: `Dr. Adrián Bengolea <${FROM_EMAIL}>`,
       to: [TO_EMAIL],
       subject: subject,
       html: body,

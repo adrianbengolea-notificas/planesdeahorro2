@@ -4,7 +4,7 @@ import 'server-only';
  */
 
 import { ai } from '@/ai/genkit';
-import { withLlmRetry } from '@/ai/llm-retry';
+import { runPromptWithModelFallback } from '@/ai/llm-fallback';
 import { z } from 'genkit';
 
 const SummarizeDoctrineDocumentInputSchema = z.object({
@@ -65,7 +65,7 @@ const summarizeDoctrineDocumentFlow = ai.defineFlow(
     outputSchema: SummarizeDoctrineDocumentOutputSchema,
   },
   async (input) => {
-    const { output } = await withLlmRetry(() => doctrinePrompt(input), {
+    const { output } = await runPromptWithModelFallback((model) => doctrinePrompt(input, { model }), {
       label: 'summarizeDoctrineDocument',
     });
     return output!;

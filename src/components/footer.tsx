@@ -8,7 +8,7 @@ const footerSections = [
       { label: 'Inicio', href: '/' },
       { label: 'Problemas Frecuentes', href: '/#problemas' },
       { label: 'Sobre Mí', href: '/sobre-mi' },
-      { label: 'Evaluar Caso', href: '/evaluar-caso' },
+      { label: 'Contanos tu caso', href: '/evaluar-caso' },
     ],
   },
   {
@@ -65,7 +65,7 @@ export function AppFooter() {
         </div>
         <div className="mt-14 border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/35">
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <span>&copy; {new Date().getFullYear()} Adrián Bengolea. Todos los derechos reservados.</span>
+            <span>&copy; {new Date().getFullYear()} Dr. Adrián Bengolea. Todos los derechos reservados.</span>
             <Link
               href="/admin"
               className="text-[10px] text-white/25 hover:text-white/45 transition-colors"
@@ -74,7 +74,7 @@ export function AppFooter() {
             </Link>
           </p>
           <p className="text-center md:text-right max-w-sm">
-            La información en este sitio no constituye asesoramiento legal. Para una evaluación de su caso, contáctenos.
+            La información en este sitio no constituye asesoramiento legal. Para analizar su situación con el estudio, contáctenos.
           </p>
         </div>
       </div>

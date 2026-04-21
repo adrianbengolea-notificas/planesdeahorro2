@@ -1,11 +1,25 @@
 import 'server-only';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { cert, getApps, initializeApp, type App } from 'firebase-admin/app';
+import {
+  applicationDefault,
+  cert,
+  getApps,
+  initializeApp,
+  type App,
+} from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 import { firebaseConfig } from '@/firebase/config';
+
+function hasExplicitServiceAccountEnv(): boolean {
+  return Boolean(
+    process.env.FIREBASE_SERVICE_ACCOUNT_JSON?.trim() ||
+      process.env.FIREBASE_SERVICE_ACCOUNT_PATH?.trim() ||
+      process.env.GOOGLE_APPLICATION_CREDENTIALS?.trim(),
+  );
+}
 
 function loadServiceAccountJson(): Record<string, string> {
   const inline = process.env.FIREBASE_SERVICE_ACCOUNT_JSON?.trim();
@@ -39,6 +53,23 @@ function loadServiceAccountJson(): Record<string, string> {
   );
 }
 
+function resolveAdminProjectId(): string {
+  const fromFirebaseConfig = process.env.FIREBASE_CONFIG?.trim();
+  if (fromFirebaseConfig) {
+    try {
+      const parsed = JSON.parse(fromFirebaseConfig) as { projectId?: string };
+      if (parsed.projectId) return parsed.projectId;
+    } catch {
+      /* ignorar JSON inválido */
+    }
+  }
+  return (
+    process.env.GOOGLE_CLOUD_PROJECT?.trim() ||
+    process.env.GCLOUD_PROJECT?.trim() ||
+    firebaseConfig.projectId
+  );
+}
+
 /**
  * App Admin SDK (solo servidor).
  */
@@ -48,14 +79,28 @@ export function getAdminApp(): App {
     return existing;
   }
 
-  const parsed = loadServiceAccountJson();
+  if (hasExplicitServiceAccountEnv()) {
+    const parsed = loadServiceAccountJson();
+    return initializeApp({
+      credential: cert({
+        projectId: parsed.project_id,
+        clientEmail: parsed.client_email,
+        privateKey: parsed.private_key?.replace(/\\n/g, '\n'),
+      }),
+    });
+  }
+
+  // Cloud Run / App Hosting: cuenta de servicio del runtime vía metadata (ADC).
+  const projectId = resolveAdminProjectId();
+  if (!projectId) {
+    throw new Error(
+      'Admin SDK sin credencial explícita: falta GOOGLE_CLOUD_PROJECT / GCLOUD_PROJECT o `projectId` en la config de Firebase. En local usá FIREBASE_SERVICE_ACCOUNT_JSON o `gcloud auth application-default login`.',
+    );
+  }
 
   return initializeApp({
-    credential: cert({
-      projectId: parsed.project_id,
-      clientEmail: parsed.client_email,
-      privateKey: parsed.private_key?.replace(/\\n/g, '\n'),
-    }),
+    credential: applicationDefault(),
+    projectId,
   });
 }
 

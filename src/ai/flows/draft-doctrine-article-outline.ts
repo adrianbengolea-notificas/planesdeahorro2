@@ -9,6 +9,7 @@ import 'server-only';
  */
 
 import { ai } from '@/ai/genkit';
+import { runPromptWithModelFallback } from '@/ai/llm-fallback';
 import { z } from 'genkit';
 
 const DraftDoctrineArticleOutlineInputSchema = z.object({
@@ -56,7 +57,10 @@ const draftDoctrineArticleOutlineFlow = ai.defineFlow(
     outputSchema: DraftDoctrineArticleOutlineOutputSchema,
   },
   async (input) => {
-    const { output } = await draftDoctrineArticleOutlinePrompt(input);
+    const { output } = await runPromptWithModelFallback(
+      (model) => draftDoctrineArticleOutlinePrompt(input, { model }),
+      { label: 'draftDoctrineArticleOutline' },
+    );
     return output!;
   }
 );

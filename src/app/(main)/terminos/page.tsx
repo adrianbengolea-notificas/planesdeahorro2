@@ -4,7 +4,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Términos y Condiciones de Uso',
   description:
-    'Condiciones generales de uso de este sitio (Adrián Bengolea – Reclamos por planes de ahorro): alcance informativo, limitaciones de responsabilidad y normas aplicables en la República Argentina.',
+    'Condiciones generales de uso de este sitio (Dr. Adrián Bengolea – Reclamos por planes de ahorro): alcance informativo, limitaciones de responsabilidad y normas aplicables en la República Argentina.',
 };
 
 const lastUpdated = '19 de abril de 2026';
@@ -26,7 +26,7 @@ export default function TerminosPage() {
           <div className="prose prose-neutral dark:prose-invert max-w-none mt-10">
             <h2 className="font-headline text-xl md:text-2xl text-foreground">1. Titular del sitio</h2>
             <p>
-              El sitio web <strong>Adrián Bengolea – Reclamos por planes de ahorro</strong> es operado con fines
+              El sitio web <strong>Dr. Adrián Bengolea – Reclamos por planes de ahorro</strong> es operado con fines
               profesionales y de información por el Dr. Adrián Bengolea, abogado matriculado en la Provincia de Buenos
               Aires, República Argentina. En adelante,
               &quot;nosotros&quot; o &quot;el

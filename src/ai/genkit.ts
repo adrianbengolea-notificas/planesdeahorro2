@@ -22,6 +22,10 @@ if (plugins.length === 0) {
     console.warn(
       '[genkit] No hay OPENAI_API_KEY ni GEMINI/GOOGLE_API_KEY. Definí al menos una en `.env.local`.',
     );
+  } else {
+    console.error(
+      '[genkit] Sin clave de IA en runtime: definí GEMINI_API_KEY (o GOOGLE_API_KEY) u OPENAI_API_KEY en App Hosting / Cloud Run. Ver `apphosting.yaml`.',
+    );
   }
   plugins.push(openAI());
   plugins.push(googleAI());
@@ -31,6 +35,7 @@ if (plugins.length === 0) {
 const useOpenAI = Boolean(openaiApiKey) && process.env.LLM_PROVIDER !== 'google';
 
 const openaiModelId = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+/** `gemini-2.0-flash` dejó de estar disponible para cuentas/claves nuevas en la API pública. Override: `GEMINI_MODEL`. */
 const geminiModelId = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 
 const defaultModel = useOpenAI

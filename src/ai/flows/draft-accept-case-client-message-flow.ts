@@ -5,6 +5,7 @@ import 'server-only';
  */
 
 import { ai } from '@/ai/genkit';
+import { runPromptWithModelFallback } from '@/ai/llm-fallback';
 import { z } from 'zod';
 
 const DraftAcceptCaseClientMessageInputSchema = z.object({
@@ -79,7 +80,10 @@ const draftAcceptCaseClientMessageFlow = ai.defineFlow(
     outputSchema: DraftAcceptCaseClientMessageOutputSchema,
   },
   async (input) => {
-    const { output } = await draftAcceptCaseClientMessagePrompt(input);
+    const { output } = await runPromptWithModelFallback(
+      (model) => draftAcceptCaseClientMessagePrompt(input, { model }),
+      { label: 'draftAcceptCaseClientMessage' },
+    );
     if (!output?.message?.trim()) {
       throw new Error('La IA no generó el mensaje.');
     }

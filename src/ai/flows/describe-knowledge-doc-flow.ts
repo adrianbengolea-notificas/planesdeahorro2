@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { ai } from '@/ai/genkit';
+import { runPromptWithModelFallback } from '@/ai/llm-fallback';
 import { z } from 'genkit';
 
 const DescribeKnowledgeDocInputSchema = z.object({
@@ -51,7 +52,9 @@ const describeKnowledgeDocFlow = ai.defineFlow(
     outputSchema: DescribeKnowledgeDocOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const { output } = await runPromptWithModelFallback((model) => prompt(input, { model }), {
+      label: 'describeKnowledgeDoc',
+    });
     return output!;
   }
 );

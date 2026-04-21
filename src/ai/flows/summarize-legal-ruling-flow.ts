@@ -8,7 +8,7 @@ import 'server-only';
  */
 
 import { ai } from '@/ai/genkit';
-import { withLlmRetry } from '@/ai/llm-retry';
+import { runPromptWithModelFallback } from '@/ai/llm-fallback';
 import { stripExpedienteBoilerplateFromText } from '@/lib/legal/strip-expediente-boilerplate';
 import { z } from 'genkit';
 
@@ -65,7 +65,7 @@ const summarizeLegalRulingFlow = ai.defineFlow(
     outputSchema: SummarizeLegalRulingOutputSchema,
   },
   async (input) => {
-    const { output } = await withLlmRetry(() => prompt(input), {
+    const { output } = await runPromptWithModelFallback((model) => prompt(input, { model }), {
       label: 'summarizeLegalRuling',
     });
     return output!;

@@ -15,7 +15,7 @@ const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 export function WhatsAppButton() {
   const phoneNumber = '5491112345678'; // Reemplazar con el número de WhatsApp
-  const message = 'Hola, quisiera hacer una consulta sobre mi plan de ahorro.'; // Mensaje prearmado
+  const message = 'Hola, quisiera contarles mi caso sobre mi plan de ahorro.'; // Mensaje prearmado
 
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
     message

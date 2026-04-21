@@ -58,7 +58,7 @@ export function AppHeader() {
             asChild
             className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-sm h-9 px-5"
           >
-            <Link href="/evaluar-caso">Evaluar Caso</Link>
+            <Link href="/evaluar-caso">Contanos tu caso</Link>
           </Button>
         </div>
 
@@ -99,7 +99,7 @@ export function AppHeader() {
                   className="mt-6 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
                 >
                   <Link href="/evaluar-caso" onClick={() => setIsMobileMenuOpen(false)}>
-                    Evaluar Caso Gratis
+                    Contanos tu caso
                   </Link>
                 </Button>
               </div>

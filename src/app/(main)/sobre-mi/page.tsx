@@ -105,7 +105,7 @@ export default function AboutPage() {
                   size="lg"
                   className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8"
                 >
-                  <Link href="/evaluar-caso">Evaluar mi Caso</Link>
+                  <Link href="/evaluar-caso">Contanos tu caso</Link>
                 </Button>
                 <Button
                   asChild
