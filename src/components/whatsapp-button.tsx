@@ -1,6 +1,7 @@
 'use client';
 
-import { Button } from "./ui/button";
+import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -13,29 +14,54 @@ const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export function WhatsAppButton() {
-  const phoneNumber = '5491112345678'; // Reemplazar con el número de WhatsApp
-  const message = 'Hola, quisiera contarles mi caso sobre mi plan de ahorro.'; // Mensaje prearmado
+const DEFAULT_PREFILL =
+  'Hola, quiero consultar por Planes de Ahorro - Dr. Bengolea.';
 
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-    message
-  )}`;
+/** Línea de contacto (336… → 549… para wa.me). Sobreescribible con NEXT_PUBLIC_WHATSAPP_NUMBER. */
+const DEFAULT_WHATSAPP_E164 = '5493364513355';
+
+function digitsOnlyPhone(raw: string): string {
+  return raw.replace(/\D/g, '').replace(/^0+/, '');
+}
+
+/** Botón flotante: número vía NEXT_PUBLIC_WHATSAPP_NUMBER (solo dígitos, ej. 54911…). */
+export function WhatsAppButton() {
+  const raw =
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() ||
+    process.env.NEXT_PUBLIC_WHATSAPP_PHONE?.trim() ||
+    DEFAULT_WHATSAPP_E164;
+  const phoneNumber = digitsOnlyPhone(raw);
+  const message =
+    process.env.NEXT_PUBLIC_WHATSAPP_PREFILL?.trim() || DEFAULT_PREFILL;
+
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   return (
-    <a
-      href={whatsappUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Contactar por WhatsApp"
-      className="fixed bottom-6 right-6 z-50"
-    >
+    <div className="fixed bottom-6 right-6 z-50">
       <Button
+        asChild
         size="lg"
-        className="h-16 w-16 rounded-full shadow-lg bg-[#25D366] hover:bg-[#128C7E] text-white flex items-center justify-center"
+        className="h-14 w-14 sm:h-16 sm:w-16 rounded-full shadow-lg bg-[#25D366] hover:bg-[#128C7E] text-white p-0"
       >
-        <WhatsAppIcon className="h-8 w-8" />
-        <span className="sr-only">Contactar por WhatsApp</span>
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Abrir WhatsApp para escribir al estudio"
+        >
+          <WhatsAppIcon className="h-7 w-7 sm:h-8 sm:w-8" />
+          <span className="sr-only">Contactar por WhatsApp</span>
+        </a>
       </Button>
-    </a>
+    </div>
   );
+}
+
+/** Igual que el footer: no mostrar en rutas de administración. */
+export function ConditionalWhatsAppButton() {
+  const pathname = usePathname();
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+  return <WhatsAppButton />;
 }

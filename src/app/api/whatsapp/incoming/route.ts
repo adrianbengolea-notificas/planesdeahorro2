@@ -1,4 +1,4 @@
-import { after, NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { FieldValue, type DocumentReference } from 'firebase-admin/firestore';
 import { getAdminFirestore } from '@/firebase/admin';
 import { processCaseEvaluationConversation } from '@/server/case-evaluation-conversation';
@@ -22,10 +22,16 @@ import {
 } from '@/lib/whatsapp-inbound';
 import type { ChatMessage } from '@/lib/types';
 
+/** Tiempo máx. del request: el procesamiento ahora es síncrono (Genkit puede tardar). */
+export const maxDuration = 180;
+
 const SESSION_COLLECTION = 'whatsapp_case_sessions';
 const DEDUP_COLLECTION = 'whatsapp_inbound_dedup';
 
-const PENDING_MENU_TEXT = `Este número atiende más de un servicio. Para contarnos tu caso sobre el plan de ahorro (Dr. Adrián Bengolea, residentes en Provincia de Buenos Aires), respondé:
+/** Misma denominación que conviene usar en Firestore del hub: `tenants/planesdeahorro` → campo `name`. */
+const WHATSAPP_SERVICE_LABEL = 'Planes de Ahorro - Dr. Bengolea';
+
+const PENDING_MENU_TEXT = `Este número atiende más de un servicio. Para consultar por ${WHATSAPP_SERVICE_LABEL} (residentes en Provincia de Buenos Aires), respondé:
 1 — Sí, quiero continuar
 2 — No era para este trámite / otro servicio
 
@@ -33,11 +39,15 @@ Si venís de un enlace con la frase "EVAL CASO", podés escribirla y seguimos di
 En cualquier momento podés escribir MENU para ver esto de nuevo.`;
 
 const OTHER_SERVICE_TEXT =
-  'Listo. Si este chat no era para el estudio de planes de ahorro, podés usar el mismo número según te indique la otra plataforma. Si más adelante querés contarnos tu caso sobre el plan, escribí MENU.';
+  'Listo. Si este chat no era para ' +
+  WHATSAPP_SERVICE_LABEL +
+  ', podés usar el mismo número según te indique la otra plataforma. Si más adelante querés contarnos tu caso, escribí MENU.';
 
 /** Tras elegir ya el servicio en NotificasHub, no repetimos el menú 1/2. */
 const HUB_ROUTED_RESET_HINT =
-  'Seguimos con tu consulta sobre el plan de ahorro. Contanos en una o varias frases qué te pasa, o escribí EVAL CASO para el flujo guiado. En cualquier momento podés escribir MENU.';
+  'Seguimos con tu consulta en ' +
+  WHATSAPP_SERVICE_LABEL +
+  '. Contanos en una o varias frases qué te pasa, o escribí EVAL CASO para el flujo guiado. En cualquier momento podés escribir MENU.';
 
 type StoredChatMessage = {
   id: string;
@@ -90,13 +100,18 @@ function initialAssistantMessage(): ChatMessage {
 }
 
 function serializeMsg(m: ChatMessage): StoredChatMessage {
-  return {
+  const out: StoredChatMessage = {
     id: m.id,
     role: m.role,
     content: m.content,
-    quickReplies: m.quickReplies,
-    isFinished: m.isFinished,
   };
+  if (m.quickReplies !== undefined) {
+    out.quickReplies = m.quickReplies;
+  }
+  if (m.isFinished !== undefined) {
+    out.isFinished = m.isFinished;
+  }
+  return out;
 }
 
 function deserializeMsg(m: StoredChatMessage): ChatMessage {
@@ -144,7 +159,7 @@ async function processWhatsAppInboundBody(
 
   if (type && type !== 'text' && type !== 'interactive') {
     await send(
-      'Para seguir con tu caso sobre el plan de ahorro necesitamos que escribas en texto (podés describir el problema en una o varias frases).'
+      `Para seguir con tu caso en ${WHATSAPP_SERVICE_LABEL} necesitamos que escribas en texto (podés describir el problema en una o varias frases).`
     );
     return;
   }
@@ -330,32 +345,23 @@ export async function POST(req: NextRequest) {
 
   const dedupRef = claim.ref;
 
-  const processWithDedupCleanup = async () => {
-    try {
-      await processWhatsAppInboundBody(body, {
-        tenantIdHub,
-        inboundSecret: secret,
-      });
-    } catch (err) {
-      console.error('[whatsapp/incoming] process error', err);
-      if (dedupRef) {
-        try {
-          await dedupRef.delete();
-        } catch (delErr) {
-          console.error('[whatsapp/incoming] dedup delete after failure', delErr);
-        }
+  try {
+    // No usar `after()`: en Cloud Run / App Hosting el trabajo en segundo plano a menudo no termina
+    // tras el 200 y el usuario no recibe respuesta por WhatsApp.
+    await processWhatsAppInboundBody(body, {
+      tenantIdHub,
+      inboundSecret: secret,
+    });
+  } catch (err) {
+    console.error('[whatsapp/incoming] process error', err);
+    if (dedupRef) {
+      try {
+        await dedupRef.delete();
+      } catch (delErr) {
+        console.error('[whatsapp/incoming] dedup delete after failure', delErr);
       }
     }
-  };
-
-  try {
-    after(processWithDedupCleanup);
-  } catch (afterErr) {
-    console.error(
-      '[whatsapp/incoming] after() falló; procesando en línea (sin cierre diferido)',
-      afterErr,
-    );
-    await processWithDedupCleanup();
+    return NextResponse.json({ error: 'process_failed' }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });

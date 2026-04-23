@@ -132,6 +132,7 @@ export function isLikelyHubTenantPickerReply(
   const tid = tenantIdHub.trim().toLowerCase();
   if (tid && (t === tid || t.includes(tid))) return true;
   if (t.includes('planes') && t.includes('ahorr')) return true;
+  if (t.includes('bengolea') && t.includes('planes')) return true;
 
   if (message.type === 'interactive') {
     const inter = message.interactive as {

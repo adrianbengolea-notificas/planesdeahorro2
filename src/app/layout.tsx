@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { AppHeader } from '@/components/header';
 import { ConditionalFooter } from '@/components/conditional-footer';
+import { ConditionalWhatsAppButton } from '@/components/whatsapp-button';
 import { FirebaseClientProvider } from '@/firebase';
 
 // ── Fuentes locales (descargadas en build, sin dependencia de CDN) ──────────
@@ -43,6 +44,7 @@ export default function RootLayout({
           <AppHeader />
           <main className="flex-grow">{children}</main>
           <ConditionalFooter />
+          <ConditionalWhatsAppButton />
           <Toaster />
         </FirebaseClientProvider>
       </body>
