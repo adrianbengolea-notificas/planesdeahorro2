@@ -183,6 +183,8 @@ export type ChatMessage = {
   content: string;
   quickReplies?: string[];
   isFinished?: boolean;
+  /** true cuando el caso se guardó en Firestore (lead real para Google Ads). */
+  leadCaptured?: boolean;
 };
 
 /** Documento de conocimiento para alimentar el contexto de la IA. Solo accesible por admins. */
