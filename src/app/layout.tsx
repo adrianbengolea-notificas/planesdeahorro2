@@ -8,12 +8,20 @@ import { AppHeader } from '@/components/header';
 import { ConditionalFooter } from '@/components/conditional-footer';
 import { ConditionalWhatsAppButton } from '@/components/whatsapp-button';
 import { FirebaseClientProvider } from '@/firebase';
+import { JsonLd } from '@/components/json-ld';
+import {
+  absoluteUrl,
+  DEFAULT_DESCRIPTION,
+  SITE_LOCALE,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_TITLE,
+} from '@/lib/seo';
 
 /** Etiqueta de Google Ads (gtag.js). Sobreescribible con NEXT_PUBLIC_GOOGLE_ADS_ID. */
 const GOOGLE_ADS_ID =
   process.env.NEXT_PUBLIC_GOOGLE_ADS_ID?.trim() || 'AW-18107912536';
 
-// ── Fuentes locales (descargadas en build, sin dependencia de CDN) ──────────
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
@@ -29,12 +37,84 @@ const ebGaramond = EB_Garamond({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(absoluteUrl('/')),
   title: {
-    default: 'Dr. Adrián Bengolea – Reclamos por planes de ahorro',
-    template: '%s | Dr. Adrián Bengolea – Reclamos por planes de ahorro',
+    default: SITE_TITLE,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    'Reclamos y asesoramiento legal en conflictos con planes de ahorro automotriz en Argentina. Liquidación, rescisión, cláusulas abusivas y más.',
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_TITLE,
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  keywords: [
+    'planes de ahorro',
+    'reclamo plan de ahorro',
+    'abogado planes de ahorro',
+    'liquidación plan de ahorro',
+    'rescisión plan de ahorro',
+    'cláusulas abusivas',
+    'ejecución prendaria',
+    'Provincia de Buenos Aires',
+    'Dr. Adrián Bengolea',
+  ],
+  alternates: {
+    canonical: absoluteUrl('/'),
+  },
+  openGraph: {
+    type: 'website',
+    locale: SITE_LOCALE,
+    url: absoluteUrl('/'),
+    siteName: SITE_TITLE,
+    title: SITE_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  category: 'legal',
+};
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LegalService',
+  name: SITE_TITLE,
+  alternateName: SITE_NAME,
+  description: DEFAULT_DESCRIPTION,
+  url: absoluteUrl('/'),
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Provincia de Buenos Aires, Argentina',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressRegion: 'Buenos Aires',
+    addressCountry: 'AR',
+  },
+  founder: {
+    '@type': 'Person',
+    name: SITE_NAME,
+    jobTitle: 'Abogado',
+  },
+  knowsAbout: [
+    'Planes de ahorro automotriz',
+    'Derecho del consumidor',
+    SITE_TAGLINE,
+  ],
+  availableLanguage: ['es'],
 };
 
 export default function RootLayout({
@@ -45,6 +125,7 @@ export default function RootLayout({
   return (
     <html lang="es" className={cn(inter.variable, ebGaramond.variable)}>
       <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
+        <JsonLd data={organizationJsonLd} />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
           strategy="afterInteractive"

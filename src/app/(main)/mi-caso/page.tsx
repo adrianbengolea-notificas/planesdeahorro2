@@ -1,10 +1,14 @@
 import type { Metadata } from 'next';
 import { MiCasoDashboard } from './mi-caso-dashboard';
 
-export const metadata: Metadata = {
-  title: 'Mi consulta | Portal del cliente',
+import { buildPageMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Mi consulta',
   description: 'Estado de tu expediente, movimientos y documentación.',
-};
+  path: '/mi-caso',
+  noIndex: true,
+});
 
 export default function MiCasoPage() {
   return (

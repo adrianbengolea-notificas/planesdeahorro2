@@ -1,10 +1,14 @@
 import { ProblemPageLayout } from '@/components/problem-page-layout';
 import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Problemas con la Liquidación del Plan de Ahorro',
-  description: 'Asesoramiento legal si su administradora demora o calcula mal la liquidación final de su plan de ahorro. Defendemos sus derechos.',
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Problemas con la liquidación del plan de ahorro',
+  description:
+    'Asesoramiento legal si su administradora demora o calcula mal la liquidación final de su plan de ahorro. Defendemos sus derechos.',
+  path: '/problemas/liquidacion',
+  keywords: ['liquidación plan de ahorro', 'haberes plan de ahorro'],
+});
 
 export default function LiquidacionPage() {
   return (

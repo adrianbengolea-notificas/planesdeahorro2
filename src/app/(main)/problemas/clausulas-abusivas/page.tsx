@@ -1,10 +1,14 @@
 import { ProblemPageLayout } from '@/components/problem-page-layout';
 import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Cláusulas Abusivas en Planes de Ahorro',
-  description: 'Identificamos y demandamos la nulidad de cláusulas abusivas en su contrato de plan de ahorro. Proteja sus derechos como consumidor.',
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Cláusulas abusivas en planes de ahorro',
+  description:
+    'Identificamos y demandamos la nulidad de cláusulas abusivas en su contrato de plan de ahorro. Proteja sus derechos como consumidor.',
+  path: '/problemas/clausulas-abusivas',
+  keywords: ['cláusulas abusivas plan de ahorro', 'nulidad cláusulas consumidor'],
+});
 
 export default function ClausulasAbusivasPage() {
   return (

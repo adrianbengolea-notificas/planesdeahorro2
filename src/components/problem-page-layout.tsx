@@ -29,11 +29,11 @@ export function ProblemPageLayout({ title, children }: ProblemPageLayoutProps) {
           <div className="grid lg:grid-cols-3 gap-12 lg:gap-16">
 
             {/* Article */}
-            <main className="lg:col-span-2">
+            <div className="lg:col-span-2">
               <article className="prose lg:prose-lg max-w-none dark:prose-invert prose-headings:font-headline prose-headings:text-primary prose-a:text-primary">
                 {children}
               </article>
-            </main>
+            </div>
 
             {/* Sidebar CTA */}
             <aside className="lg:col-span-1">

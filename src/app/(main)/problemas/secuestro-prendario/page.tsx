@@ -1,11 +1,14 @@
 import { ProblemPageLayout } from '@/components/problem-page-layout';
 import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Defensa en Ejecución Prendaria — Plan de Ahorro',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Defensa en ejecución prendaria — plan de ahorro',
   description:
     '¿Recibió una intimación o enfrenta una ejecución prendaria? Actúe rápido. Le ofrecemos la mejor defensa para proteger su vehículo y sus derechos.',
-};
+  path: '/problemas/secuestro-prendario',
+  keywords: ['ejecución prendaria', 'secuestro prendario plan de ahorro'],
+});
 
 export default function SecuestroPrendarioPage() {
   return (

@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
 import { ChatClient } from './chat-client';
 
-export const metadata: Metadata = {
-  title: 'Contanos tu caso | Estudio Dr. Bengolea',
+import { buildPageMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Contanos tu caso',
   description:
     'El asistente recopila y ordena tu relato para que el Dr. Adrián Bengolea analice tu situación. Confidencial y sin compromiso. Provincia de Buenos Aires.',
-};
+  path: '/evaluar-caso',
+});
 
 export default function EvaluateCasePage() {
   return (

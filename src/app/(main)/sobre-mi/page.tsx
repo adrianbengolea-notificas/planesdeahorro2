@@ -5,11 +5,14 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Scale, FileText, Users } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'Sobre Mí — Dr. Adrián Bengolea',
+import { buildPageMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Sobre mí',
   description:
     'Conozca al Dr. Adrián Bengolea, abogado con dedicación exclusiva a reclamos por planes de ahorro en la Provincia de Buenos Aires.',
-};
+  path: '/sobre-mi',
+});
 
 const highlights = [
   {

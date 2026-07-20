@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,20 @@ import { frequentProblems, faqs, faqHomeItems } from '@/lib/data';
 import { HomeDoctrinePreview } from '@/components/home-doctrine-preview';
 import { FaqAnswer } from '@/components/faq-answer';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { buildPageMetadata, DEFAULT_DESCRIPTION, SITE_TITLE } from '@/lib/seo';
+
+export const metadata: Metadata = buildPageMetadata({
+  title: SITE_TITLE,
+  description: DEFAULT_DESCRIPTION,
+  path: '/',
+  absoluteTitle: true,
+  keywords: [
+    'abogado planes de ahorro',
+    'reclamo plan de ahorro Argentina',
+    'liquidación plan de ahorro',
+    'Dr. Adrián Bengolea',
+  ],
+});
 
 const homeFaqs = faqHomeItems.length > 0 ? faqHomeItems : faqs.slice(0, 4);
 

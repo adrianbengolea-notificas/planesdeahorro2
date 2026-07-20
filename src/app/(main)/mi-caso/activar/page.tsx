@@ -3,10 +3,14 @@ import { Suspense } from 'react';
 import { ActivarPortalClient } from './activar-portal-client';
 import { Loader2 } from 'lucide-react';
 
-export const metadata: Metadata = {
+import { buildPageMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildPageMetadata({
   title: 'Activar portal del cliente',
   description: 'Acceso seguro al estado de tu consulta y documentación.',
-};
+  path: '/mi-caso/activar',
+  noIndex: true,
+});
 
 function ActivarFallback() {
   return (

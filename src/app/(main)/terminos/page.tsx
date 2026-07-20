@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
-  title: 'Términos y Condiciones de Uso',
+import { buildPageMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Términos y condiciones de uso',
   description:
     'Condiciones generales de uso de este sitio (Dr. Adrián Bengolea – Reclamos por planes de ahorro): alcance informativo, limitaciones de responsabilidad y normas aplicables en la República Argentina.',
-};
+  path: '/terminos',
+});
 
 const lastUpdated = '19 de abril de 2026';
 

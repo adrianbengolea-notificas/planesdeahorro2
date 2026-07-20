@@ -1,10 +1,14 @@
 import { ProblemPageLayout } from '@/components/problem-page-layout';
 import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Rescisión de Contrato de Plan de Ahorro',
-  description: '¿Quiere renunciar a su plan o la administradora lo rescindió? Conozca sus derechos y cómo recuperar su dinero. Asesoramiento legal experto.',
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Rescisión de contrato de plan de ahorro',
+  description:
+    '¿Quiere renunciar a su plan o la administradora lo rescindió? Conozca sus derechos y cómo recuperar su dinero. Asesoramiento legal experto.',
+  path: '/problemas/rescision',
+  keywords: ['rescisión plan de ahorro', 'renuncia plan de ahorro'],
+});
 
 export default function RescisionPage() {
   return (

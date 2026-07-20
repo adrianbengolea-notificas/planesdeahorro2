@@ -21,6 +21,17 @@ export interface Fallo {
   updatedAt?: Timestamp;
 }
 
+/** Resumen público de fallo para listados SSR / sitemap. */
+export type PublishedFalloSummary = {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  tribunal: string;
+  date: string;
+  updatedAt?: string;
+};
+
 export interface Article {
   slug: string;
   title: string;

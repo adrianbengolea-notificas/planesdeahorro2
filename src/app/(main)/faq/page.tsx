@@ -6,17 +6,38 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { FaqAnswer } from '@/components/faq-answer';
+import { JsonLd } from '@/components/json-ld';
 import { faqSections } from '@/lib/data';
+import { absoluteUrl, buildPageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Preguntas Frecuentes sobre Planes de Ahorro',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Preguntas frecuentes sobre planes de ahorro',
   description:
     'Guía clara sobre planes de ahorro: contrato, entrega del auto, cuotas, mora, liquidación y más.',
+  path: '/faq',
+  keywords: ['FAQ planes de ahorro', 'preguntas frecuentes plan de ahorro', 'cuotas plan de ahorro'],
+});
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqSections.flatMap((section) =>
+    section.items.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer.replace(/\n+/g, ' ').trim(),
+      },
+    })),
+  ),
+  url: absoluteUrl('/faq'),
 };
 
 export default function FaqPage() {
   return (
     <div className="flex flex-col">
+      <JsonLd data={faqJsonLd} />
       {/* ── Page header ── */}
       <div className="bg-primary text-primary-foreground py-14 md:py-20 relative overflow-hidden">
         <div className="absolute left-0 top-0 w-[3px] h-full bg-accent hidden md:block" />

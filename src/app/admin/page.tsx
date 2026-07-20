@@ -4,6 +4,7 @@ import { Bot, FileText, Gavel, ClipboardList, BookOpen, ArrowRight } from 'lucid
 
 export const metadata: Metadata = {
   title: 'Administración',
+  robots: { index: false, follow: false },
 };
 
 const adminCards = [

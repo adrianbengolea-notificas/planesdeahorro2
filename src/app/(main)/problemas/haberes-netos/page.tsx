@@ -1,10 +1,14 @@
 import { ProblemPageLayout } from '@/components/problem-page-layout';
 import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Cálculo de Haberes Netos en Planes de Ahorro',
-  description: '¿La administradora calculó mal sus haberes netos? Reclame la diferencia. Asesoramiento legal para la correcta liquidación de su plan.',
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Cálculo de haberes netos en planes de ahorro',
+  description:
+    '¿La administradora calculó mal sus haberes netos? Reclame la diferencia. Asesoramiento legal para la correcta liquidación de su plan.',
+  path: '/problemas/haberes-netos',
+  keywords: ['haberes netos plan de ahorro', 'reintegro plan de ahorro'],
+});
 
 export default function HaberesNetosPage() {
   return (
