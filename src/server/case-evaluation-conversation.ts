@@ -120,10 +120,10 @@ export async function processCaseEvaluationConversation(
   try {
     const assistantOutput: ConversationOutput = await evaluateCase(history, knowledgeContext);
 
+    let newEvaluationId: string | undefined;
+
     if (assistantOutput.isFinished && assistantOutput.structuredData) {
       const caseData = assistantOutput.structuredData as CaseEvaluation;
-
-      let newEvaluationId: string | undefined;
 
       try {
         const db = getAdminFirestore();
@@ -169,6 +169,7 @@ export async function processCaseEvaluationConversation(
       content: assistantOutput.nextMessage,
       quickReplies: assistantOutput.quickReplies,
       isFinished: assistantOutput.isFinished,
+      leadCaptured: Boolean(newEvaluationId),
     };
   } catch (aiError) {
     console.error('[evaluate-case] processCaseEvaluationConversation failed:', aiError);

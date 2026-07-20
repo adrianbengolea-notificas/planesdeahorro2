@@ -23,6 +23,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { CASE_EVAL_MAX_VOICE_SECONDS, useCaseEvalSpeech } from './use-case-eval-speech';
+import { trackGoogleAdsLeadConversion } from '@/lib/google-ads';
 
 function formatVoiceCountdown(totalSec: number): string {
   const m = Math.floor(totalSec / 60);
@@ -98,6 +99,9 @@ export function ChatClient() {
       const newHistory = [...messages, userMessage];
       const assistantResponse = await continueConversation(newHistory, sessionId);
       setMessages(prev => [...prev, assistantResponse]);
+      if (assistantResponse.leadCaptured) {
+        trackGoogleAdsLeadConversion();
+      }
     });
   };
   
