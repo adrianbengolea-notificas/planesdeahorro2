@@ -35,6 +35,8 @@ function caseDocToDraftInput(data: Record<string, unknown>): DraftAcceptCaseClie
     adjudicado: str(data.adjudicado) || '—',
     vehiculoRecibido: str(data.vehiculoRecibido) || '—',
     grupoOrden: str(data.grupoOrden) || '—',
+    fechaSuscripcion: str(data.fechaSuscripcion) || '—',
+    duracionPlan: str(data.duracionPlan) || '—',
     problemaPrincipal: str(data.problemaPrincipal) || '—',
     resumenHechos: str(data.resumenHechos) || '—',
     documentacionDisponible:

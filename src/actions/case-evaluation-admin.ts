@@ -27,6 +27,8 @@ export type CaseEvaluationEditablePayload = {
   adjudicado: string;
   vehiculoRecibido: string;
   grupoOrden: string;
+  fechaSuscripcion: string;
+  duracionPlan: string;
   problemaPrincipal: string;
   resumenHechos: string;
   documentacionDisponible: string[];
@@ -213,6 +215,8 @@ export async function updateCaseEvaluationData(
     adjudicado: data.adjudicado.trim(),
     vehiculoRecibido: data.vehiculoRecibido.trim(),
     grupoOrden: data.grupoOrden.trim(),
+    fechaSuscripcion: data.fechaSuscripcion.trim(),
+    duracionPlan: data.duracionPlan.trim(),
     problemaPrincipal: data.problemaPrincipal.trim(),
     resumenHechos: data.resumenHechos.trim(),
     documentacionDisponible: docs,

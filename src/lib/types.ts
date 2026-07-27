@@ -104,6 +104,10 @@ export interface CaseEvaluation {
   adjudicado: string;
   vehiculoRecibido: string;
   grupoOrden: string;
+  /** Año o fecha aproximada de suscripción / inicio de pagos. */
+  fechaSuscripcion?: string;
+  /** Duración del plan/grupo o indicación de cuándo finalizó. */
+  duracionPlan?: string;
   problemaPrincipal: string;
   resumenHechos: string;
   documentacionDisponible: string[];

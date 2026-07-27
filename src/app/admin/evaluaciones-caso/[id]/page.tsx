@@ -185,6 +185,8 @@ export default function EvaluacionCasoDetallePage() {
                 <Field label="Adjudicado">{row.adjudicado || '—'}</Field>
                 <Field label="Vehículo recibido">{row.vehiculoRecibido || '—'}</Field>
                 <Field label="Grupo / orden">{row.grupoOrden || '—'}</Field>
+                <Field label="Fecha de suscripción">{row.fechaSuscripcion || '—'}</Field>
+                <Field label="Duración / fin del plan">{row.duracionPlan || '—'}</Field>
               </CardContent>
             </Card>
 

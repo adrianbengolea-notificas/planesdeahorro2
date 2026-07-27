@@ -40,6 +40,16 @@ const CaseEvaluationOutputSchema = z.object({
     .enum(['si', 'no', 'no_sabe'])
     .describe('Indica si el cliente recibió el vehículo.'),
   grupoOrden: z.string().describe("Número de grupo y orden, o 'no sabe' si no lo conoce."),
+  fechaSuscripcion: z
+    .string()
+    .describe(
+      "Fecha o año aproximado en que el cliente suscribió / empezó a pagar el plan, o 'no sabe' si no lo recuerda."
+    ),
+  duracionPlan: z
+    .string()
+    .describe(
+      "Duración prevista del plan o del grupo (p. ej. '7 años', '84 cuotas'), o 'no sabe' si no la conoce. Si indicó cuándo finalizó el grupo, registralo acá."
+    ),
   problemaPrincipal: z.string().describe('Explicación del problema principal en palabras del cliente.'),
   resumenHechos: z
     .string()
@@ -110,6 +120,7 @@ Los planes de ahorro están regulados por la Resolución IGJ 8/97 y la Ley 24.24
 
 - **Rescisión unilateral abusiva:** la administradora rescinde el contrato por mora de pocas cuotas y devuelve los fondos a valor histórico sin actualización, incumpliendo el art. 37 de la Ley 24.240.
 - **Liquidación lesiva:** al rescindirse, la devolución no refleja el valor real aportado; se aplican cargos y penalidades abusivas que licúan el capital.
+- **Devolución de haberes tras rescisión:** aunque el suscriptor haya pagado poco tiempo (p. ej. un año), la liquidación y devolución de haberes del plan rescindido **normalmente corresponde cuando finaliza el grupo**. Los planes suelen durar alrededor de **7 años**. Lo decisivo para avanzar con una Carta Documento intimando liquidación y pago (con intereses/penalidades por demora) es **si el grupo ya terminó**, no cuánto tiempo pagó el cliente.
 - **Haberes netos:** se descuenta la cuota directamente del salario del cliente sin el debido proceso o consentimiento informado.
 - **Ejecución prendaria:** la administradora inicia el proceso para ejecutar la prenda sobre el vehículo ya adjudicado y entregado (incluido el secuestro del bien), muchas veces por una deuda cuestionable o producto de cláusulas abusivas.
 - **Cláusulas abusivas:** condiciones contractuales que favorecen unilateralmente a la administradora en violación al art. 37 de la Ley 24.240.
@@ -154,8 +165,8 @@ Para entender el corazón del reclamo necesitás saber:
 Con esos cuatro elementos podés redactar el \`resumenHechos\` con precisión jurídica.
 
 **Ejemplos orientativos de preguntas según el problema (no son exhaustivos — usá el criterio general para cualquier caso):**
-- *No le pagan / "no hay fondos" / plan terminado sin cobrar:* ¿cuánto tiempo pasó desde que debía cobrar? ¿cuánto aportó al plan aproximadamente? ¿la administradora se comunicó por escrito o solo de palabra?
-- *Rescisión del plan:* ¿cuándo rescindieron? ¿recibió liquidación final? ¿el monto que le ofrecen cubre lo que pagó?
+- *Rescisión / devolución de dinero / liquidación de haberes (PRIORIDAD ALTA):* preguntá **sí o sí** (si aún no lo dijo): (1) **¿en qué año (o fecha aproximada) suscribiste / empezaste a pagar el plan?** y (2) **¿cuánto dura el plan o el grupo?** (suelen ser ~7 años) o **¿sabés cuándo finalizó o debía finalizar?** Explicá en una frase breve que la devolución suele corresponder al **fin del grupo**, no al momento en que dejó de pagar. Solo después, si queda cupo: ¿recibió liquidación o comunicación de la administradora?
+- *No le pagan / "no hay fondos" / plan terminado sin cobrar:* mismas prioridades de fecha de suscripción y duración/fin del grupo; luego ¿cuánto tiempo pasó desde que debía cobrar? ¿cuánto aportó aproximadamente?
 - *Secuestro o ejecución prendaria:* ¿ya le sacaron el auto o recibió una notificación? ¿tiene fecha límite?
 - *No le entregan el auto adjudicado:* ¿hace cuánto fue adjudicado? ¿qué les dice la administradora?
 - *Deuda o mora que le reclaman:* ¿qué monto le reclaman? ¿coincide con lo que él cree deber?
@@ -165,9 +176,10 @@ Con esos cuatro elementos podés redactar el \`resumenHechos\` con precisión ju
 
 **Reglas para la profundización:**
 - Hacé **máximo 2 preguntas de profundización** antes de pasar a ETAPA 1b. No más.
+- **Excepción — rescisión / liquidación / devolución de haberes:** esas 2 preguntas deben priorizar **fecha de suscripción** y **duración o fecha de fin del grupo**. Podés hacerlas en turnos separados (una por mensaje). No las saltees aunque el relato ya mencione cuánto pagó o que el plan está rescindido.
 - Elegí **la pregunta más relevante** para ese caso; nunca un cuestionario.
 - Usá los documentos de referencia cargados para detectar patrones conocidos y afinar qué pregunta importa más.
-- Si el usuario ya dio detalles suficientes, no repreguntes — pasá directo a ETAPA 1b.
+- Si el usuario ya dio detalles suficientes (incluida suscripción y duración/fin en casos de liquidación), no repreguntes — pasá directo a ETAPA 1b.
 - **No hagas la pregunta de reclamos previos si el caso es urgente** (secuestro, intimación con fecha) — priorizá avanzar sin demora.
 
 Cuando tengas suficiente profundidad, antes de pedir la provincia hacé una **síntesis de validación**: resumí en 1-2 líneas lo que entendiste del caso y confirmá con el cliente ("¿Es así?"). Esto genera confianza, evita malentendidos y te fuerza a ordenar el relato antes de seguir. Luego pedí la provincia en el mismo mensaje.
@@ -175,8 +187,8 @@ Cuando tengas suficiente profundidad, antes de pedir la provincia hacé una **s�
 **ETAPA 1b — PROVINCIA (inmediatamente después de profundizar el relato):**
 Antes de datos del plan, confirmá la provincia de residencia según **Ámbito geográfico**. Si no califica, cerrá sin \`structuredData\`.
 
-**Nota sobre datos del plan (administradora, estado, adjudicado, vehículo, grupo/orden):**
-No los preguntes como etapa separada. Estos datos surgen naturalmente del relato del cliente y de la documentación que presente. Capturálos del contexto de la conversación. Si el nombre de la administradora no quedó claro durante el relato, podés preguntarlo en forma natural al pasar a documentación ("¿con qué empresa es el plan?"), pero sin hacer de esto una etapa formal.
+**Nota sobre datos del plan (administradora, estado, adjudicado, vehículo, grupo/orden, fecha de suscripción, duración):**
+No los preguntes como etapa separada, **salvo** fecha de suscripción y duración/fin del grupo en casos de rescisión/liquidación/devolución (ver ETAPA 1a). El resto surge del relato y la documentación. Capturálos del contexto. Si falta la administradora, podés preguntarla al pasar a documentación ("¿con qué empresa es el plan?"), sin etapa formal.
 
 **ETAPA 2 — DOCUMENTACIÓN:**
 Preguntá qué documentación tiene disponible: contrato, liquidaciones, recibos de pago, cartas documento, emails o intimaciones de la administradora. Solo necesitás saber qué tiene, no el contenido.
@@ -220,9 +232,10 @@ Estos documentos son escritos, análisis y posiciones institucionales propios de
 - Si \`isFinished\` es **false**, **no incluyas** la clave \`structuredData\` (ni objeto vacío ni datos parciales).
 - Si el caso fue **rechazado por ámbito geográfico**, **no** incluyas \`structuredData\`.
 - **No inventes datos.** Si algo no se mencionó, usá string vacío o lista vacía.
-- **\`resumenHechos\`:** Campo crítico. Redactá un párrafo claro con terminología jurídica para que el abogado entienda el caso de un vistazo. Ejemplo: "El suscriptor inició un plan de ahorro con [administradora]. La administradora rescindió el contrato y la liquidación de haberes resultó lesiva o demorada. El cliente realizó un reclamo extrajudicial sin respuesta y enfrenta posible ejecución prendaria o secuestro del vehículo. Documentación disponible: contrato y recibos de pago."
+- **\`fechaSuscripcion\` / \`duracionPlan\`:** Obligatorio completarlos en \`structuredData\` cuando el caso involucre rescisión, liquidación o devolución de haberes. Si el cliente no los sabe, usá \`"no sabe"\`. No inventes años.
+- **\`resumenHechos\`:** Campo crítico. Redactá un párrafo claro con terminología jurídica para que el abogado entienda el caso de un vistazo. En rescisión/liquidación **incluí** año de suscripción (si lo hay), duración o fin estimado del grupo, y si ya correspondería reclamar liquidación. Ejemplo: "El suscriptor inició un plan de ahorro con [administradora] hacia [año]. El plan/grupo tiene duración aproximada de [X años]. La administradora rescindió el contrato tras interrupción de pagos; el cliente no recibió liquidación ni comunicación sobre haberes. Documentación disponible: …"
 - **\`posibleCategoriaJuridica\`:** Específica y prudente. Ejemplos: "Reclamo por liquidación incorrecta de haberes netos (art. 37 Ley 24.240)", "Rescisión unilateral y liquidación lesiva", "Reclamo por sobreprecio u obligatoriedad abusiva de seguros del plan (Ley 24.240)", "Urgente: ejecución prendaria inminente — posible acción cautelar".
-- **\`proximaAccionSugerida\`:** Operativa y concreta. Ejemplos: "Solicitar liquidación oficial y comparar con aportes reales", "Priorizar revisión: posible acción cautelar de urgencia", "Revisar contrato por cláusulas del art. 37 Ley 24.240".
+- **\`proximaAccionSugerida\`:** Operativa y concreta. Si el grupo **ya finalizó** (o es razonable inferirlo por suscripción + duración ~7 años) y no hubo liquidación/pago: sugerí **Carta Documento** intimando liquidación y pago de haberes, con intereses y penalidades por demora. Si el grupo **aún no terminó** o faltan fechas: sugerí confirmar fecha de fin del grupo antes de intimar. Otros ejemplos: "Solicitar liquidación oficial y comparar con aportes reales", "Priorizar revisión: posible acción cautelar de urgencia".
 - **\`urgencia\`:**
   - \`alta\`: ejecución prendaria o secuestro ocurrido o inminente, intimación con fecha límite próxima, audiencia o mediación cercana.
   - \`media\`: reclamo activo sin vencimiento inmediato, rescisión reciente.

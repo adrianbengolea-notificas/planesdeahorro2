@@ -17,6 +17,8 @@ const DraftAcceptCaseClientMessageInputSchema = z.object({
   adjudicado: z.string(),
   vehiculoRecibido: z.string(),
   grupoOrden: z.string(),
+  fechaSuscripcion: z.string(),
+  duracionPlan: z.string(),
   problemaPrincipal: z.string(),
   resumenHechos: z.string(),
   /** Lista que ya declaró el cliente, en texto (ej. separada por comas). */
@@ -51,6 +53,8 @@ const draftAcceptCaseClientMessagePrompt = ai.definePrompt({
 - Adjudicado: {{{adjudicado}}}
 - Vehículo recibido: {{{vehiculoRecibido}}}
 - Grupo/orden: {{{grupoOrden}}}
+- Fecha de suscripción: {{{fechaSuscripcion}}}
+- Duración / fin del plan: {{{duracionPlan}}}
 - Problema (palabras del cliente): {{{problemaPrincipal}}}
 - Resumen de hechos (interno): {{{resumenHechos}}}
 - Documentación que ya indicó tener: {{documentacionDisponible}}

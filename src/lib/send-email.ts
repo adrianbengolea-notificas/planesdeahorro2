@@ -168,6 +168,8 @@ function caseEvaluationNotificationHtml(
       { label: 'Adjudicado', value: caseData.adjudicado },
       { label: 'Vehículo recibido', value: caseData.vehiculoRecibido },
       { label: 'Grupo y orden', value: caseData.grupoOrden || 'No especificado' },
+      { label: 'Fecha de suscripción', value: caseData.fechaSuscripcion || 'No especificado' },
+      { label: 'Duración / fin del plan', value: caseData.duracionPlan || 'No especificado' },
     ])}
     ${emailSectionTitle('Resumen del caso')}
     ${emailKeyValueRows([{ label: 'Problema principal', value: caseData.problemaPrincipal }])}

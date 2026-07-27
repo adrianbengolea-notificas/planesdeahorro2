@@ -34,6 +34,8 @@ function formFromRow(row: CaseEvaluationSubmission & { id: string }) {
     adjudicado: row.adjudicado ?? '',
     vehiculoRecibido: row.vehiculoRecibido ?? '',
     grupoOrden: row.grupoOrden ?? '',
+    fechaSuscripcion: row.fechaSuscripcion ?? '',
+    duracionPlan: row.duracionPlan ?? '',
     problemaPrincipal: row.problemaPrincipal ?? '',
     resumenHechos: row.resumenHechos ?? '',
     documentacionText: docs,
@@ -78,6 +80,8 @@ export function CaseEvaluationEditForm({ row }: { row: CaseEvaluationSubmission 
         adjudicado: form.adjudicado,
         vehiculoRecibido: form.vehiculoRecibido,
         grupoOrden: form.grupoOrden,
+        fechaSuscripcion: form.fechaSuscripcion,
+        duracionPlan: form.duracionPlan,
         problemaPrincipal: form.problemaPrincipal,
         resumenHechos: form.resumenHechos,
         documentacionDisponible,
@@ -193,6 +197,24 @@ export function CaseEvaluationEditForm({ row }: { row: CaseEvaluationSubmission 
                 id="ed-grupo"
                 value={form.grupoOrden}
                 onChange={(e) => setForm((f) => ({ ...f, grupoOrden: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ed-suscripcion">Fecha de suscripción</Label>
+              <Input
+                id="ed-suscripcion"
+                value={form.fechaSuscripcion}
+                onChange={(e) => setForm((f) => ({ ...f, fechaSuscripcion: e.target.value }))}
+                placeholder="Ej. 2018 / marzo 2019"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ed-duracion">Duración / fin del plan</Label>
+              <Input
+                id="ed-duracion"
+                value={form.duracionPlan}
+                onChange={(e) => setForm((f) => ({ ...f, duracionPlan: e.target.value }))}
+                placeholder="Ej. 7 años / finalizó en 2024"
               />
             </div>
             <div className="space-y-2 sm:col-span-2">
