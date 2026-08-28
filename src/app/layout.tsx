@@ -9,12 +9,13 @@ import { ConditionalFooter } from '@/components/conditional-footer';
 import { ConditionalWhatsAppButton } from '@/components/whatsapp-button';
 import { FirebaseClientProvider } from '@/firebase';
 import { JsonLd } from '@/components/json-ld';
+import { siteIdentityJsonLd } from '@/lib/schema';
 import {
   absoluteUrl,
   DEFAULT_DESCRIPTION,
+  DEFAULT_KEYWORDS,
   SITE_LOCALE,
   SITE_NAME,
-  SITE_TAGLINE,
   SITE_TITLE,
 } from '@/lib/seo';
 
@@ -47,19 +48,12 @@ export const metadata: Metadata = {
   authors: [{ name: SITE_NAME }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
-  keywords: [
-    'planes de ahorro',
-    'reclamo plan de ahorro',
-    'abogado planes de ahorro',
-    'liquidación plan de ahorro',
-    'rescisión plan de ahorro',
-    'cláusulas abusivas',
-    'ejecución prendaria',
-    'Provincia de Buenos Aires',
-    'Dr. Adrián Bengolea',
-  ],
+  keywords: DEFAULT_KEYWORDS,
   alternates: {
     canonical: absoluteUrl('/'),
+    types: {
+      'text/plain': absoluteUrl('/llms.txt'),
+    },
   },
   openGraph: {
     type: 'website',
@@ -88,34 +82,7 @@ export const metadata: Metadata = {
   category: 'legal',
 };
 
-const organizationJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'LegalService',
-  name: SITE_TITLE,
-  alternateName: SITE_NAME,
-  description: DEFAULT_DESCRIPTION,
-  url: absoluteUrl('/'),
-  areaServed: {
-    '@type': 'AdministrativeArea',
-    name: 'Provincia de Buenos Aires, Argentina',
-  },
-  address: {
-    '@type': 'PostalAddress',
-    addressRegion: 'Buenos Aires',
-    addressCountry: 'AR',
-  },
-  founder: {
-    '@type': 'Person',
-    name: SITE_NAME,
-    jobTitle: 'Abogado',
-  },
-  knowsAbout: [
-    'Planes de ahorro automotriz',
-    'Derecho del consumidor',
-    SITE_TAGLINE,
-  ],
-  availableLanguage: ['es'],
-};
+const organizationJsonLd = siteIdentityJsonLd();
 
 export default function RootLayout({
   children,
@@ -123,7 +90,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={cn(inter.variable, ebGaramond.variable)}>
+    <html lang="es-AR" className={cn(inter.variable, ebGaramond.variable)}>
+      <head>
+        <link
+          rel="alternate"
+          type="text/plain"
+          title="Índice para modelos de IA"
+          href={absoluteUrl('/llms.txt')}
+        />
+      </head>
       <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
         <JsonLd data={organizationJsonLd} />
         <Script

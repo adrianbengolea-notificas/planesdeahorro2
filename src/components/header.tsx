@@ -17,7 +17,7 @@ import {
 
 const navLinks = [
   { href: '/', label: 'Inicio' },
-  { href: '/#problemas', label: 'Problemas' },
+  { href: '/problemas', label: 'Problemas' },
   { href: '/fallos', label: 'Fallos' },
   { href: '/doctrina', label: 'Doctrina' },
   { href: '/faq', label: 'FAQ' },
@@ -43,7 +43,8 @@ export function AppHeader() {
               href={link.href}
               className={cn(
                 'text-base font-medium tracking-wide transition-colors',
-                pathname === link.href
+                pathname === link.href ||
+                (link.href !== '/' && pathname.startsWith(link.href))
                   ? 'text-white'
                   : 'text-white/55 hover:text-white/90'
               )}
@@ -89,7 +90,8 @@ export function AppHeader() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
                       'py-3 px-2 text-lg font-medium tracking-wide transition-colors border-b border-white/10',
-                      pathname === link.href
+                      pathname === link.href ||
+                      (link.href !== '/' && pathname.startsWith(link.href))
                         ? 'text-white'
                         : 'text-white/60 hover:text-white'
                     )}

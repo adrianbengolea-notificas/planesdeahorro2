@@ -83,6 +83,14 @@ export interface FrequentProblem {
   slug: string;
   title: string;
   description: string;
+  /** Título orientado a consultas de buscadores y de IA. */
+  seoTitle: string;
+  seoDescription: string;
+  keywords: string[];
+  /** Respuesta directa (primera cita para modelos de IA). */
+  directAnswer: string;
+  /** Secciones de FAQ relacionadas (`faqSections.id`). */
+  relatedFaqSectionIds: string[];
 }
 
 /** Video de YouTube listado en /videos (usar solo el ID, p. ej. de watch?v=XXXX). */

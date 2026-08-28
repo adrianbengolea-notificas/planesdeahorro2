@@ -1,46 +1,48 @@
 import { ProblemPageLayout } from '@/components/problem-page-layout';
 import type { Metadata } from 'next';
+import { getProblemBySlug } from '@/lib/data';
 import { buildPageMetadata } from '@/lib/seo';
 
+const problem = getProblemBySlug('liquidacion')!;
+
 export const metadata: Metadata = buildPageMetadata({
-  title: 'Problemas con la liquidación del plan de ahorro',
-  description:
-    'Asesoramiento legal si su administradora demora o calcula mal la liquidación final de su plan de ahorro. Defendemos sus derechos.',
+  title: problem.seoTitle,
+  description: problem.seoDescription,
   path: '/problemas/liquidacion',
-  keywords: ['liquidación plan de ahorro', 'haberes plan de ahorro'],
+  keywords: problem.keywords,
 });
 
 export default function LiquidacionPage() {
   return (
-    <ProblemPageLayout title="Liquidación del Plan de Ahorro">
+    <ProblemPageLayout slug="liquidacion" title="Liquidación del Plan de Ahorro">
       <p>
-        La etapa de liquidación de un plan de ahorro ocurre al finalizar el plazo del grupo. Es el momento en que la administradora debe rendir cuentas y, en muchos casos, devolver dinero a los suscriptores. Sin embargo, esta etapa está llena de potenciales conflictos.
+        La liquidación de un plan de ahorro es uno de los problemas más frecuentes: ocurre al finalizar el plazo del grupo, cuando la administradora debe rendir cuentas y, en muchos casos, devolver dinero. En la práctica, esta etapa suele generar demoras, números opacos y descuentos que el suscriptor no puede controlar.
       </p>
-      
-      <h2 className='font-headline'>Problemas Comunes en la Liquidación</h2>
+
+      <h2 className="font-headline">¿Qué problemas hay en la liquidación de un plan de ahorro?</h2>
       <ul>
-        <li><strong>Demoras injustificadas:</strong> Las administradoras suelen tardar meses o incluso años en realizar la liquidación final y poner los fondos a disposición de los ahorristas.</li>
-        <li><strong>Cálculos incorrectos:</strong> A menudo, se aplican descuentos indebidos, no se actualizan correctamente los montos o se realizan liquidaciones a valores inferiores a los que corresponden.</li>
-        <li><strong>Falta de información:</strong> El ahorrista se encuentra con una total falta de transparencia sobre cómo se calculó el monto a devolver.</li>
-        <li><strong>Cobro de multas o penalidades improcedentes:</strong> Se aplican penalidades por rescisión que no corresponden o que son excesivas.</li>
+        <li><strong>Demoras injustificadas:</strong> las administradoras tardan meses o incluso años en liquidar y poner los fondos a disposición.</li>
+        <li><strong>Cálculos incorrectos:</strong> descuentos indebidos, montos sin actualizar o liquidaciones por debajo de lo que corresponde.</li>
+        <li><strong>Falta de información:</strong> no entregan un detalle claro de cómo se armó el haber a devolver.</li>
+        <li><strong>Multas o penalidades improcedentes:</strong> cargos por rescisión que no corresponden o que son excesivos.</li>
       </ul>
 
-      <h2 className='font-headline'>¿Quiénes tienen derecho a la devolución de fondos?</h2>
+      <h2 className="font-headline">¿Quiénes tienen derecho a la devolución de fondos?</h2>
       <p>
-        Principalmente, los suscriptores que renunciaron al plan, los que fueron rescindidos por falta de pago y, en algunos casos, los que pagaron la totalidad del plan pero nunca retiraron el vehículo. A estos ahorristas se les debe devolver el valor de las "cuotas puras" que pagaron, actualizado al valor del vehículo al momento de la liquidación.
+        Principalmente, quienes renunciaron al plan, quienes fueron rescindidos por falta de pago y, en algunos casos, quienes pagaron la totalidad pero nunca retiraron el vehículo. Corresponde devolver el valor de las cuotas puras pagadas, actualizado al valor del vehículo al momento de la liquidación.
       </p>
 
-      <h2 className='font-headline'>Nuestra Estrategia Legal</h2>
+      <h2 className="font-headline">¿Qué hacer si la administradora demora o calcula mal la liquidación?</h2>
       <p>
-        Nuestro enfoque se basa en una acción legal rápida y efectiva:
+        El reclamo suele avanzar en tres tramos:
       </p>
       <ol>
-        <li><strong>Intimación por carta documento:</strong> Exigimos formalmente a la administradora la correcta liquidación y el pago inmediato de los haberes.</li>
-        <li><strong>Mediación y audiencias de conciliación:</strong> Buscamos un acuerdo favorable en la etapa prejudicial para evitar un juicio largo.</li>
-        <li><strong>Demanda judicial:</strong> Si la administradora no cumple, iniciamos una demanda por cumplimiento de contrato, daños y perjuicios, y aplicamos multas (daño punitivo) por la conducta abusiva.</li>
+        <li><strong>Intimación por carta documento:</strong> se exige la liquidación correcta y el pago de los haberes.</li>
+        <li><strong>Mediación y conciliación:</strong> se busca un acuerdo prejudicial para evitar un juicio largo.</li>
+        <li><strong>Demanda judicial:</strong> si no cumplen, se reclama el cumplimiento del contrato, daños y, cuando corresponde, daño punitivo por conducta abusiva.</li>
       </ol>
       <p>
-        No permita que la administradora se quede con su dinero. La ley de defensa del consumidor lo ampara y nosotros sabemos cómo hacerla cumplir.
+        La Ley de Defensa del Consumidor (N.º 24.240) ampara al suscriptor. No hay que resignarse a que la administradora retenga el dinero o lo pague desactualizado.
       </p>
     </ProblemPageLayout>
   );

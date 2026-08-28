@@ -11,11 +11,16 @@ import { faqSections } from '@/lib/data';
 import { absoluteUrl, buildPageMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = buildPageMetadata({
-  title: 'Preguntas frecuentes sobre planes de ahorro',
+  title: 'Preguntas frecuentes sobre problemas de planes de ahorro',
   description:
-    'Guía clara sobre planes de ahorro: contrato, entrega del auto, cuotas, mora, liquidación y más.',
+    'Guía clara sobre problemas de planes de ahorro: contrato, entrega del auto, cuotas, mora, liquidación, haberes y qué hacer ante la administradora.',
   path: '/faq',
-  keywords: ['FAQ planes de ahorro', 'preguntas frecuentes plan de ahorro', 'cuotas plan de ahorro'],
+  keywords: [
+    'FAQ problemas planes de ahorro',
+    'preguntas frecuentes plan de ahorro',
+    'qué hacer si hay problemas con el plan de ahorro',
+    'cuotas plan de ahorro',
+  ],
 });
 
 const faqJsonLd = {

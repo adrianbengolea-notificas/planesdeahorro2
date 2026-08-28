@@ -6,7 +6,7 @@ const footerSections = [
     title: 'Navegación',
     links: [
       { label: 'Inicio', href: '/' },
-      { label: 'Problemas Frecuentes', href: '/#problemas' },
+      { label: 'Problemas Frecuentes', href: '/problemas' },
       { label: 'Sobre Mí', href: '/sobre-mi' },
       { label: 'Contanos tu caso', href: '/evaluar-caso' },
     ],
@@ -37,7 +37,7 @@ export function AppFooter() {
             <Logo inverted />
             <div className="w-8 h-[2px] bg-accent mt-5 mb-5" />
             <p className="text-white/55 text-sm leading-relaxed max-w-xs">
-              Asesoramiento legal especializado en reclamos por planes de ahorro.
+              Asesoramiento legal en problemas de planes de ahorro automotriz: liquidación, rescisión, haberes netos, ejecución prendaria y cláusulas abusivas.
             </p>
             <p className="mt-4 text-xs text-white/40">
               Atención a residentes en la Provincia de Buenos Aires (matriculación del titular).

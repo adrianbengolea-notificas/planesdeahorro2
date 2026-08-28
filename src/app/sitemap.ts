@@ -6,6 +6,7 @@ import { absoluteUrl } from '@/lib/seo';
 
 const STATIC_PATHS: { path: string; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency']; priority: number }[] = [
   { path: '/', changeFrequency: 'weekly', priority: 1 },
+  { path: '/problemas', changeFrequency: 'monthly', priority: 0.95 },
   { path: '/evaluar-caso', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/faq', changeFrequency: 'monthly', priority: 0.85 },
   { path: '/sobre-mi', changeFrequency: 'monthly', priority: 0.8 },

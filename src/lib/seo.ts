@@ -2,11 +2,26 @@ import type { Metadata } from 'next';
 import { getPublicAppUrl } from '@/lib/public-app-url';
 
 export const SITE_NAME = 'Dr. Adrián Bengolea';
-export const SITE_TAGLINE = 'Reclamos por planes de ahorro';
+export const SITE_TAGLINE = 'Problemas y reclamos de planes de ahorro';
 export const SITE_TITLE = `${SITE_NAME} – ${SITE_TAGLINE}`;
 
 export const DEFAULT_DESCRIPTION =
-  'Reclamos y asesoramiento legal en conflictos con planes de ahorro automotriz en Argentina. Liquidación, rescisión, cláusulas abusivas y más. Provincia de Buenos Aires.';
+  'Problemas con planes de ahorro automotriz en Argentina: liquidación demorada, rescisión, haberes netos mal calculados, ejecución prendaria y cláusulas abusivas. Asesoramiento legal del Dr. Adrián Bengolea en la Provincia de Buenos Aires.';
+
+export const DEFAULT_KEYWORDS = [
+  'problemas de planes de ahorro',
+  'problemas plan de ahorro Argentina',
+  'reclamo plan de ahorro',
+  'abogado planes de ahorro',
+  'liquidación plan de ahorro',
+  'rescisión plan de ahorro',
+  'cláusulas abusivas plan de ahorro',
+  'ejecución prendaria plan de ahorro',
+  'haberes netos plan de ahorro',
+  'Defensa del Consumidor plan de ahorro',
+  'Provincia de Buenos Aires',
+  'Dr. Adrián Bengolea',
+];
 
 export const SITE_LOCALE = 'es_AR';
 
@@ -53,7 +68,10 @@ export function buildPageMetadata({
     title: absoluteTitle ? { absolute: title } : title,
     description,
     ...(keywords?.length ? { keywords } : {}),
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      types: { 'text/plain': absoluteUrl('/llms.txt') },
+    },
     robots: noIndex
       ? { index: false, follow: false, googleBot: { index: false, follow: false } }
       : { index: true, follow: true },

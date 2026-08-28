@@ -1,5 +1,5 @@
 type JsonLdProps = {
-  data: Record<string, unknown> | Record<string, unknown>[];
+  data: object | object[];
 };
 
 /** Inserta JSON-LD en el documento (safe para SSR). */

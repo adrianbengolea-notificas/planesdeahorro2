@@ -5,13 +5,19 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Scale, FileText, Users } from 'lucide-react';
 
-import { buildPageMetadata } from '@/lib/seo';
+import { JsonLd } from '@/components/json-ld';
+import { absoluteUrl, buildPageMetadata, SITE_NAME } from '@/lib/seo';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Sobre mí',
   description:
-    'Conozca al Dr. Adrián Bengolea, abogado con dedicación exclusiva a reclamos por planes de ahorro en la Provincia de Buenos Aires.',
+    'Dr. Adrián Bengolea, abogado en la Provincia de Buenos Aires con dedicación exclusiva a problemas y reclamos de planes de ahorro automotriz.',
   path: '/sobre-mi',
+  keywords: [
+    'Dr. Adrián Bengolea',
+    'abogado planes de ahorro Buenos Aires',
+    'especialista problemas plan de ahorro',
+  ],
 });
 
 const highlights = [
@@ -31,9 +37,26 @@ const highlights = [
 
 export default function AboutPage() {
   const portraitImage = PlaceHolderImages.find((img) => img.id === 'about-me-portrait');
+  const personJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${absoluteUrl('/')}#person`,
+    name: SITE_NAME,
+    jobTitle: 'Abogado',
+    description:
+      'Abogado matriculado en la Provincia de Buenos Aires, especializado en problemas de planes de ahorro automotriz y defensa del consumidor.',
+    url: absoluteUrl('/sobre-mi'),
+    knowsAbout: [
+      'Problemas de planes de ahorro',
+      'Planes de ahorro automotriz',
+      'Ley 24.240',
+      'Ejecución prendaria',
+    ],
+  };
 
   return (
     <div className="flex flex-col">
+      <JsonLd data={personJsonLd} />
       {/* ── Page header ── */}
       <div className="bg-primary text-primary-foreground py-14 md:py-20 relative overflow-hidden">
         <div className="absolute left-0 top-0 w-[3px] h-full bg-accent hidden md:block" />
@@ -116,7 +139,7 @@ export default function AboutPage() {
                   variant="outline"
                   className="border-primary/30 text-primary"
                 >
-                  <Link href="/#problemas">Ver Problemas Frecuentes</Link>
+                  <Link href="/problemas">Ver problemas frecuentes</Link>
                 </Button>
               </div>
             </div>

@@ -1,48 +1,50 @@
 import { ProblemPageLayout } from '@/components/problem-page-layout';
 import type { Metadata } from 'next';
+import { getProblemBySlug } from '@/lib/data';
 import { buildPageMetadata } from '@/lib/seo';
 
+const problem = getProblemBySlug('secuestro-prendario')!;
+
 export const metadata: Metadata = buildPageMetadata({
-  title: 'Defensa en ejecución prendaria — plan de ahorro',
-  description:
-    '¿Recibió una intimación o enfrenta una ejecución prendaria? Actúe rápido. Le ofrecemos la mejor defensa para proteger su vehículo y sus derechos.',
+  title: problem.seoTitle,
+  description: problem.seoDescription,
   path: '/problemas/secuestro-prendario',
-  keywords: ['ejecución prendaria', 'secuestro prendario plan de ahorro'],
+  keywords: problem.keywords,
 });
 
 export default function SecuestroPrendarioPage() {
   return (
-    <ProblemPageLayout title="Ejecución Prendaria">
+    <ProblemPageLayout slug="secuestro-prendario" title="Ejecución Prendaria">
       <p>
-        La ejecución prendaria es la acción judicial más agresiva que puede iniciar una administradora de plan de ahorro cuando un suscriptor que ya tiene el vehículo deja de pagar las cuotas. Suele incluir el secuestro del bien: el objetivo de la administradora es recuperar el auto para venderlo y saldar la deuda.
+        La ejecución prendaria es el problema más urgente de un plan de ahorro: la administradora inicia juicio cuando el suscriptor ya tiene el auto y deja de pagar cuotas. El objetivo suele ser secuestrar el vehículo, venderlo y cancelar la deuda.
       </p>
       <p>
-        Es un proceso muy rápido y, si no se actúa a tiempo, puede resultar en la pérdida de su vehículo en cuestión de semanas.
+        Es un proceso muy rápido. Si no se actúa a tiempo, se puede perder el auto en cuestión de semanas.
       </p>
 
-      <h2 className='font-headline'>¿Cómo funciona el proceso?</h2>
+      <h2 className="font-headline">¿Me pueden sacar el auto del plan de ahorro por deber cuotas?</h2>
       <ol>
-        <li><strong>Mora en el pago:</strong> El suscriptor deja de pagar un número determinado de cuotas.</li>
-        <li><strong>Intimación de pago:</strong> La administradora envía una carta documento intimando a pagar la deuda en un plazo corto.</li>
-        <li><strong>Inicio de la acción judicial:</strong> Si no hay pago, la administradora presenta una demanda solicitando el secuestro del vehículo.</li>
-        <li><strong>Orden de secuestro:</strong> El juez, sin escuchar al deudor, puede librar una orden para que un oficial de justicia, acompañado por la policía, secuestre el auto donde sea que se encuentre.</li>
-        <li><strong>Subasta:</strong> Una vez secuestrado, el vehículo es subastado públicamente.</li>
+        <li><strong>Mora:</strong> se dejan de pagar un número de cuotas.</li>
+        <li><strong>Intimación:</strong> carta documento exigiendo el pago en un plazo corto.</li>
+        <li><strong>Demanda:</strong> si no hay pago, piden el secuestro judicial.</li>
+        <li><strong>Orden de secuestro:</strong> el juez puede librarla sin escuchar antes al deudor; un oficial, con policía, puede retirar el auto donde esté.</li>
+        <li><strong>Subasta:</strong> el vehículo se remata.</li>
       </ol>
 
-      <h2 className='font-headline'>¡Usted tiene defensas!</h2>
+      <h2 className="font-headline">¿Qué defensas hay frente a una ejecución prendaria?</h2>
       <p>
-        Aunque el proceso es rápido, no significa que usted esté indefenso. Existen numerosas estrategias legales para frenar la ejecución o el secuestro y proteger sus derechos:
+        Aunque el trámite es rápido, no estás indefenso:
       </p>
       <ul>
-        <li><strong>Nulidad de la intimación:</strong> Si la intimación de pago no cumple con los requisitos legales, todo el proceso posterior puede ser nulo.</li>
-        <li><strong>Liquidación de deuda abusiva:</strong> A menudo, la deuda reclamada por la administradora es incorrecta, incluye intereses sobre intereses (anatocismo), gastos improcedentes o se basa en un cálculo de cuotas o capital cuestionable. Discutir el monto de la deuda es una defensa clave.</li>
-        <li><strong>Impugnación del cálculo de la deuda:</strong> Se puede pedir al juez que revise cómo se armó el saldo reclamado; si el monto resulta inflado o mal liquidado, la mora o el propio reclamo de la administradora pueden verse afectados.</li>
-        <li><strong>Ofrecimiento de pago:</strong> Presentarse en el juicio y ofrecer un plan de pagos razonable puede ser una vía para detener el secuestro y regularizar la situación.</li>
+        <li><strong>Nulidad de la intimación:</strong> si la carta no cumple requisitos legales, puede caer el proceso posterior.</li>
+        <li><strong>Deuda abusiva:</strong> intereses sobre intereses (anatocismo), gastos improcedentes o un saldo mal armado.</li>
+        <li><strong>Impugnación del cálculo:</strong> pedir al juez que revise el monto; si está inflado, la mora o el reclamo se debilita.</li>
+        <li><strong>Ofrecimiento de pago:</strong> un plan razonable puede frenar el secuestro y regularizar.</li>
       </ul>
 
-      <h2 className='font-headline'>La importancia de actuar rápido</h2>
+      <h2 className="font-headline">¿Por qué hay que actuar apenas llega la intimación?</h2>
       <p>
-        Desde el momento en que recibe la primera intimación o una notificación del juzgado, el tiempo es crucial. Ponerse en contacto con un abogado especializado de inmediato puede marcar la diferencia entre conservar su vehículo y perderlo.
+        Desde la primera carta documento o la cédula del juzgado, el tiempo es decisivo. Un abogado especializado en planes de ahorro puede marcar la diferencia entre conservar el vehículo y perderlo.
       </p>
     </ProblemPageLayout>
   );

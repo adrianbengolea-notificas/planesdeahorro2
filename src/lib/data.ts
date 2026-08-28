@@ -5,27 +5,111 @@ export const frequentProblems: FrequentProblem[] = [
     slug: 'liquidacion',
     title: 'Liquidación del Plan',
     description: 'Problemas y demoras al finalizar su plan y solicitar la liquidación de haberes.',
+    seoTitle: 'Problemas con la liquidación del plan de ahorro',
+    seoDescription:
+      'La administradora demora o calcula mal la liquidación de tu plan de ahorro. Qué derechos tenés, quién cobra haberes y cómo reclamar en Argentina.',
+    keywords: [
+      'problemas liquidación plan de ahorro',
+      'demora liquidación plan de ahorro',
+      'haberes plan de ahorro',
+      'no me liquidan el plan de ahorro',
+    ],
+    directAnswer:
+      'Si tu plan de ahorro ya cerró o te rescindieron y la administradora no liquida, tarda meses o años, o te paga menos de lo que corresponde, podés intimar por escrito, reclamar en Defensa del Consumidor y demandar el pago de las cuotas puras actualizadas, con intereses.',
+    relatedFaqSectionIds: ['liquidacion'],
   },
   {
     slug: 'rescision',
     title: 'Rescisión de Contrato',
     description: 'Conflictos derivados de la rescisión anticipada del contrato por parte del suscriptor o la administradora.',
+    seoTitle: 'Rescisión de un plan de ahorro: derechos y devolución',
+    seoDescription:
+      'Renunciaste al plan de ahorro o la administradora te rescindió. Cómo recuperar las cuotas puras, impugnar penalidades abusivas y reclamar al cierre del grupo.',
+    keywords: [
+      'rescisión plan de ahorro',
+      'renuncia plan de ahorro',
+      'salirme del plan de ahorro',
+      'devolver plata plan de ahorro',
+    ],
+    directAnswer:
+      'Podés renunciar a un plan de ahorro en cualquier momento. No perdés el dinero de las cuotas puras: se reintegra al finalizar el grupo, actualizado. Si la administradora te rescindió por mora, también conservás ese derecho; las multas desproporcionadas se pueden cuestionar como cláusulas abusivas.',
+    relatedFaqSectionIds: ['mora', 'liquidacion'],
   },
   {
     slug: 'haberes-netos',
     title: 'Cálculo de Haberes Netos',
     description: 'Discrepancias en el cálculo de los haberes netos y los montos a reintegrar por la administradora.',
+    seoTitle: 'Haberes netos mal calculados en el plan de ahorro',
+    seoDescription:
+      'La administradora te devolvió menos haber neto del que corresponde. Cómo se calculan las cuotas puras actualizadas y cómo reclamar la diferencia.',
+    keywords: [
+      'haberes netos plan de ahorro',
+      'reintegro plan de ahorro',
+      'cuota pura plan de ahorro',
+      'me devolvieron poco del plan de ahorro',
+    ],
+    directAnswer:
+      'Los haberes netos son la suma de las cuotas puras pagadas, actualizadas al valor del vehículo al liquidar el grupo. Si la administradora devuelve el valor nominal, descuenta gastos indebidos o usa un valor móvil viejo, el cálculo es cuestionable y se puede reclamar la diferencia.',
+    relatedFaqSectionIds: ['liquidacion'],
   },
   {
     slug: 'secuestro-prendario',
     title: 'Ejecución Prendaria',
     description:
       'Defensa ante la ejecución prendaria y el secuestro del vehículo por falta de pago de cuotas.',
+    seoTitle: 'Ejecución prendaria y secuestro del auto del plan de ahorro',
+    seoDescription:
+      'Intimación o juicio de ejecución prendaria por un plan de ahorro. Defensas para frenar el secuestro del vehículo y discutir una deuda inflada.',
+    keywords: [
+      'ejecución prendaria plan de ahorro',
+      'secuestro prendario',
+      'me quieren sacar el auto plan de ahorro',
+      'prenda plan de ahorro',
+    ],
+    directAnswer:
+      'Si dejaste de pagar cuotas con el auto prendado, la administradora puede pedir el secuestro judicial. El proceso es rápido, pero hay defensas: intimación nula, deuda mal liquidada, intereses abusivos u ofrecimiento de pago. Hay que actuar en cuanto llega la carta documento o la cédula del juzgado.',
+    relatedFaqSectionIds: ['aumentos', 'mora'],
   },
   {
     slug: 'clausulas-abusivas',
     title: 'Cláusulas Abusivas',
     description: 'Análisis y nulidad de cláusulas que imponen condiciones desproporcionadas en el contrato.',
+    seoTitle: 'Cláusulas abusivas en contratos de plan de ahorro',
+    seoDescription:
+      'Cláusulas abusivas en planes de ahorro: ajustes unilaterales, seguros impuestos, penalidades y prórroga de jurisdicción. La Ley 24.240 las tiene por no escritas.',
+    keywords: [
+      'cláusulas abusivas plan de ahorro',
+      'contrato adhesión plan de ahorro',
+      'nulidad cláusulas consumidor',
+      'Ley 24.240 plan de ahorro',
+    ],
+    directAnswer:
+      'El contrato de plan de ahorro es de adhesión: no se negocia. Si una cláusula genera un desequilibrio grave en perjuicio del suscriptor, la Ley de Defensa del Consumidor 24.240 la tiene por no escrita, pero hace falta que un juez la declare nula en el caso concreto.',
+    relatedFaqSectionIds: ['contratacion', 'aumentos'],
+  },
+];
+
+/** Preguntas de la página índice /problemas (citas para buscadores de IA). */
+export const problemasIndexFaqs: FAQ[] = [
+  {
+    question: '¿Cuáles son los problemas más frecuentes de un plan de ahorro?',
+    answer:
+      'Los conflictos más habituales son: demora o mal cálculo de la liquidación final, rescisión o renuncia sin devolución correcta, haberes netos desactualizados, ejecución prendaria o secuestro del vehículo, y cláusulas abusivas (penalidades, seguros impuestos, ajustes unilaterales). Ocurren con administradoras de planes automotrices en Argentina (Chevrolet, Ford, Volkswagen, Fiat, Renault/Plan Rombo y otras).',
+  },
+  {
+    question: '¿Qué hago si tengo un problema con mi plan de ahorro?',
+    answer:
+      'Reuní contrato, cuotas pagadas, cartas de la administradora y cualquier intimación. Pedí por escrito la liquidación o el detalle de la deuda. Si no responden, o los números no cierran, podés ir a Defensa del Consumidor, mediación o juicio. En la Provincia de Buenos Aires el Dr. Adrián Bengolea evalúa estos casos sin compromiso.',
+  },
+  {
+    question: '¿Puedo reclamar si la administradora demora la liquidación?',
+    answer:
+      'Sí. Al cierre del grupo debe liquidar y poner los fondos a disposición. Si tarda, omite intereses o descuenta conceptos no autorizados, el suscriptor puede intimar y demandar el pago con actualización. Las reglas de la IGJ y la Ley 24.240 amparan al consumidor.',
+  },
+  {
+    question: '¿Me pueden sacar el auto si debo cuotas del plan de ahorro?',
+    answer:
+      'Si el vehículo está prendado, la administradora puede iniciar ejecución prendaria y pedir el secuestro. No es automático ni inapelable: se puede discutir la deuda, la intimación y medidas desproporcionadas. El tiempo es crítico apenas llega la carta documento o la notificación judicial.',
   },
 ];
 
@@ -294,3 +378,25 @@ export const faqs: FAQ[] = faqSections.flatMap((s) => s.items);
 
 /** Ítems marcados para la home (máx. 4 recomendados). */
 export const faqHomeItems: FAQ[] = faqs.filter((f) => f.highlight).slice(0, 4);
+
+export function getProblemBySlug(slug: string): FrequentProblem | undefined {
+  return frequentProblems.find((p) => p.slug === slug);
+}
+
+/** Preguntas de FAQ ligadas a una página de problema (tope para no inflar el JSON-LD). */
+export function getRelatedFaqsForProblem(slug: string, limit = 8): FAQ[] {
+  const problem = getProblemBySlug(slug);
+  if (!problem) return [];
+  const items = faqSections
+    .filter((section) => problem.relatedFaqSectionIds.includes(section.id))
+    .flatMap((section) => section.items);
+  const seen = new Set<string>();
+  const unique: FAQ[] = [];
+  for (const item of items) {
+    if (seen.has(item.question)) continue;
+    seen.add(item.question);
+    unique.push(item);
+    if (unique.length >= limit) break;
+  }
+  return unique;
+}

@@ -12,20 +12,24 @@ import { ArrowRight, Scale, Bot, MapPin } from 'lucide-react';
 import { frequentProblems, faqs, faqHomeItems } from '@/lib/data';
 import { HomeDoctrinePreview } from '@/components/home-doctrine-preview';
 import { FaqAnswer } from '@/components/faq-answer';
+import { JsonLd } from '@/components/json-ld';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { buildPageMetadata, DEFAULT_DESCRIPTION, SITE_TITLE } from '@/lib/seo';
+import { faqPageJsonLd } from '@/lib/schema';
+import {
+  absoluteUrl,
+  buildPageMetadata,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_KEYWORDS,
+  SITE_TAGLINE,
+  SITE_TITLE,
+} from '@/lib/seo';
 
 export const metadata: Metadata = buildPageMetadata({
   title: SITE_TITLE,
   description: DEFAULT_DESCRIPTION,
   path: '/',
   absoluteTitle: true,
-  keywords: [
-    'abogado planes de ahorro',
-    'reclamo plan de ahorro Argentina',
-    'liquidación plan de ahorro',
-    'Dr. Adrián Bengolea',
-  ],
+  keywords: DEFAULT_KEYWORDS,
 });
 
 const homeFaqs = faqHomeItems.length > 0 ? faqHomeItems : faqs.slice(0, 4);
@@ -70,6 +74,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
+      <JsonLd data={faqPageJsonLd(homeFaqs, absoluteUrl('/'))} />
       {/* ── Hero ── */}
       <section className="relative min-h-[88vh] w-full flex items-end">
         {/* Background */}
@@ -97,11 +102,11 @@ export default function Home() {
           <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] max-w-4xl">
             Dr. Adrián Bengolea
             <br />
-            <span className="text-accent">Reclamos por planes de ahorro</span>
+            <span className="text-accent">{SITE_TAGLINE}</span>
           </h1>
           <div className="w-14 h-[2px] bg-accent mt-9 mb-9" />
           <p className="text-white/70 text-lg md:text-xl max-w-xl leading-relaxed">
-            Si fue víctima de una rescisión abusiva, tiene demoras en la liquidación de su plan o enfrenta conflictos con su administradora — tiene derechos y los defiendo.
+            Si tenés problemas con un plan de ahorro —rescisión abusiva, demora en la liquidación, haberes mal calculados o ejecución prendaria— tenés derechos y los defiendo.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
             <Button
@@ -117,7 +122,7 @@ export default function Home() {
               variant="outline"
               className="border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white h-12 text-base"
             >
-              <Link href="#problemas">Ver Problemas Frecuentes</Link>
+              <Link href="/problemas">Ver problemas frecuentes</Link>
             </Button>
           </div>
         </div>
@@ -149,11 +154,11 @@ export default function Home() {
               Áreas de Práctica
             </p>
             <h2 className="font-headline text-3xl md:text-5xl font-bold text-primary max-w-2xl leading-tight">
-              ¿Tiene alguno de estos problemas?
+              Problemas frecuentes de planes de ahorro
             </h2>
             <div className="w-12 h-[2px] bg-accent mt-6" />
             <p className="text-muted-foreground max-w-2xl mt-6 text-base leading-relaxed">
-              Estos son los conflictos más comunes que enfrentan los suscriptores de planes de ahorro. Cada caso tiene solución legal.
+              Estos son los conflictos más comunes de los suscriptores con las administradoras. Cada caso tiene solución legal.
             </p>
           </div>
 
@@ -178,6 +183,12 @@ export default function Home() {
                 </div>
               </Link>
             ))}
+          </div>
+
+          <div className="mt-10">
+            <Button asChild variant="outline" className="border-primary/30 text-primary">
+              <Link href="/problemas">Ver todos los problemas</Link>
+            </Button>
           </div>
         </div>
       </section>

@@ -6,8 +6,13 @@ import { buildPageMetadata } from '@/lib/seo';
 export const metadata: Metadata = buildPageMetadata({
   title: 'Contanos tu caso',
   description:
-    'El asistente recopila y ordena tu relato para que el Dr. Adrián Bengolea analice tu situación. Confidencial y sin compromiso. Provincia de Buenos Aires.',
+    '¿Tenés un problema con tu plan de ahorro? El asistente ordena tu relato para que el Dr. Adrián Bengolea lo analice. Confidencial, sin compromiso, Provincia de Buenos Aires.',
   path: '/evaluar-caso',
+  keywords: [
+    'consultar problema plan de ahorro',
+    'abogado plan de ahorro Buenos Aires',
+    'evaluar caso plan de ahorro',
+  ],
 });
 
 export default function EvaluateCasePage() {
