@@ -80,6 +80,11 @@ export const metadata: Metadata = {
     },
   },
   category: 'legal',
+  verification: {
+    other: {
+      'msvalidate.01': '99A58204BDAF981B678193D8C9643E21',
+    },
+  },
 };
 
 const organizationJsonLd = siteIdentityJsonLd();
