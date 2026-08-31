@@ -2,7 +2,15 @@ import 'server-only';
 import { faqSections, frequentProblems, problemasIndexFaqs } from '@/lib/data';
 import { listPublishedDoctrinaForSeo } from '@/lib/doctrina-list-public-server';
 import { listPublishedFallosForSeo } from '@/lib/fallos-public-server';
-import { absoluteUrl, BAR_REGISTRATION_LABEL, DEFAULT_DESCRIPTION, SITE_NAME, SITE_TITLE } from '@/lib/seo';
+import {
+  absoluteUrl,
+  BAR_REGISTRATION_LABEL,
+  DEFAULT_DESCRIPTION,
+  FIRM_NAME,
+  FIRM_URL,
+  SITE_NAME,
+  SITE_TITLE,
+} from '@/lib/seo';
 
 function mdLink(title: string, path: string, description: string): string {
   return `- [${title}](${absoluteUrl(path)}): ${description}`;
@@ -76,6 +84,7 @@ ${doctrinaLines}
 
 ${mdLink('Sobre el Dr. Adrián Bengolea', '/sobre-mi', 'Abogado con especialización exclusiva en reclamos de planes de ahorro.')}
 ${mdLink('Contanos tu caso', '/evaluar-caso', 'Primer contacto confidencial para evaluar un conflicto con la administradora.')}
+- [${FIRM_NAME}](${FIRM_URL}): estudio jurídico general del Dr. Adrián Bengolea (sitio Wix). Este dominio se especializa en planes de ahorro.
 
 ## Archivos para modelos
 

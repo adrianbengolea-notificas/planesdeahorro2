@@ -9,6 +9,13 @@ export const BAR_ASSOCIATION = 'Colegio de Abogados de San Nicolás';
 export const BAR_REGISTRATION = 'Tomo 8, Folio 84';
 export const BAR_REGISTRATION_LABEL = `${BAR_REGISTRATION} — ${BAR_ASSOCIATION}`;
 
+export const FIRM_NAME = 'Estudio Jurídico Bengolea & Lamas';
+export const FIRM_URL = 'https://www.bengolealamas.com.ar';
+export const FIRM_FACEBOOK_URL = 'https://www.facebook.com/estudiobl/';
+
+/** Perfiles oficiales del mismo profesional / estudio (sameAs para buscadores e IA). */
+export const SITE_SAME_AS = [FIRM_URL, FIRM_FACEBOOK_URL] as const;
+
 export const DEFAULT_DESCRIPTION =
   'Problemas con planes de ahorro automotriz en Argentina: liquidación demorada, rescisión, haberes netos mal calculados, ejecución prendaria y cláusulas abusivas. Asesoramiento legal del Dr. Adrián Bengolea en la Provincia de Buenos Aires.';
 

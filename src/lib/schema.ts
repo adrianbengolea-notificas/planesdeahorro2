@@ -6,7 +6,10 @@ import {
   BAR_REGISTRATION,
   BAR_REGISTRATION_LABEL,
   DEFAULT_DESCRIPTION,
+  FIRM_NAME,
+  FIRM_URL,
   SITE_NAME,
+  SITE_SAME_AS,
   SITE_TAGLINE,
   SITE_TITLE,
 } from '@/lib/seo';
@@ -106,6 +109,7 @@ export function siteIdentityJsonLd() {
         description: DEFAULT_DESCRIPTION,
         url: origin,
         image: absoluteUrl('/opengraph-image'),
+        sameAs: [...SITE_SAME_AS],
         areaServed: {
           '@type': 'AdministrativeArea',
           name: 'Provincia de Buenos Aires, Argentina',
@@ -154,11 +158,17 @@ export function siteIdentityJsonLd() {
         description: `Abogado matriculado en la Provincia de Buenos Aires (${BAR_REGISTRATION_LABEL}), con dedicación exclusiva a reclamos por problemas de planes de ahorro automotriz.`,
         url: absoluteUrl('/sobre-mi'),
         identifier: BAR_REGISTRATION,
+        sameAs: [...SITE_SAME_AS],
         memberOf: {
           '@type': 'Organization',
           name: BAR_ASSOCIATION,
         },
         worksFor: { '@id': orgId },
+        affiliation: {
+          '@type': 'LegalService',
+          name: FIRM_NAME,
+          url: FIRM_URL,
+        },
         knowsAbout: [
           'Planes de ahorro',
           'Defensa del consumidor',

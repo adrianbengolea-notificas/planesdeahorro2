@@ -12,7 +12,10 @@ import {
   BAR_REGISTRATION,
   BAR_REGISTRATION_LABEL,
   buildPageMetadata,
+  FIRM_NAME,
+  FIRM_URL,
   SITE_NAME,
+  SITE_SAME_AS,
 } from '@/lib/seo';
 
 export const metadata: Metadata = buildPageMetadata({
@@ -58,6 +61,7 @@ export default function AboutPage() {
     description: `Abogado matriculado en el ${BAR_ASSOCIATION} (${BAR_REGISTRATION}), especializado en problemas de planes de ahorro automotriz y defensa del consumidor.`,
     url: absoluteUrl('/sobre-mi'),
     identifier: BAR_REGISTRATION,
+    sameAs: [...SITE_SAME_AS],
     memberOf: {
       '@type': 'Organization',
       name: BAR_ASSOCIATION,
@@ -141,6 +145,13 @@ export default function AboutPage() {
                 </p>
                 <p>
                   Creo en un trato directo y transparente. Cada cliente habla directamente conmigo, y cada caso es tratado con la dedicación y la seriedad que merece.
+                </p>
+                <p>
+                  Integro el{' '}
+                  <a href={FIRM_URL} target="_blank" rel="noopener noreferrer">
+                    {FIRM_NAME}
+                  </a>
+                  . Este sitio está dedicado a reclamos de planes de ahorro; el resto de la práctica del estudio está en bengolealamas.com.ar.
                 </p>
               </div>
 

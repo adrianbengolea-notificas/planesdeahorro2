@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Logo } from './logo';
-import { BAR_REGISTRATION_LABEL } from '@/lib/seo';
+import { BAR_REGISTRATION_LABEL, FIRM_NAME, FIRM_URL } from '@/lib/seo';
 
 const footerSections = [
   {
@@ -42,6 +42,16 @@ export function AppFooter() {
             </p>
             <p className="mt-4 text-xs text-white/40">
               {BAR_REGISTRATION_LABEL}. Atención a residentes en la Provincia de Buenos Aires.
+            </p>
+            <p className="mt-2 text-xs text-white/40">
+              <a
+                href={FIRM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white/70 transition-colors"
+              >
+                {FIRM_NAME}
+              </a>
             </p>
           </div>
           {footerSections.map((section) => (
