@@ -3,10 +3,9 @@
 import { notFound, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { doctrinalArticles } from '@/lib/data';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, limit, query, where } from 'firebase/firestore';
-import type { Article, DoctrinaArticle } from '@/lib/types';
+import type { DoctrinaArticle } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Tag, User } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -15,18 +14,16 @@ import ReactMarkdown from 'react-markdown';
 type ArticleDetailClientProps = {
   /** Cargado en el servidor (Admin); evita el índice compuesto en el cliente. */
   initialFromFirestore?: DoctrinaArticle | null;
-  staticArticle?: Article | null;
 };
 
 export function ArticleDetailClient({
   initialFromFirestore: initialFromServer = null,
-  staticArticle: staticFromServer = null,
 }: ArticleDetailClientProps) {
   const params = useParams();
   const slug = params.slug as string;
   const firestore = useFirestore();
 
-  const useClientQuery = initialFromServer == null && staticFromServer == null;
+  const useClientQuery = initialFromServer == null;
 
   const doctrinaQuery = useMemoFirebase(() => {
     if (!useClientQuery || !firestore || !slug) return null;
@@ -40,7 +37,6 @@ export function ArticleDetailClient({
 
   const { data: rows, isLoading: clientLoading } = useCollection<DoctrinaArticle>(doctrinaQuery);
   const fromDb = initialFromServer ?? rows?.[0];
-  const staticArticle = staticFromServer ?? doctrinalArticles.find((p) => p.slug === slug);
   const isLoading = useClientQuery && clientLoading;
 
   if (isLoading) {
@@ -128,46 +124,6 @@ export function ArticleDetailClient({
                 <ReactMarkdown>{fromDb.content}</ReactMarkdown>
               </div>
             )}
-          </article>
-
-          <div className="mt-12 text-center">
-            <Button asChild>
-              <Link href="/doctrina">Volver a Doctrina</Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (staticArticle) {
-    return (
-      <div className="bg-card py-12 md:py-20">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <article className="prose lg:prose-xl max-w-none dark:prose-invert prose-headings:font-body prose-headings:text-primary [&_h1]:font-body [&_h2]:font-body [&_h3]:font-body [&_h4]:font-body">
-            <div className="mb-8">
-              <h1 className="font-body text-3xl md:text-4xl font-bold text-primary mb-4 tracking-tight">{staticArticle.title}</h1>
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span>Por {staticArticle.author}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <time dateTime={staticArticle.date}>
-                    {new Date(staticArticle.date).toLocaleDateString('es-AR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </time>
-                </div>
-              </div>
-            </div>
-
-            <p className="lead text-lg font-medium text-foreground">{staticArticle.summary}</p>
-
-            <div className="whitespace-pre-wrap mt-8">{staticArticle.content}</div>
           </article>
 
           <div className="mt-12 text-center">

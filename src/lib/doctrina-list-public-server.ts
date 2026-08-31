@@ -1,6 +1,5 @@
 import 'server-only';
 import { getAdminFirestore } from '@/firebase/admin';
-import { doctrinalArticles } from '@/lib/data';
 
 export type PublishedDoctrinaSummary = {
   slug: string;
@@ -38,13 +37,8 @@ export async function listPublishedDoctrinaForSeo(): Promise<PublishedDoctrinaSu
         .filter((a) => a.slug);
     }
   } catch (e) {
-    console.warn('[doctrina] listado SEO no disponible, se usan artículos estáticos', e);
+    console.warn('[doctrina] listado SEO no disponible', e);
   }
 
-  return doctrinalArticles.map((a) => ({
-    slug: a.slug,
-    title: a.title,
-    summary: a.summary,
-    publishDate: a.date,
-  }));
+  return [];
 }

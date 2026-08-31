@@ -2,8 +2,6 @@
 
 import Link from 'next/link';
 import { ArrowRight, FileText } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { doctrinalArticles } from '@/lib/data';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, limit, orderBy, query, where } from 'firebase/firestore';
 import type { DoctrinaArticle } from '@/lib/types';
@@ -48,18 +46,16 @@ export function HomeDoctrinePreview() {
         summary: a.summary,
         date: a.publishDate,
       }))
-    : doctrinalArticles.slice(0, 3).map((a) => ({
-        key: a.slug,
-        slug: a.slug,
-        title: a.title,
-        summary: a.summary,
-        date: a.date,
-      }));
+    : [];
 
   return (
     <>
       {isLoading ? (
         <PreviewSkeleton />
+      ) : items.length === 0 ? (
+        <p className="text-muted-foreground text-sm">
+          Pronto publicaremos nuevos análisis de doctrina.
+        </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border">
           {items.map((article) => (
@@ -88,12 +84,6 @@ export function HomeDoctrinePreview() {
             </article>
           ))}
         </div>
-      )}
-
-      {!isLoading && !showFirestore && (
-        <p className="text-center text-xs text-muted-foreground mt-4">
-          Artículos de ejemplo hasta que publique entradas desde administración.
-        </p>
       )}
     </>
   );

@@ -2,6 +2,9 @@ import { frequentProblems, problemasIndexFaqs } from '@/lib/data';
 import type { FAQ, FrequentProblem } from '@/lib/types';
 import {
   absoluteUrl,
+  BAR_ASSOCIATION,
+  BAR_REGISTRATION,
+  BAR_REGISTRATION_LABEL,
   DEFAULT_DESCRIPTION,
   SITE_NAME,
   SITE_TAGLINE,
@@ -109,6 +112,7 @@ export function siteIdentityJsonLd() {
         },
         address: {
           '@type': 'PostalAddress',
+          addressLocality: 'San Nicolás',
           addressRegion: 'Buenos Aires',
           addressCountry: 'AR',
         },
@@ -147,9 +151,13 @@ export function siteIdentityJsonLd() {
         '@id': personId,
         name: SITE_NAME,
         jobTitle: 'Abogado',
-        description:
-          'Abogado matriculado en la Provincia de Buenos Aires, con dedicación exclusiva a reclamos por problemas de planes de ahorro automotriz.',
+        description: `Abogado matriculado en la Provincia de Buenos Aires (${BAR_REGISTRATION_LABEL}), con dedicación exclusiva a reclamos por problemas de planes de ahorro automotriz.`,
         url: absoluteUrl('/sobre-mi'),
+        identifier: BAR_REGISTRATION,
+        memberOf: {
+          '@type': 'Organization',
+          name: BAR_ASSOCIATION,
+        },
         worksFor: { '@id': orgId },
         knowsAbout: [
           'Planes de ahorro',

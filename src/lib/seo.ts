@@ -5,6 +5,10 @@ export const SITE_NAME = 'Dr. Adrián Bengolea';
 export const SITE_TAGLINE = 'Problemas y reclamos de planes de ahorro';
 export const SITE_TITLE = `${SITE_NAME} – ${SITE_TAGLINE}`;
 
+export const BAR_ASSOCIATION = 'Colegio de Abogados de San Nicolás';
+export const BAR_REGISTRATION = 'Tomo 8, Folio 84';
+export const BAR_REGISTRATION_LABEL = `${BAR_REGISTRATION} — ${BAR_ASSOCIATION}`;
+
 export const DEFAULT_DESCRIPTION =
   'Problemas con planes de ahorro automotriz en Argentina: liquidación demorada, rescisión, haberes netos mal calculados, ejecución prendaria y cláusulas abusivas. Asesoramiento legal del Dr. Adrián Bengolea en la Provincia de Buenos Aires.';
 

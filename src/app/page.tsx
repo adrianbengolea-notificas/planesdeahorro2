@@ -65,7 +65,7 @@ const differentiators = [
     icon: MapPin,
     title: 'Atención en Provincia de Buenos Aires',
     description:
-      'El Dr. Adrián Bengolea está matriculado en la Provincia de Buenos Aires; el estudio toma nuevos casos de quienes residen en ese ámbito. Modalidad 100% digital, sin desplazamientos.',
+      'El Dr. Adrián Bengolea está matriculado en el Colegio de Abogados de San Nicolás (Tomo 8, Folio 84). El estudio toma nuevos casos de quienes residen en la Provincia de Buenos Aires. Modalidad 100% digital, sin desplazamientos.',
   },
 ];
 

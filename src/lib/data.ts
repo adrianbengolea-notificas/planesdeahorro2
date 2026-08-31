@@ -1,4 +1,4 @@
-import type { Article, FAQ, FaqSection, FrequentProblem } from './types';
+import type { FAQ, FaqSection, FrequentProblem } from './types';
 
 export const frequentProblems: FrequentProblem[] = [
   {
@@ -110,36 +110,6 @@ export const problemasIndexFaqs: FAQ[] = [
     question: '¿Me pueden sacar el auto si debo cuotas del plan de ahorro?',
     answer:
       'Si el vehículo está prendado, la administradora puede iniciar ejecución prendaria y pedir el secuestro. No es automático ni inapelable: se puede discutir la deuda, la intimación y medidas desproporcionadas. El tiempo es crítico apenas llega la carta documento o la notificación judicial.',
-  },
-];
-
-export const doctrinalArticles: Article[] = [
-  {
-    slug: 'la-naturaleza-juridica-del-plan-de-ahorro',
-    title: 'La Naturaleza Jurídica del Contrato de Plan de Ahorro',
-    summary:
-      'Un análisis profundo sobre si el plan de ahorro es un contrato de consumo, un mandato, o una figura mixta. Implicancias prácticas de cada postura.',
-    author: 'Dr. Juan Pérez',
-    date: '2024-03-10',
-    content: 'Análisis detallado sobre la naturaleza jurídica del contrato de plan de ahorro...',
-  },
-  {
-    slug: 'el-valor-movil-y-la-crisis-economica',
-    title: 'El "Valor Móvil" en Jaque: Cómo la Crisis Económica Desnaturaliza el Contrato',
-    summary:
-      'Exploración de la teoría de la imprevisión y el esfuerzo compartido como herramientas legales para morigerar los efectos de la devaluación en los planes de ahorro.',
-    author: 'Dra. Ana Gómez',
-    date: '2024-02-05',
-    content: 'Artículo completo sobre la crisis económica y su impacto en el valor móvil...',
-  },
-  {
-    slug: 'defensa-del-consumidor-en-secuestro-prendario',
-    title: 'Estrategias de Defensa del Consumidor ante un Secuestro Prendario',
-    summary:
-      'Guía práctica con las principales defensas y nulidades que pueden oponerse en un juicio de secuestro prendario iniciado por una administradora de plan de ahorro.',
-    author: 'Dr. Carlos Rodríguez',
-    date: '2024-01-20',
-    content: 'Guía detallada sobre cómo defenderse en un juicio de secuestro prendario...',
   },
 ];
 

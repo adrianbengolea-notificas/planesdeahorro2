@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { ArrowRight, FileText } from 'lucide-react';
-import { doctrinalArticles } from '@/lib/data';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, orderBy, query, where } from 'firebase/firestore';
 import type { DoctrinaArticle } from '@/lib/types';
@@ -47,14 +46,7 @@ export function DoctrineListClient() {
         authorLabel: a.authorName,
         date: a.publishDate,
       }))
-    : doctrinalArticles.map((a) => ({
-        key: a.slug,
-        slug: a.slug,
-        title: a.title,
-        summary: a.summary,
-        authorLabel: a.author,
-        date: a.date,
-      }));
+    : [];
 
   return (
     <div className="flex flex-col">
@@ -79,9 +71,9 @@ export function DoctrineListClient() {
       <div className="bg-background py-14 md:py-20">
         <div className="container mx-auto px-4">
 
-          {!isLoading && !showFirestore && (
+          {!isLoading && articles.length === 0 && (
             <p className="text-sm text-muted-foreground mb-8 border-l-2 border-accent pl-4">
-              Mostrando artículos de ejemplo hasta que publique contenido desde el panel de administración.
+              Todavía no hay artículos de doctrina publicados.
             </p>
           )}
 

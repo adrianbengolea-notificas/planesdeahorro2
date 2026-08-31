@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Logo } from './logo';
+import { BAR_REGISTRATION_LABEL } from '@/lib/seo';
 
 const footerSections = [
   {
@@ -40,7 +41,7 @@ export function AppFooter() {
               Asesoramiento legal en problemas de planes de ahorro automotriz: liquidación, rescisión, haberes netos, ejecución prendaria y cláusulas abusivas.
             </p>
             <p className="mt-4 text-xs text-white/40">
-              Atención a residentes en la Provincia de Buenos Aires (matriculación del titular).
+              {BAR_REGISTRATION_LABEL}. Atención a residentes en la Provincia de Buenos Aires.
             </p>
           </div>
           {footerSections.map((section) => (

@@ -32,15 +32,6 @@ export type PublishedFalloSummary = {
   updatedAt?: string;
 };
 
-export interface Article {
-  slug: string;
-  title: string;
-  summary: string;
-  author: string;
-  date: string;
-  content: string;
-}
-
 /** Documento en la colección Firestore `doctrina` (blog jurídico). */
 export interface DoctrinaArticle {
   id: string;
