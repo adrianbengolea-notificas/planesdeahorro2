@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { EB_Garamond, Inter } from 'next/font/google';
+import { Cinzel, Source_Sans_3 } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 import { cn } from '@/lib/utils';
@@ -23,17 +23,17 @@ import {
 const GOOGLE_ADS_ID =
   process.env.NEXT_PUBLIC_GOOGLE_ADS_ID?.trim() || 'AW-18107912536';
 
-const inter = Inter({
+const sourceSans = Source_Sans_3({
   subsets: ['latin'],
-  variable: '--font-inter',
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-source-sans',
   display: 'swap',
 });
 
-const ebGaramond = EB_Garamond({
+const cinzel = Cinzel({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-  variable: '--font-eb-garamond',
+  variable: '--font-cinzel',
   display: 'swap',
 });
 
@@ -95,7 +95,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es-AR" className={cn(inter.variable, ebGaramond.variable)}>
+    <html lang="es-AR" className={cn(sourceSans.variable, cinzel.variable)}>
       <head>
         <link
           rel="alternate"

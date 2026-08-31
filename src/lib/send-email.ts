@@ -24,7 +24,7 @@ function clientFromEmail(): string {
 }
 
 const p =
-  'margin:0 0 14px;font-family:\'Inter\',-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;font-size:15px;line-height:1.6;color:' +
+  'margin:0 0 14px;font-family:\'Source Sans 3\',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:' +
   EMAIL_THEME.body;
 
 function plainToParagraphs(text: string | undefined): string {
@@ -144,7 +144,7 @@ function caseEvaluationNotificationHtml(
   const docs = caseData.documentacionDisponible.join(', ') || '—';
   const cta = options.openInAdminUrl
     ? `
-    <p style="margin:0 0 18px;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.6;color:${EMAIL_THEME.body};">
+    <p style="margin:0 0 18px;font-family:'Source Sans 3',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:${EMAIL_THEME.body};">
       <a href="${escapeHtml(options.openInAdminUrl)}" style="display:inline-block;padding:10px 18px;background:${EMAIL_THEME.primary};color:${EMAIL_THEME.primaryFg};text-decoration:none;border-radius:6px;font-weight:600;">Abrir en el panel de administración</a>
     </p>
   `

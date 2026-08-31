@@ -89,7 +89,7 @@ export default function Home() {
               priority
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-[hsl(218,65%,10%)]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-[hsl(191,24%,16%)]" />
         </div>
 
         {/* Gold left accent bar */}
@@ -298,7 +298,7 @@ export default function Home() {
       {/* ── Final CTA ── */}
       <section className="relative py-24 md:py-36 bg-primary text-primary-foreground overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_50%,hsl(40,68%,48%,0.08),transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_50%,hsl(48,22%,62%,0.12),transparent_60%)]" />
           <div className="absolute right-0 top-0 w-[3px] h-full bg-accent opacity-50" />
         </div>
         <div className="relative z-10 container mx-auto px-4 text-center">

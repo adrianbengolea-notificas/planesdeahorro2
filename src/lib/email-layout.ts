@@ -1,21 +1,21 @@
 /**
  * Plantilla HTML para correos transaccionales (Resend).
- * Colores y tipografías alineados con `globals.css` / sitio (Inter + EB Garamond).
+ * Colores y tipografías alineados con `globals.css` / sitio (Source Sans 3 + Cinzel).
  */
 
 export const EMAIL_THEME = {
-  /** hsl(218, 65%, 18%) */
-  primary: '#102f5e',
-  primaryFg: '#ffffff',
-  /** hsl(40, 68%, 48%) */
-  accent: '#d4a83a',
+  /** hsl(191, 22%, 30%) — teal del estudio */
+  primary: '#3d5c63',
+  primaryFg: '#f7f4ea',
+  /** hsl(48, 22%, 62%) — champagne */
+  accent: '#c4b89a',
   /** ~ foreground */
-  body: '#2b3340',
-  muted: '#5a6370',
-  subtle: '#8b939e',
-  border: '#e6e9ef',
-  pageBg: '#f0f2f6',
-  cardBg: '#ffffff',
+  body: '#313d3f',
+  muted: '#5e6a6d',
+  subtle: '#8a9193',
+  border: '#e4dfd0',
+  pageBg: '#f7f4ea',
+  cardBg: '#fffcf7',
 } as const;
 
 export function escapeHtml(text: string): string {
@@ -26,10 +26,10 @@ export function escapeHtml(text: string): string {
     .replace(/"/g, '&quot;');
 }
 
-const FONT_LINK = `https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap`;
+const FONT_LINK = `https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@400;500;600&display=swap`;
 
-const fontBody = `'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif`;
-const fontHeadline = `'EB Garamond',Georgia,'Times New Roman',serif`;
+const fontBody = `'Source Sans 3',Helvetica,Arial,sans-serif`;
+const fontHeadline = `Cinzel,Georgia,'Times New Roman',serif`;
 
 export type EmailLayoutVariant = 'client' | 'internal';
 
@@ -100,7 +100,7 @@ export function wrapEmailHtml(
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:${EMAIL_THEME.pageBg};border-collapse:collapse;">
     <tr>
       <td align="center" style="padding:28px 16px;">
-        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;width:100%;background:${EMAIL_THEME.cardBg};border-collapse:collapse;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(16,47,94,0.08);border:1px solid ${EMAIL_THEME.border};">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;width:100%;background:${EMAIL_THEME.cardBg};border-collapse:collapse;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(61,92,99,0.08);border:1px solid ${EMAIL_THEME.border};">
           <tr>
             <td style="padding:0;background:${EMAIL_THEME.primary};">
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">

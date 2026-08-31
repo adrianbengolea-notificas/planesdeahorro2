@@ -29,10 +29,10 @@ export function AppHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-primary font-headline">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur-sm font-headline">
       <div className="container mx-auto flex h-[4.5rem] items-center justify-between px-4">
         <Link href="/">
-          <Logo inverted />
+          <Logo />
         </Link>
 
         {/* Desktop Navigation */}
@@ -42,11 +42,11 @@ export function AppHeader() {
               key={link.href}
               href={link.href}
               className={cn(
-                'text-base font-medium tracking-wide transition-colors',
+                'text-sm font-medium uppercase tracking-[0.14em] transition-colors',
                 pathname === link.href ||
                 (link.href !== '/' && pathname.startsWith(link.href))
-                  ? 'text-white'
-                  : 'text-white/55 hover:text-white/90'
+                  ? 'text-primary'
+                  : 'text-primary/55 hover:text-primary'
               )}
             >
               {link.label}
@@ -57,7 +57,7 @@ export function AppHeader() {
         <div className="hidden md:flex items-center gap-4">
           <Button
             asChild
-            className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base h-10 px-5"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm uppercase tracking-[0.12em] h-10 px-5"
           >
             <Link href="/evaluar-caso">Contanos tu caso</Link>
           </Button>
@@ -67,19 +67,19 @@ export function AppHeader() {
         <div className="md:hidden">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 hover:text-white">
+              <Button variant="ghost" size="icon" className="text-primary hover:bg-secondary hover:text-primary">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Abrir menú</span>
               </Button>
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="w-[300px] sm:w-[350px] bg-primary border-white/10 font-headline"
+              className="w-[300px] sm:w-[350px] bg-background border-border font-headline"
             >
               <SheetHeader>
                 <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Logo inverted />
+                  <Logo />
                 </Link>
               </SheetHeader>
               <div className="mt-8 flex flex-col gap-1">
@@ -89,11 +89,11 @@ export function AppHeader() {
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
-                      'py-3 px-2 text-lg font-medium tracking-wide transition-colors border-b border-white/10',
+                      'py-3 px-2 text-base font-medium uppercase tracking-[0.14em] transition-colors border-b border-border',
                       pathname === link.href ||
                       (link.href !== '/' && pathname.startsWith(link.href))
-                        ? 'text-white'
-                        : 'text-white/60 hover:text-white'
+                        ? 'text-primary'
+                        : 'text-primary/60 hover:text-primary'
                     )}
                   >
                     {link.label}
@@ -101,7 +101,7 @@ export function AppHeader() {
                 ))}
                 <Button
                   asChild
-                  className="mt-6 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base h-10"
+                  className="mt-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm uppercase tracking-[0.12em] h-10"
                 >
                   <Link href="/evaluar-caso" onClick={() => setIsMobileMenuOpen(false)}>
                     Contanos tu caso
