@@ -50,7 +50,6 @@ export const metadata: Metadata = {
   publisher: SITE_NAME,
   keywords: DEFAULT_KEYWORDS,
   alternates: {
-    canonical: absoluteUrl('/'),
     types: {
       'text/plain': absoluteUrl('/llms.txt'),
     },
@@ -58,7 +57,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: SITE_LOCALE,
-    url: absoluteUrl('/'),
     siteName: SITE_TITLE,
     title: SITE_TITLE,
     description: DEFAULT_DESCRIPTION,
@@ -69,11 +67,7 @@ export const metadata: Metadata = {
     description: DEFAULT_DESCRIPTION,
   },
   robots: {
-    index: true,
-    follow: true,
     googleBot: {
-      index: true,
-      follow: true,
       'max-image-preview': 'large',
       'max-snippet': -1,
       'max-video-preview': -1,

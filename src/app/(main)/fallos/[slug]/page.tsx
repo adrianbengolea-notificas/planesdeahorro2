@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: 'Fallo judicial',
     description: 'Detalle de jurisprudencia sobre planes de ahorro automotriz.',
     path: `/fallos/${slug}`,
+    noIndex: result.mode === 'none',
   });
 }
 

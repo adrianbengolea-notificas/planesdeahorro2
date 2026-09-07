@@ -79,6 +79,7 @@ export function AppFooter() {
             <span>&copy; {new Date().getFullYear()} Dr. Adrián Bengolea. Todos los derechos reservados.</span>
             <Link
               href="/admin"
+              rel="nofollow"
               className="text-[10px] text-white/25 hover:text-white/45 transition-colors"
             >
               Admin

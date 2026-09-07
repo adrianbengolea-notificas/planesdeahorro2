@@ -1,6 +1,6 @@
-import { redirect } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 
-/** Sección de videos deshabilitada temporalmente: redirige al inicio. */
+/** Sección de videos deshabilitada: Google debe consolidar esta URL en el inicio. */
 export default function VideosPage() {
-  redirect('/');
+  permanentRedirect('/');
 }
