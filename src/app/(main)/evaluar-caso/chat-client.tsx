@@ -128,8 +128,8 @@ export function ChatClient() {
                 <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-green-500 ring-2 ring-card" />
             </div>
             <div>
-                <p className="font-bold text-lg">Juris-IA</p>
-                <p className="text-sm text-muted-foreground">Asistente Virtual</p>
+                <p className="font-bold text-lg">Estudio Bengolea</p>
+                <p className="text-sm text-muted-foreground">Consulta inicial</p>
             </div>
         </div>
         <Button variant="ghost" size="icon" onClick={handleReset} aria-label="Reiniciar conversación">

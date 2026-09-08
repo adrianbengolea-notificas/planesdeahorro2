@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { ArrowRight, Scale, Bot, MapPin } from 'lucide-react';
+import { ArrowRight, Scale, ClipboardList, MapPin } from 'lucide-react';
 import { frequentProblems, faqs, faqHomeItems } from '@/lib/data';
 import { HomeDoctrinePreview } from '@/components/home-doctrine-preview';
 import { FaqAnswer } from '@/components/faq-answer';
@@ -56,10 +56,10 @@ const differentiators = [
       'Dedicación exclusiva a planes de ahorro. Conocemos cada cláusula abusiva y cada precedente judicial favorable para su situación.',
   },
   {
-    icon: Bot,
-    title: 'Diagnóstico Inmediato con IA',
+    icon: ClipboardList,
+    title: 'Consulta inicial sin turnos',
     description:
-      'Nuestra herramienta de inteligencia artificial evalúa su caso al instante e indica si tiene fundamentos legales para reclamar, sin turnos ni esperas.',
+      'Contanos tu situación cuando puedas. El estudio ordena la información y el Dr. Bengolea la revisa, sin que tengas que pedir un turno previo.',
   },
   {
     icon: MapPin,
@@ -201,7 +201,7 @@ export default function Home() {
               Cómo trabajamos
             </p>
             <h2 className="font-headline text-3xl md:text-5xl font-bold max-w-2xl leading-tight">
-              Especialización, IA y atención en Provincia de Buenos Aires
+              Especialización y atención en Provincia de Buenos Aires
             </h2>
             <div className="w-12 h-[2px] bg-accent mt-6" />
           </div>
@@ -223,14 +223,14 @@ export default function Home() {
 
           <div className="mt-16 pt-10 border-t border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <p className="font-headline text-2xl md:text-3xl font-bold max-w-lg leading-tight">
-              La IA ordena tu relato para que el Dr. Bengolea analice tu situación con la información completa.
+              Contanos tu situación: el estudio ordena la información para que el Dr. Bengolea la analice completa.
             </p>
             <Button
               asChild
               size="lg"
               className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold shrink-0 h-12 px-8"
             >
-              <Link href="/evaluar-caso">Contanos tu caso con IA</Link>
+              <Link href="/evaluar-caso">Contanos tu caso</Link>
             </Button>
           </div>
         </div>

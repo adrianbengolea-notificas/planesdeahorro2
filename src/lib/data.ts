@@ -336,7 +336,7 @@ export const faqSections: FaqSection[] = [
       {
         question: '¿El primer contacto con el estudio tiene costo?',
         answer:
-          'No. Podés iniciar el contacto con el estudio sin compromiso. El asistente recopila y ordena la información para que el Dr. Bengolea analice tu situación; ahí vemos si podemos intervenir y, si encaja, te explicamos cómo serían los honorarios para las etapas siguientes.\n\nLas dudas sobre cómo funciona el plan de ahorro en general están repartidas en las secciones de arriba; esta parte es solo el canal con el estudio.',
+          'No. Podés iniciar el contacto con el estudio sin compromiso. Contanos tu situación y el estudio ordena la información para que el Dr. Bengolea la analice; ahí vemos si podemos intervenir y, si encaja, te explicamos cómo serían los honorarios para las etapas siguientes.\n\nLas dudas sobre cómo funciona el plan de ahorro en general están repartidas en las secciones de arriba; esta parte es solo el canal con el estudio.',
         highlight: true,
       },
     ],

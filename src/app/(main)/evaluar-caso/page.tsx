@@ -6,7 +6,7 @@ import { buildPageMetadata } from '@/lib/seo';
 export const metadata: Metadata = buildPageMetadata({
   title: 'Contanos tu caso',
   description:
-    '¿Tenés un problema con tu plan de ahorro? El asistente ordena tu relato para que el Dr. Adrián Bengolea lo analice. Confidencial, sin compromiso, Provincia de Buenos Aires.',
+    '¿Tenés un problema con tu plan de ahorro? Contanos tu situación y el estudio ordena el relato para que el Dr. Adrián Bengolea lo analice. Confidencial, sin compromiso, Provincia de Buenos Aires.',
   path: '/evaluar-caso',
   keywords: [
     'consultar problema plan de ahorro',
@@ -30,7 +30,7 @@ export default function EvaluateCasePage() {
           </h1>
           <div className="w-12 h-[2px] bg-accent mt-6" />
           <p className="text-white/65 mt-6 max-w-2xl text-base leading-relaxed">
-            La IA no reemplaza al abogado: recopila datos, filtra y ordena la información, y el estudio se la entrega al Dr. Bengolea para el análisis. Es confidencial y sin compromiso. Atendemos a residentes en la Provincia de Buenos Aires.
+            Contanos tu situación. El estudio ordena la información y se la entrega al Dr. Bengolea para el análisis. Es confidencial y sin compromiso. Atendemos a residentes en la Provincia de Buenos Aires.
           </p>
           <ol className="mt-8 grid gap-4 sm:grid-cols-3 text-sm text-white/80 max-w-3xl">
             <li className="flex gap-3">
@@ -39,7 +39,7 @@ export default function EvaluateCasePage() {
             </li>
             <li className="flex gap-3">
               <span className="font-headline font-bold text-accent shrink-0">2</span>
-              <span>La IA recopila y ordena el relato</span>
+              <span>El estudio ordena tu relato</span>
             </li>
             <li className="flex gap-3">
               <span className="font-headline font-bold text-accent shrink-0">3</span>
