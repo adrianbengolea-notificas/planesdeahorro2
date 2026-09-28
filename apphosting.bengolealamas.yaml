@@ -11,10 +11,12 @@ scripts:
   runCommand: npm run start:bl
 
 env:
-  - variable: GOOGLE_NODE_RUN_SCRIPTS
-    value: build:bl
+  # Preferir APP_SITE_ID (consola backend bengolealamas, BUILD + RUNTIME).
+  - variable: APP_SITE_ID
+    value: bl
     availability:
       - BUILD
+      - RUNTIME
   - variable: NEXT_PUBLIC_SITE_ID
     value: bl
     availability:

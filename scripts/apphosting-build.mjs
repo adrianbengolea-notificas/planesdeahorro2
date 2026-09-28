@@ -1,13 +1,19 @@
 import { execSync } from 'node:child_process';
 
-/**
- * App Hosting (monorepo): el backend bengolealamas define NEXT_PUBLIC_SITE_ID=bl en build.
- * Adrian (planesdeahorro2) no define esa variable → build clásico en la raíz.
- */
-const siteId = process.env.NEXT_PUBLIC_SITE_ID?.trim();
+/** Backend bengolealamas: APP_SITE_ID=bl (BUILD+RUNTIME en consola). Adrian: no definir. */
+function resolveSiteId() {
+  return (
+    process.env.APP_SITE_ID?.trim() ||
+    process.env.NEXT_PUBLIC_SITE_ID?.trim() ||
+    ''
+  );
+}
+
+const siteId = resolveSiteId();
+console.log('[apphosting-build] siteId=', siteId || '(adrian default)');
 
 if (siteId === 'bl') {
   execSync('npm run build --workspace=bengolealamas', { stdio: 'inherit' });
 } else {
-  execSync('next build', { stdio: 'inherit' });
+  execSync('npm run build:adrian', { stdio: 'inherit' });
 }

@@ -17,7 +17,7 @@ Si el backend apunta a `apps/bengolealamas`, el build falla con:
 |--------|--------|
 | Root directory | **`.`** o **`/`** (raíz del repositorio) |
 | Rama | `main` |
-| Build | variable `GOOGLE_NODE_RUN_SCRIPTS` = `build:bl` |
+| Build | `APP_SITE_ID` = `bl` (**BUILD** y **RUNTIME** en Environment) |
 
 Ver `apphosting.bengolealamas.yaml` en la raíz del repo.
 
