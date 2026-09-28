@@ -1,0 +1,29 @@
+{
+  "name": "@repo/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./seo": "./src/seo/index.ts",
+    "./schema": "./src/schema/index.ts",
+    "./components/breadcrumbs": "./src/components/breadcrumbs.tsx",
+    "./components/json-ld": "./src/components/json-ld.tsx",
+    "./redirects/wix": "./src/redirects/wix-redirects.ts",
+    "./utils/cn": "./src/utils/cn.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.0.1"
+  },
+  "peerDependencies": {
+    "next": ">=15",
+    "react": ">=19"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.1",
+    "typescript": "^5"
+  }
+}

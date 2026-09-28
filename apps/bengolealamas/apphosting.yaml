@@ -1,0 +1,17 @@
+# Firebase App Hosting — backend bengolealamas (sitio institucional).
+# Crear el backend en consola o CLI antes del primer deploy (ver docs/multi-site-architecture.md).
+
+runConfig:
+  maxInstances: 1
+
+env:
+  - variable: NEXT_PUBLIC_APP_URL
+    value: https://bengolealamas.com.ar
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_SITE_ID
+    value: bl
+    availability:
+      - BUILD
+      - RUNTIME
