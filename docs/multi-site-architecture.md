@@ -52,12 +52,20 @@ Firebase App Hosting admite **varios backends** en un mismo proyecto.
 2. Crear backend App Hosting **`bengolealamas`**:
    - Consola: **App Hosting → Create backend** → conectar repo Git → **Root directory**: `apps/bengolealamas`.
    - O CLI (referencia): `firebase apphosting:backends:create --project planesdeahorro-77c3e` y asociar root `apps/bengolealamas`.
-3. Copiar/adaptar secretos: **ninguno obligatorio** en esta fase (sin IA/WhatsApp).
-4. Variables de build/runtime en `apps/bengolealamas/apphosting.yaml`:
+3. **Root directory (Deployment):** **`.`** (raíz del monorepo), **no** `apps/bengolealamas`.  
+   Con subcarpeta sola, `npm install` no resuelve `@repo/shared` y el build falla.
+4. Config: `apphosting.bengolealamas.yaml` en la raíz (build vía `GOOGLE_NODE_RUN_SCRIPTS=build:bl`, run `npm run start:bl`).  
+   Si la consola no enlaza ese archivo, cargar las mismas variables en **Settings → Environment**.
+5. Variables mínimas:
    - `NEXT_PUBLIC_APP_URL` — en staging usar la URL `https://<backend>--<project>.web.app` hasta DNS.
    - `NEXT_PUBLIC_SITE_ID=bl`
-5. Deploy desde rama con cambios; **no** conectar `bengolealamas.com.ar` hasta Fase DNS.
-6. Adrian sigue desplegándose desde la **raíz** con `firebase.json` existente (`planesdeahorro2`).
+6. Deploy desde rama con cambios; **no** conectar `bengolealamas.com.ar` hasta Fase DNS.
+7. Adrian sigue desplegándose desde la **raíz** con `firebase.json` existente (`planesdeahorro2`); no comparte el mismo `runCommand` porque el backend Adrian usa el `apphosting.yaml` por defecto (`npm run build` / `npm start`).
+
+### Ver logs cuando falla el build
+
+Consola: **App Hosting → backend bengolealamas → Rollouts** → clic en el rollout fallido → **Ver registros de compilación** (Cloud Build).  
+Ahí aparece el error real (`npm ERR`, `Module not found`, etc.).
 
 ### Archivos de deploy B&L
 

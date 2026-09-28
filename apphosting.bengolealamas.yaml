@@ -1,0 +1,27 @@
+# App Hosting — backend «bengolealamas» (monorepo).
+# En consola: Deployment → Root directory = «.» (raíz del repo).
+# Asociar este archivo al backend bengolealamas si la consola lo permite; si no, copiar env a Settings → Environment.
+
+runConfig:
+  maxInstances: 1
+
+# No usar buildCommand aquí: en monorepos npm puede borrar «workspaces» del package.json.
+# El build se dispara con GOOGLE_NODE_RUN_SCRIPTS → npm run build:bl (script en package.json raíz).
+scripts:
+  runCommand: npm run start:bl
+
+env:
+  - variable: GOOGLE_NODE_RUN_SCRIPTS
+    value: build:bl
+    availability:
+      - BUILD
+  - variable: NEXT_PUBLIC_SITE_ID
+    value: bl
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_APP_URL
+    value: https://bengolealamas--planesdeahorro-77c3e.us-east4.hosted.app
+    availability:
+      - BUILD
+      - RUNTIME

@@ -4,10 +4,8 @@
 runConfig:
   maxInstances: 1
 
-# Monorepo: el root del backend en consola es apps/bengolealamas, pero @repo/* vive en la raíz del repo.
-scripts:
-  buildCommand: cd ../.. && npm ci && npm run build:bl
-  runCommand: cd ../.. && npm run start:bl
+# Monorepo: usar apphosting.bengolealamas.yaml en la raíz del repo y Root directory «.» en consola.
+# Ver docs/multi-site-architecture.md
 
 env:
   - variable: NEXT_PUBLIC_APP_URL
