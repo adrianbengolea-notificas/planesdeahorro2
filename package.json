@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "workspaces": [
-    "apps/*",
     "packages/*"
   ],
   "scripts": {
@@ -20,9 +19,9 @@
     "test-resend": "tsx scripts/test-resend.ts",
     "test-notificashub-send": "tsx scripts/test-notificashub-send.ts",
     "check-notificashub-env": "tsx scripts/check-notificashub-env.ts",
-    "dev:bl": "npm run dev --workspace=bengolealamas",
-    "build:bl": "npm run build --workspace=bengolealamas",
-    "start:bl": "npm run start --workspace=bengolealamas"
+    "dev:bl": "npm run dev --prefix apps/bengolealamas",
+    "build:bl": "npm run build --prefix apps/bengolealamas",
+    "start:bl": "npm run start --prefix apps/bengolealamas"
   },
   "dependencies": {
     "@genkit-ai/compat-oai": "^1.32.0",

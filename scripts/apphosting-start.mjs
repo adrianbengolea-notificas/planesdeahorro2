@@ -8,7 +8,7 @@ const siteId =
 console.log('[apphosting-start] siteId=', siteId || '(adrian default)');
 
 if (siteId === 'bl') {
-  execSync('npm run start --workspace=bengolealamas', { stdio: 'inherit' });
+  execSync('npm run start --prefix apps/bengolealamas', { stdio: 'inherit' });
 } else {
   execSync('npm run start:adrian', { stdio: 'inherit' });
 }

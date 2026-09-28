@@ -13,7 +13,7 @@ const siteId = resolveSiteId();
 console.log('[apphosting-build] siteId=', siteId || '(adrian default)');
 
 if (siteId === 'bl') {
-  execSync('npm run build --workspace=bengolealamas', { stdio: 'inherit' });
+  execSync('npm run build --prefix apps/bengolealamas', { stdio: 'inherit' });
 } else {
   execSync('npm run build:adrian', { stdio: 'inherit' });
 }

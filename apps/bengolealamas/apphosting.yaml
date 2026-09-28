@@ -4,12 +4,11 @@
 runConfig:
   maxInstances: 1
 
-# Monorepo: usar apphosting.bengolealamas.yaml en la raíz del repo y Root directory «.» en consola.
-# Ver docs/multi-site-architecture.md
+# Root directory en Firebase: apps/bengolealamas (lockfile local + file:../../packages/*).
 
 env:
   - variable: NEXT_PUBLIC_APP_URL
-    value: https://bengolealamas.com.ar
+    value: https://bengolealamas--planesdeahorro-77c3e.us-east4.hosted.app
     availability:
       - BUILD
       - RUNTIME
