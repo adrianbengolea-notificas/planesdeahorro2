@@ -69,6 +69,6 @@ export function buildPageMetadata(
   };
 }
 
-export function createMetadataBase(site: SiteSeoConfig): Metadata['metadataBase'] {
+export function createMetadataBase(site: SiteSeoConfig): URL {
   return new URL(absoluteUrl(site, '/'));
 }

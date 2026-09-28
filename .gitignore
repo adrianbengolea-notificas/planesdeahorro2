@@ -3,6 +3,8 @@
 # dependencies
 /node_modules
 apps/bengolealamas/node_modules/
+packages/shared/node_modules/
+packages/content-types/node_modules/
 /.pnp
 .pnp.*
 .yarn/*

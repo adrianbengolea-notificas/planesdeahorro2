@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack -p 9003",
+    "prebuild": "npm install clsx@^2.1.1 tailwind-merge@^3.0.1 --prefix ../../packages/shared --no-package-lock --ignore-scripts --no-fund --no-audit",
     "build": "next build",
     "start": "next start -p 9003",
     "lint": "next lint",
