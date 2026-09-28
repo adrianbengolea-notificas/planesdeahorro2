@@ -2,6 +2,10 @@
   "name": "nextn",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "next dev --turbopack -p 9002",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
@@ -13,7 +17,10 @@
     "grant-admin": "tsx scripts/grant-admin.ts",
     "test-resend": "tsx scripts/test-resend.ts",
     "test-notificashub-send": "tsx scripts/test-notificashub-send.ts",
-    "check-notificashub-env": "tsx scripts/check-notificashub-env.ts"
+    "check-notificashub-env": "tsx scripts/check-notificashub-env.ts",
+    "dev:bl": "npm run dev --workspace=bengolealamas",
+    "build:bl": "npm run build --workspace=bengolealamas",
+    "start:bl": "npm run start --workspace=bengolealamas"
   },
   "dependencies": {
     "@genkit-ai/compat-oai": "^1.32.0",
