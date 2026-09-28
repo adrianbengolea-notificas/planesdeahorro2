@@ -52,15 +52,15 @@ Firebase App Hosting admite **varios backends** en un mismo proyecto.
 2. Crear backend App Hosting **`bengolealamas`**:
    - Consola: **App Hosting → Create backend** → conectar repo Git → **Root directory**: `apps/bengolealamas`.
    - O CLI (referencia): `firebase apphosting:backends:create --project planesdeahorro-77c3e` y asociar root `apps/bengolealamas`.
-3. **Root directory (Deployment):** **`.`** (raíz del monorepo), **no** `apps/bengolealamas`.  
-   Con subcarpeta sola, `npm install` no resuelve `@repo/shared` y el build falla.
-4. Config: `apphosting.bengolealamas.yaml` en la raíz (build vía `GOOGLE_NODE_RUN_SCRIPTS=build:bl`, run `npm run start:bl`).  
-   Si la consola no enlaza ese archivo, cargar las mismas variables en **Settings → Environment**.
-5. Variables mínimas:
-   - `NEXT_PUBLIC_APP_URL` — en staging usar la URL `https://<backend>--<project>.web.app` hasta DNS.
+3. **Root directory (Deployment):** **`apps/bengolealamas`** (obligatorio).  
+   La app tiene `package-lock.json` y dependencias `file:../../packages/*`. Firebase sube el repo completo; el adaptador Next.js debe compilar **dentro** de esa carpeta.  
+   **No** uses root `.` con `APP_SITE_ID` / `build:bl`: el build puede terminar en otra ruta y el adaptador falla con *framework build command*.
+4. Env: `apps/bengolealamas/apphosting.yaml` (o las mismas variables en consola). **No** uses `APP_SITE_ID` en el backend Adrian.
+5. Variables mínimas en B&L:
+   - `NEXT_PUBLIC_APP_URL` — staging: URL `https://bengolealamas--planesdeahorro-77c3e.us-east4.hosted.app`
    - `NEXT_PUBLIC_SITE_ID=bl`
-6. Deploy desde rama con cambios; **no** conectar `bengolealamas.com.ar` hasta Fase DNS.
-7. Adrian sigue desplegándose desde la **raíz** con `firebase.json` existente (`planesdeahorro2`); no comparte el mismo `runCommand` porque el backend Adrian usa el `apphosting.yaml` por defecto (`npm run build` / `npm start`).
+6. Deploy desde `main`; **no** conectar `bengolealamas.com.ar` hasta Fase DNS.
+7. Adrian: backend `planesdeahorro2`, root **`.`**, `apphosting.yaml` en la raíz (`npm run build` = `next build`).
 
 ### Ver logs cuando falla el build
 

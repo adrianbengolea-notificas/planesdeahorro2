@@ -12,4 +12,8 @@ Este directorio incluye su propio **`package-lock.json`** y dependencias `file:.
 
 Adrian (`planesdeahorro2`) usa root **`.`** (raíz del repo).
 
-Variables opcionales en Environment: `NEXT_PUBLIC_SITE_ID=bl`, `NEXT_PUBLIC_APP_URL` (URL `hosted.app` del backend bengolealamas). **No hace falta** `APP_SITE_ID` si el root es `apps/bengolealamas`.
+Variables en Environment (o `apphosting.yaml`): `NEXT_PUBLIC_SITE_ID=bl`, `NEXT_PUBLIC_APP_URL` (URL `hosted.app` del backend bengolealamas).
+
+**No** configures root `.` con `APP_SITE_ID=bl` ni `GOOGLE_NODE_RUN_SCRIPTS=build:bl`: el deploy de `05cf4a8` falla porque el adaptador Next.js de App Hosting no encuentra el artefacto en la raíz del repo.
+
+Si el build falla por lockfile: confirmá que `apps/bengolealamas/package-lock.json` está en GitHub y volvé a desplegar.

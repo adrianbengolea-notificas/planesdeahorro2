@@ -1,5 +1,7 @@
 import { execSync } from 'node:child_process';
 
+/** Solo pruebas locales. App Hosting B&L usa root apps/bengolealamas; Adrian usa npm run build = next build. */
+
 /** Backend bengolealamas: APP_SITE_ID=bl (BUILD+RUNTIME en consola). Adrian: no definir. */
 function resolveSiteId() {
   return (

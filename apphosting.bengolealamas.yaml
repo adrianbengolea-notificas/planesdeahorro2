@@ -1,29 +1,23 @@
-# App Hosting — backend «bengolealamas» (monorepo).
-# En consola: Deployment → Root directory = «.» (raíz del repo).
-# Asociar este archivo al backend bengolealamas si la consola lo permite; si no, copiar env a Settings → Environment.
+# Referencia — NO usar con Root directory «.» en el backend bengolealamas.
+#
+# APP_SITE_ID + npm run build en la raíz hace que el adaptador Next.js de App Hosting
+# falle (busca .next en la raíz; el sitio B&L compila en apps/bengolealamas/.next).
+#
+# Configuración correcta:
+#   Consola → backend bengolealamas → Root directory = apps/bengolealamas
+#   Env / YAML activo: apps/bengolealamas/apphosting.yaml
 
 runConfig:
   maxInstances: 1
 
-# No usar buildCommand aquí: en monorepos npm puede borrar «workspaces» del package.json.
-# El build se dispara con GOOGLE_NODE_RUN_SCRIPTS → npm run build:bl (script en package.json raíz).
-scripts:
-  runCommand: npm run start:bl
-
 env:
-  # Preferir APP_SITE_ID (consola backend bengolealamas, BUILD + RUNTIME).
-  - variable: APP_SITE_ID
-    value: bl
+  - variable: NEXT_PUBLIC_APP_URL
+    value: https://bengolealamas--planesdeahorro-77c3e.us-east4.hosted.app
     availability:
       - BUILD
       - RUNTIME
   - variable: NEXT_PUBLIC_SITE_ID
     value: bl
-    availability:
-      - BUILD
-      - RUNTIME
-  - variable: NEXT_PUBLIC_APP_URL
-    value: https://bengolealamas--planesdeahorro-77c3e.us-east4.hosted.app
     availability:
       - BUILD
       - RUNTIME

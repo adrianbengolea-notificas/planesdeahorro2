@@ -6,16 +6,30 @@
   "storage": {
     "rules": "storage.rules"
   },
-  "apphosting": {
-    "backendId": "planesdeahorro2",
-    "rootDir": ".",
-    "ignore": [
-      "node_modules",
-      ".git",
-      "firebase-debug.log",
-      "firebase-debug.*.log",
-      "functions"
-    ],
-    "alwaysDeployFromSource": true
-  }
+  "apphosting": [
+    {
+      "backendId": "planesdeahorro2",
+      "rootDir": ".",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions",
+        "apps/bengolealamas/node_modules"
+      ],
+      "alwaysDeployFromSource": true
+    },
+    {
+      "backendId": "bengolealamas",
+      "rootDir": "apps/bengolealamas",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ],
+      "alwaysDeployFromSource": true
+    }
+  ]
 }
