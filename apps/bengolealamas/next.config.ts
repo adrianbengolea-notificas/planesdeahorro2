@@ -4,7 +4,8 @@ import path from 'path';
 const appNodeModules = path.join(__dirname, 'node_modules');
 
 const nextConfig: NextConfig = {
-  outputFileTracingRoot: path.join(__dirname, '../..'),
+  // Raíz de esta app (no el monorepo): el adaptador App Hosting espera standalone bajo apps/bengolealamas/.next.
+  outputFileTracingRoot: path.join(__dirname),
   transpilePackages: ['@repo/shared', '@repo/content-types'],
   typescript: { ignoreBuildErrors: false },
   eslint: { ignoreDuringBuilds: false },
