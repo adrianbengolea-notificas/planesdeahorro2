@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { CaseIntakePromo } from '@/components/case-intake/case-intake-promo';
 import { PageShell } from '@/components/page-shell';
 import { ADRIAN_PLANES_SITE_URL } from '@/config/site';
 import { blPageMetadata } from '@/lib/page-metadata';
@@ -23,6 +24,11 @@ export default function PlanesDeAhorroHubPage() {
         { label: 'Planes de ahorro' },
       ]}
     >
+      <CaseIntakePromo
+        className="mb-8"
+        title="¿Conflicto con tu plan de ahorro?"
+        description="Contanos tu situación con el asistente: administradora, cuotas, liquidación o entrega del vehículo. El estudio recibe un resumen para revisar tu caso."
+      />
       <div className="max-w-3xl space-y-4 text-muted-foreground leading-relaxed">
         <p>
           Los conflictos con administradoras de planes de ahorro automotriz (liquidación, rescisión, haberes netos,

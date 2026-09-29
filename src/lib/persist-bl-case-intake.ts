@@ -41,6 +41,7 @@ export async function persistBlCaseIntake(
       posibleUrgencia: data.posibleUrgencia,
       detalleUrgencia: data.detalleUrgencia,
       consentimientoDatos: data.consentimientoDatos,
+      archivosAdjuntos: data.archivosAdjuntos ?? [],
     });
     return { ok: true, id: ref.id };
   } catch (e) {

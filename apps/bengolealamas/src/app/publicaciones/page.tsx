@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { CaseIntakePromo } from '@/components/case-intake/case-intake-promo';
 import { PublicationList } from '@/components/publication-list';
 import { PageShell } from '@/components/page-shell';
 import { getAllPublicPublications } from '@/lib/bl-cms-publications';
@@ -27,6 +28,7 @@ export default async function PublicacionesPage() {
         {items.length} notas del estudio
         {cmsCount ? ` (${cmsCount} desde el panel)` : null}.
       </p>
+      <CaseIntakePromo className="mb-10" />
       <PublicationList items={items} />
     </PageShell>
   );

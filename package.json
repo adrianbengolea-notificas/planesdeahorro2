@@ -25,7 +25,8 @@
     "sync:bl-publications": "node scripts/sync-bl-publications.mjs",
     "harvest:bl-publications": "node scripts/harvest-wix-post-urls.mjs",
     "scrape:bl-publications": "node scripts/scrape-bl-publication-bodies.mjs",
-    "smoke:bl-intake": "node scripts/smoke-bl-intake-bridge.mjs"
+    "smoke:bl-intake": "node scripts/smoke-bl-intake-bridge.mjs",
+    "provision:intake-bridge-secret": "node scripts/provision-intake-bridge-secret.mjs"
   },
   "dependencies": {
     "@genkit-ai/compat-oai": "^1.32.0",

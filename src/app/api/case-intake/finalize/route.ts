@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { parseBlIntakeStructured, deliverBlCaseIntake } from '@/server/bl-case-intake-delivery';
+import { parseBlCaseIntakeAttachmentPaths } from '@/server/case-intake-bl-conversation';
 import type { ChatMessage } from '@/lib/types';
 import { ZodError } from 'zod';
 
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unsupported intake site' }, { status: 400 });
   }
 
-  let body: { structuredData?: unknown; intakeId?: string };
+  let body: { structuredData?: unknown; intakeId?: string; attachmentPaths?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -28,8 +29,10 @@ export async function POST(req: NextRequest) {
 
   try {
     const structuredData = parseBlIntakeStructured(body.structuredData);
+    const attachmentPaths = parseBlCaseIntakeAttachmentPaths(body.attachmentPaths);
     const delivery = await deliverBlCaseIntake(structuredData, {
       existingIntakeId: typeof body.intakeId === 'string' ? body.intakeId : undefined,
+      attachmentPaths,
     });
 
     if (!delivery.persisted && !delivery.emailSent) {

@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { processBlCaseIntakeConversation } from '@/server/case-intake-bl-conversation';
+import {
+  parseBlCaseIntakeAttachmentPaths,
+  processBlCaseIntakeConversation,
+} from '@/server/case-intake-bl-conversation';
 import type { ChatMessage } from '@/lib/types';
 
 const MAX_BODY_BYTES = 120_000;
@@ -70,7 +73,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Payload too large' }, { status: 413 });
   }
 
-  let body: { history?: unknown };
+  let body: { history?: unknown; attachmentPaths?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -82,6 +85,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid history' }, { status: 400 });
   }
 
-  const message = await processBlCaseIntakeConversation(history);
+  const attachmentPaths = parseBlCaseIntakeAttachmentPaths(body.attachmentPaths);
+  const message = await processBlCaseIntakeConversation(history, attachmentPaths);
   return NextResponse.json({ message });
 }

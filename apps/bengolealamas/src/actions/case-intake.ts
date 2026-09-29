@@ -1,5 +1,6 @@
 'use server';
 
+import type { CaseIntakeAttachment } from '@/actions/case-intake-upload';
 import type { ChatMessage } from '@/lib/chat-types';
 
 function bridgeBaseUrl(): string | null {
@@ -15,7 +16,10 @@ function bridgeHeaders(secret: string): HeadersInit {
   };
 }
 
-export async function continueCaseIntake(history: ChatMessage[]): Promise<ChatMessage> {
+export async function continueCaseIntake(
+  history: ChatMessage[],
+  attachmentPaths?: CaseIntakeAttachment[],
+): Promise<ChatMessage> {
   const url = bridgeBaseUrl();
   const secret = process.env.INTAKE_BRIDGE_SECRET?.trim();
 
@@ -32,7 +36,10 @@ export async function continueCaseIntake(history: ChatMessage[]): Promise<ChatMe
     const res = await fetch(url, {
       method: 'POST',
       headers: bridgeHeaders(secret),
-      body: JSON.stringify({ history }),
+      body: JSON.stringify({
+        history,
+        attachmentPaths: attachmentPaths?.length ? attachmentPaths : undefined,
+      }),
       cache: 'no-store',
     });
 
@@ -76,6 +83,7 @@ export async function continueCaseIntake(history: ChatMessage[]): Promise<ChatMe
 export async function retryCaseIntakeDelivery(input: {
   structuredData: Record<string, unknown>;
   intakeId?: string;
+  attachmentPaths?: CaseIntakeAttachment[];
 }): Promise<ChatMessage> {
   const continueUrl = bridgeBaseUrl();
   const secret = process.env.INTAKE_BRIDGE_SECRET?.trim();
@@ -97,6 +105,7 @@ export async function retryCaseIntakeDelivery(input: {
       body: JSON.stringify({
         structuredData: input.structuredData,
         intakeId: input.intakeId,
+        attachmentPaths: input.attachmentPaths?.length ? input.attachmentPaths : undefined,
       }),
       cache: 'no-store',
     });

@@ -54,4 +54,5 @@ export type BlCaseIntakeRow = {
   transcripcionResumen: string;
   posibleUrgencia: boolean;
   detalleUrgencia: string;
+  archivosAdjuntos: { path: string; fileName: string }[];
 };

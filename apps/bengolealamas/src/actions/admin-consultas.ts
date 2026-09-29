@@ -2,7 +2,7 @@
 
 import { FieldValue } from 'firebase-admin/firestore';
 import { BL_CASE_INTAKES_COLLECTION } from '@repo/content-types';
-import { getAdminFirestore, requireAdminSession } from '@/firebase/admin';
+import { getAdminFirestore, getAdminStorage, requireAdminSession } from '@/firebase/admin';
 import {
   type BlCaseIntakeRow,
   type BlIntakeStatus,
@@ -48,7 +48,40 @@ function mapIntake(id: string, data: Record<string, unknown>): BlCaseIntakeRow {
     transcripcionResumen: str(data.transcripcionResumen),
     posibleUrgencia: data.posibleUrgencia === true,
     detalleUrgencia: str(data.detalleUrgencia),
+    archivosAdjuntos: Array.isArray(data.archivosAdjuntos)
+      ? data.archivosAdjuntos
+          .map((item) => {
+            if (!item || typeof item !== 'object') return null;
+            const path = str((item as { path?: string }).path);
+            const fileName = str((item as { fileName?: string }).fileName);
+            if (!path.startsWith('bl-intake-attachments/') || !fileName) return null;
+            return { path, fileName };
+          })
+          .filter((x): x is { path: string; fileName: string } => x !== null)
+      : [],
   };
+}
+
+export async function getBlIntakeAttachmentSignedUrl(
+  idToken: string,
+  storagePath: string,
+): Promise<AdminResult<string>> {
+  try {
+    await requireAdminSession(idToken);
+    if (!storagePath.startsWith('bl-intake-attachments/')) {
+      return { ok: false, error: 'Ruta no permitida.' };
+    }
+    const [url] = await getAdminStorage()
+      .bucket()
+      .file(storagePath)
+      .getSignedUrl({
+        action: 'read',
+        expires: Date.now() + 60 * 60 * 1000,
+      });
+    return { ok: true, data: url };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'No se pudo firmar el enlace.' };
+  }
 }
 
 export async function listBlCaseIntakes(idToken: string): Promise<AdminResult<BlCaseIntakeRow[]>> {

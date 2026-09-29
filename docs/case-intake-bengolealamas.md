@@ -82,7 +82,11 @@ npm run smoke:bl-intake
 
 Opcional: `SMOKE_RUN_AI=1` para un turno real contra Gemini.
 
-## Pendiente
+## Adjuntos (fase 2 — implementado)
 
-- Adjuntos de documentación (fase 2).
+- Hasta 3 archivos (PDF/JPG/PNG/WebP, 4 MB) en `/contanos-tu-caso`.
+- Subida vía Admin SDK a `bl-intake-attachments/{sessionId}/…`.
+- Se envían al cerrar el chat (`attachmentPaths` en continue/finalize) y aparecen en `/admin/consultas`.
+
+## Pendiente
 - Extraer componente compartido `<LegalIntakeChat practice="..." />` entre ambos sitios.

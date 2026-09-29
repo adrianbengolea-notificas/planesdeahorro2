@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { MessageCircle, RotateCcw, Send } from 'lucide-react';
 import { continueCaseIntake, retryCaseIntakeDelivery } from '@/actions/case-intake';
+import { uploadCaseIntakeAttachment, type CaseIntakeAttachment } from '@/actions/case-intake-upload';
 import { CASE_INTAKE_COPY, CASE_INTAKE_INITIAL_MESSAGE } from '@/config/case-intake';
 import type { ChatMessage } from '@/lib/chat-types';
 import { cn } from '@/lib/utils';
@@ -15,12 +16,19 @@ function trackIntakeEvent(name: string) {
   w.gtag?.('event', name, { send_to: undefined });
 }
 
+const MAX_ATTACHMENTS = 3;
+
 export function CaseIntakeChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([CASE_INTAKE_INITIAL_MESSAGE]);
   const [input, setInput] = useState('');
   const [started, setStarted] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [uploadSessionId] = useState(() => crypto.randomUUID());
+  const [attachments, setAttachments] = useState<CaseIntakeAttachment[]>([]);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     trackIntakeEvent('case_chat_opened');
   }, []);
@@ -53,7 +61,7 @@ export function CaseIntakeChat() {
 
     startTransition(async () => {
       const history = [...messages, userMessage];
-      const reply = await continueCaseIntake(history);
+      const reply = await continueCaseIntake(history, attachments);
       setMessages((prev) => [...prev, reply]);
       if (reply.leadCaptured) trackIntakeEvent('case_chat_completed');
       if (reply.leadCaptured) trackIntakeEvent('case_chat_email_sent');
@@ -64,6 +72,27 @@ export function CaseIntakeChat() {
     setMessages([CASE_INTAKE_INITIAL_MESSAGE]);
     setInput('');
     setStarted(false);
+    setAttachments([]);
+    setUploadError(null);
+  };
+
+  const onPickFile = async (file: File | undefined) => {
+    if (!file || isFinished || uploading) return;
+    if (attachments.length >= MAX_ATTACHMENTS) {
+      setUploadError(`Máximo ${MAX_ATTACHMENTS} archivos.`);
+      return;
+    }
+    setUploadError(null);
+    setUploading(true);
+    const fd = new FormData();
+    fd.set('file', file);
+    const result = await uploadCaseIntakeAttachment(uploadSessionId, fd);
+    setUploading(false);
+    if (!result.ok) {
+      setUploadError(result.error);
+      return;
+    }
+    setAttachments((prev) => [...prev, result.file]);
   };
 
   const retryAfterEmailFailure = () => {
@@ -73,6 +102,7 @@ export function CaseIntakeChat() {
         ? await retryCaseIntakeDelivery({
             structuredData: pending,
             intakeId: last?.intakeId,
+            attachmentPaths: attachments,
           })
         : await continueCaseIntake(messages);
       setMessages((prev) => [...prev, reply]);
@@ -147,6 +177,42 @@ export function CaseIntakeChat() {
           <Button type="button" variant="outline" onClick={retryAfterEmailFailure} disabled={isPending}>
             Reintentar envío al estudio
           </Button>
+        </div>
+      ) : null}
+
+      {!isFinished && !canRetryEmail ? (
+        <div className="border-t border-border px-4 pt-3 md:px-6">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".pdf,image/jpeg,image/png,image/webp"
+              className="sr-only"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                void onPickFile(f);
+                e.target.value = '';
+              }}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={isPending || uploading || attachments.length >= MAX_ATTACHMENTS}
+              onClick={() => fileRef.current?.click()}
+            >
+              {uploading ? 'Subiendo…' : 'Adjuntar PDF o foto'}
+            </Button>
+            <span>Hasta {MAX_ATTACHMENTS} archivos, 4 MB c/u (opcional).</span>
+          </div>
+          {uploadError ? <p className="mt-2 text-xs text-destructive">{uploadError}</p> : null}
+          {attachments.length ? (
+            <ul className="mt-2 space-y-1 text-xs text-foreground">
+              {attachments.map((a) => (
+                <li key={a.path}>📎 {a.fileName}</li>
+              ))}
+            </ul>
+          ) : null}
         </div>
       ) : null}
 

@@ -2,8 +2,24 @@ import 'server-only';
 
 import { evaluateBlCaseIntake } from '@/ai/flows/case-intake-bl-flow';
 import type { BlConversationOutput } from '@/lib/case-intake-bl-types';
-import { deliverBlCaseIntake } from '@/server/bl-case-intake-delivery';
+import { deliverBlCaseIntake, type BlIntakeAttachmentRef } from '@/server/bl-case-intake-delivery';
 import type { ChatMessage } from '@/lib/types';
+
+export { type BlIntakeAttachmentRef };
+
+export function parseBlCaseIntakeAttachmentPaths(raw: unknown): BlIntakeAttachmentRef[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const out: BlIntakeAttachmentRef[] = [];
+  for (const item of raw) {
+    if (!item || typeof item !== 'object') continue;
+    const path = (item as { path?: string }).path;
+    const fileName = (item as { fileName?: string }).fileName;
+    if (typeof path === 'string' && path.startsWith('bl-intake-attachments/') && typeof fileName === 'string') {
+      out.push({ path, fileName });
+    }
+  }
+  return out.length ? out : undefined;
+}
 
 function messageForAiFailure(error: unknown): string {
   const defaultMsg =
@@ -17,13 +33,16 @@ function messageForAiFailure(error: unknown): string {
   return defaultMsg;
 }
 
-export async function processBlCaseIntakeConversation(history: ChatMessage[]): Promise<ChatMessage> {
+export async function processBlCaseIntakeConversation(
+  history: ChatMessage[],
+  attachmentPaths?: BlIntakeAttachmentRef[],
+): Promise<ChatMessage> {
   try {
     const assistantOutput: BlConversationOutput = await evaluateBlCaseIntake(history);
 
     if (assistantOutput.isFinished && assistantOutput.structuredData) {
       const structured = assistantOutput.structuredData;
-      const delivery = await deliverBlCaseIntake(structured);
+      const delivery = await deliverBlCaseIntake(structured, { attachmentPaths });
 
       if (!delivery.persisted && !delivery.emailSent) {
         return {

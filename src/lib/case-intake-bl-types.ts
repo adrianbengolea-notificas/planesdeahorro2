@@ -20,6 +20,15 @@ export const BlIntakeStructuredSchema = z.object({
   posibleUrgencia: z.boolean(),
   detalleUrgencia: z.string(),
   consentimientoDatos: z.boolean(),
+  /** Completado en servidor al cerrar (adjuntos subidos en el chat). */
+  archivosAdjuntos: z
+    .array(
+      z.object({
+        path: z.string(),
+        fileName: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 export type BlIntakeStructured = z.infer<typeof BlIntakeStructuredSchema>;

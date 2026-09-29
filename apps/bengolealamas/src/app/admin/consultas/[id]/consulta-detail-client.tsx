@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
-import { getBlCaseIntake, updateBlCaseIntake } from '@/actions/admin-consultas';
+import { getBlCaseIntake, getBlIntakeAttachmentSignedUrl, updateBlCaseIntake } from '@/actions/admin-consultas';
 import { Button } from '@/components/ui/button';
 import { TEAM } from '@/config/professionals';
 import { useUser } from '@/firebase/provider';
@@ -142,6 +142,34 @@ export function ConsultaDetailClient({ id }: { id: string }) {
           ) : null}
         </div>
       </div>
+
+      {row.archivosAdjuntos.length ? (
+        <section className="mt-8 border border-border p-6">
+          <h2 className="font-headline text-xl">Archivos adjuntos</h2>
+          <ul className="mt-4 space-y-2 text-sm">
+            {row.archivosAdjuntos.map((file) => (
+              <li key={file.path}>
+                <button
+                  type="button"
+                  className="text-accent hover:underline"
+                  onClick={async () => {
+                    if (!user) return;
+                    const token = await user.getIdToken();
+                    const result = await getBlIntakeAttachmentSignedUrl(token, file.path);
+                    if (!result.ok || !result.data) {
+                      setMessage(result.ok ? 'No se pudo abrir el archivo.' : result.error);
+                      return;
+                    }
+                    window.open(result.data, '_blank', 'noopener,noreferrer');
+                  }}
+                >
+                  {file.fileName}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <section className="mt-8 border border-border p-6">
         <h2 className="font-headline text-xl">Gestión interna</h2>

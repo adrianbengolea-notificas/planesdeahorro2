@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { applicationDefault, cert, getApps, initializeApp, type App } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getStorage } from 'firebase-admin/storage';
 import { firebaseConfig } from '@/firebase/config';
 
 function hasExplicitServiceAccountEnv(): boolean {
@@ -84,6 +85,10 @@ export function getAdminApp(): App {
 
 export function getAdminFirestore() {
   return getFirestore(getAdminApp());
+}
+
+export function getAdminStorage() {
+  return getStorage(getAdminApp());
 }
 
 export async function verifySessionIsAdmin(idToken: string): Promise<{ uid: string; admin: boolean }> {
