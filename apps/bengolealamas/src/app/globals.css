@@ -35,3 +35,43 @@
     @apply font-headline;
   }
 }
+
+@layer components {
+  /* HTML migrado desde Wix (Ricos): imágenes con position:absolute rompen el layout */
+  .publication-prose {
+    @apply max-w-full overflow-x-hidden;
+  }
+
+  .publication-prose figure {
+    @apply my-6 max-w-full overflow-hidden rounded-lg;
+  }
+
+  .publication-prose figure img,
+  .publication-prose img {
+    position: static !important;
+    inset: auto !important;
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+  }
+
+  .publication-prose [data-hook='image-viewer'],
+  .publication-prose [data-hook='figure-IMAGE'],
+  .publication-prose wow-image,
+  .publication-prose .Ld0xm,
+  .publication-prose .WBn5Y,
+  .publication-prose .-xrHG,
+  .publication-prose .pcSy1 {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+  }
+
+  .publication-prose [data-hook='image-expand-button'] {
+    display: none !important;
+  }
+}

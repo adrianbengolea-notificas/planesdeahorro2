@@ -23,9 +23,9 @@ export default async function PublicacionesPage() {
       path="/publicaciones"
       breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Publicaciones' }]}
     >
-      <p className="mb-8 max-w-2xl text-sm text-muted-foreground">
-        {items.length} notas del estudio.
-        {cmsCount ? ` ${cmsCount} publicadas desde el panel.` : null}
+      <p className="mb-8 text-sm text-muted-foreground">
+        {items.length} notas del estudio
+        {cmsCount ? ` (${cmsCount} desde el panel)` : null}.
       </p>
       <PublicationList items={items} />
     </PageShell>

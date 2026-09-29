@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
+import { CoverImage } from '@/components/cover-image';
 import { blPageMetadata } from '@/lib/page-metadata';
 import { FOUNDERS, INFORMACION_BODY, INFORMACION_LEAD } from '@/config/wix-brand';
 
@@ -25,15 +25,13 @@ export default function InformacionPage() {
       <ul className="mt-14 grid gap-12 md:grid-cols-2 md:gap-10">
         {FOUNDERS.map((person) => (
           <li key={person.name} className="text-center">
-            <div className="relative mx-auto aspect-square w-full max-w-[280px] overflow-hidden bg-muted">
-              <Image
-                src={person.image}
-                alt={person.name}
-                fill
-                className="object-cover object-top grayscale"
-                sizes="(max-width: 768px) 80vw, 280px"
-              />
-            </div>
+            <CoverImage
+              src={person.image}
+              alt={person.name}
+              className="mx-auto aspect-square w-full max-w-[280px]"
+              imageClassName="object-top grayscale"
+              sizes="(max-width: 768px) 80vw, 280px"
+            />
             <h2 className="mt-6 font-headline text-lg font-normal text-accent md:text-xl">{person.name}</h2>
             <p className="mt-1 text-sm font-medium uppercase tracking-wide text-accent/90">{person.role}</p>
             <blockquote className="mt-4 font-headline text-base italic leading-relaxed text-foreground md:text-lg">

@@ -52,8 +52,6 @@ export const TEAM: ProfessionalSummary[] = [
       'Abogado matriculado en San Nicolás, integrante del estudio y referente en defensa del consumidor y conflictos con planes de ahorro automotor.',
     image: '/images/profesionales/adrian-bengolea.jpg',
     imageAlt: 'Dr. Adrián Bengolea',
-    /** TODO: reemplazar por fotografía oficial del profesional (actual: marca/placeholder del repo). */
-    imageTodo: true,
   },
   {
     slug: 'carlos-alberto-bengolea',

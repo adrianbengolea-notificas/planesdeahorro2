@@ -3,6 +3,7 @@ import 'server-only';
 import fs from 'node:fs';
 import path from 'node:path';
 import raw from '@/data/bl-publications.json';
+import { normalizePublicationHtml } from '@/lib/normalize-publication-html';
 
 export type BlPublication = {
   title: string;
@@ -77,11 +78,38 @@ export function getBlPublicationsSyncMeta() {
 }
 
 export function readPublicationHtml(contentFile: string): string | null {
-  if (!contentFile || !/^[a-zA-Z0-9._-]+\.html$/.test(contentFile)) return null;
+  if (!contentFile || !/^[a-zA-Z0-9._\u00C0-\u024F-]+\.html$/.test(contentFile)) return null;
   try {
     const full = path.join(process.cwd(), 'src/content/publications', contentFile);
-    return fs.readFileSync(full, 'utf8');
+    return normalizePublicationHtml(fs.readFileSync(full, 'utf8'));
   } catch {
     return null;
   }
+}
+
+const THUMB_CANDIDATES = ['img-1.jpg', 'img-1.jpeg', 'img-1.png', 'img-1.webp'] as const;
+
+function firstImageSrcInHtml(html: string): string | null {
+  const match = html.match(/<img[^>]+src=(["'])(\/images\/publicaciones\/[^"']+)\1/i);
+  return match?.[2] ?? null;
+}
+
+/** Miniatura para listados: hero del CMS, carpeta migrada o primera img del HTML. */
+export function resolvePublicationThumbnail(pub: BlPublication): string | null {
+  const hero = pub.heroImage?.trim();
+  if (hero) return hero;
+
+  const imageRoot = path.join(process.cwd(), 'public/images/publicaciones', pub.slug);
+  for (const name of THUMB_CANDIDATES) {
+    if (fs.existsSync(path.join(imageRoot, name))) {
+      return `/images/publicaciones/${pub.slug}/${name}`;
+    }
+  }
+
+  if (pub.contentFile && (pub.imageCount ?? 0) > 0) {
+    const html = readPublicationHtml(pub.contentFile);
+    if (html) return firstImageSrcInHtml(html);
+  }
+
+  return null;
 }
