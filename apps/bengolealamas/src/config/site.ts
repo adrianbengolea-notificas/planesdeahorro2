@@ -32,9 +32,19 @@ export const SITE_TITLE = `${SITE_NAME} – ${SITE_TAGLINE}`;
 /** Enlace editorial al sitio vertical de planes de ahorro (dominio distinto). */
 export const ADRIAN_PLANES_SITE_URL = 'https://adrianbengolea.com.ar';
 
-/** Redes / perfiles — completar cuando estén confirmados. */
+/** Redes institucionales — completar solo URLs verificadas. */
+export const socialLinks = {
+  facebook: 'https://www.facebook.com/estudiobl/',
+  instagram: '' as string,
+  linkedin: '' as string,
+} as const;
+
 export const SITE_SAME_AS: readonly string[] = [
-  'https://www.facebook.com/estudiobl/',
+  socialLinks.facebook,
+  ...(socialLinks.instagram ? [socialLinks.instagram] : []),
+  ...(socialLinks.linkedin ? [socialLinks.linkedin] : []),
 ];
+
+export const UCU_URL = 'https://ucu.org.ar';
 
 export const SITE_LOCALE = 'es_AR';

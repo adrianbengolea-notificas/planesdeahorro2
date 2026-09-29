@@ -1,5 +1,6 @@
 import { absoluteUrl } from '@repo/shared/seo';
 import { getBlSiteSeoConfig } from '@/config/seo';
+import { STUDIO_ADDRESS, STUDIO_EMAIL, STUDIO_PHONES } from '@/config/wix-brand';
 import { DEFAULT_DESCRIPTION, SITE_NAME, SITE_SAME_AS, SITE_TITLE } from '@/config/site';
 
 /** Grafo de identidad institucional B&L (WebSite + LegalService). */
@@ -35,10 +36,13 @@ export function siteIdentityJsonLd() {
         },
         address: {
           '@type': 'PostalAddress',
-          addressLocality: 'San Nicolás de los Arroyos',
-          addressRegion: 'Buenos Aires',
+          streetAddress: STUDIO_ADDRESS.street,
+          addressLocality: STUDIO_ADDRESS.city,
+          addressRegion: STUDIO_ADDRESS.province,
           addressCountry: 'AR',
         },
+        email: STUDIO_EMAIL,
+        telephone: STUDIO_PHONES.map((p) => p.replace(/-/g, '')).join(', '),
         availableLanguage: ['es'],
         knowsAbout: [
           'Defensa del consumidor',
@@ -59,6 +63,9 @@ export function personJsonLd(options: {
   path: string;
   jobTitle?: string;
   description?: string;
+  image?: string;
+  sameAs?: string[];
+  knowsAbout?: string[];
 }) {
   const site = getBlSiteSeoConfig();
   const origin = absoluteUrl(site, '/');
@@ -70,6 +77,9 @@ export function personJsonLd(options: {
     name: options.name,
     jobTitle: options.jobTitle ?? 'Abogado',
     ...(options.description ? { description: options.description } : {}),
+    ...(options.image ? { image: options.image } : {}),
+    ...(options.sameAs?.length ? { sameAs: options.sameAs } : {}),
+    ...(options.knowsAbout?.length ? { knowsAbout: options.knowsAbout } : {}),
     url: personUrl,
     worksFor: {
       '@type': 'LegalService',

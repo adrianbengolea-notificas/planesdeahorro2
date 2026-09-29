@@ -9,12 +9,19 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: '/estudio', destination: '/informacion', permanent: true },
-      { source: '/profesionales', destination: '/informacion', permanent: false },
     ];
   },
   transpilePackages: ['@repo/shared', '@repo/content-types'],
   typescript: { ignoreBuildErrors: false },
   eslint: { ignoreDuringBuilds: false },
+  // No mapear @repo/shared ni @repo/content-types a /src: rompe subpaths (@repo/shared/components/json-ld).
+  // Turbopack y webpack resuelven vía package.json "exports" + transpilePackages.
+  turbopack: {
+    resolveAlias: {
+      clsx: path.join(appNodeModules, 'clsx'),
+      'tailwind-merge': path.join(appNodeModules, 'tailwind-merge'),
+    },
+  },
   webpack: (config) => {
     // App Hosting solo hace npm ci en apps/bengolealamas; resolver deps de file:../../packages/* desde acá.
     config.resolve.modules = [appNodeModules, ...(config.resolve.modules ?? [])];

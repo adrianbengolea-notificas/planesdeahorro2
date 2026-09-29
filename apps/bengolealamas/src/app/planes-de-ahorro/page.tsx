@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { PageShell } from '@/components/page-shell';
 import { ADRIAN_PLANES_SITE_URL } from '@/config/site';
 import { blPageMetadata } from '@/lib/page-metadata';
@@ -36,6 +37,13 @@ export default function PlanesDeAhorroHubPage() {
           >
             Visitar adrianbengolea.com.ar — planes de ahorro
           </a>
+        </p>
+        <p className="text-sm">
+          Profesional relacionado:{' '}
+          <Link href="/profesionales/adrian-bengolea" className="font-medium text-accent hover:underline">
+            Dr. Adrián Bengolea
+          </Link>
+          .
         </p>
         <p className="text-sm">
           Esta página no duplica el contenido del sitio vertical para evitar competir en SEO; resume el enfoque del

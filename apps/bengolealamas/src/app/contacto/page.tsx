@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { blPageMetadata } from '@/lib/page-metadata';
 import { ContactForm } from '@/components/contact-form';
 import {
@@ -20,6 +21,21 @@ export default function ContactoPage() {
     <article className="mx-auto max-w-5xl px-4 py-12 md:px-8 md:py-16">
       <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">Abogados</p>
       <h1 className="mt-2 font-headline text-4xl font-normal text-foreground">Contacto</h1>
+
+      <div className="mt-8 flex flex-wrap gap-4">
+        <Link
+          href="/contanos-tu-caso"
+          className="inline-flex border border-foreground bg-foreground px-6 py-2.5 text-xs font-medium uppercase tracking-[0.15em] text-background transition hover:bg-foreground/90"
+        >
+          Contar mi caso con IA
+        </Link>
+        <a
+          href="#form-heading"
+          className="inline-flex border border-foreground px-6 py-2.5 text-xs font-medium uppercase tracking-[0.15em] transition hover:bg-foreground hover:text-background"
+        >
+          Contacto tradicional
+        </a>
+      </div>
 
       <div className="mt-8 space-y-2 text-sm leading-relaxed text-muted-foreground md:text-base">
         <p>
