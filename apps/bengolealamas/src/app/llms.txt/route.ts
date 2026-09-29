@@ -8,7 +8,8 @@ export const dynamic = 'force-static';
 
 export async function GET() {
   const site = getBlSiteSeoConfig();
-  const sections = getBlSitemapPaths()
+  const paths = await getBlSitemapPaths();
+  const sections = paths
     .filter((p) => p !== '/')
     .map((p) => `- ${absoluteUrl(site, p)}`)
     .join('\n');

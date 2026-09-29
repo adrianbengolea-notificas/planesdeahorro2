@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import { Libre_Baskerville, Source_Sans_3 } from 'next/font/google';
 import { JsonLd } from '@repo/shared/components/json-ld';
 import { createMetadataBase, buildPageMetadata } from '@repo/shared/seo';
-import { SiteHeader } from '@/components/site-header';
-import { FloatingSocial } from '@/components/floating-social';
-import { WixFooterStrip } from '@/components/wix-footer-strip';
+import { SiteChrome } from '@/components/site-chrome';
 import { getBlSiteSeoConfig } from '@/config/seo';
 import { DEFAULT_DESCRIPTION, SITE_TITLE } from '@/config/site';
 import { siteIdentityJsonLd } from '@/lib/schema';
@@ -53,10 +51,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className="flex min-h-screen flex-col">
         <JsonLd data={siteIdentityJsonLd()} />
-        <SiteHeader />
-        <main className="flex min-h-0 flex-1 flex-col">{children}</main>
-        <WixFooterStrip />
-        <FloatingSocial />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

@@ -66,3 +66,9 @@ export function isBlContent(doc: Pick<ContentDocument, 'siteId'>): boolean {
 export function isAdrianContent(doc: Pick<ContentDocument, 'siteId'>): boolean {
   return doc.siteId === 'adrian';
 }
+
+/** Consultas del asistente de B&L (solo admin). */
+export const BL_CASE_INTAKES_COLLECTION = 'bl_case_intakes';
+
+/** Notas / publicaciones CMS de B&L. */
+export const BL_PUBLICATIONS_COLLECTION = 'bl_publications';

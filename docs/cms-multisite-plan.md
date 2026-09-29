@@ -8,6 +8,11 @@ El admin en `/admin` (app Adrian) gestiona:
 
 Auth: Firebase Auth + documento en `admin_users`.
 
+**Fase B (B&L):** panel propio en `apps/bengolealamas` → `/admin`.
+
+- Consultas: colección `bl_case_intakes` (las crea el backend de Adrian al cerrar el chat).
+- Notas: colección `bl_publications` (el sitio público las mezcla con las migradas de Wix).
+
 ## Objetivo
 
 Un solo panel con selector **`siteId`**:

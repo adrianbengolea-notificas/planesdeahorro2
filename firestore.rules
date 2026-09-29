@@ -292,5 +292,25 @@ service cloud.firestore {
     match /knowledge_docs/{docId} {
       allow read, write: if isAdmin();
     }
+
+    /**
+     * Consultas del asistente de Bengolea & Lamas.
+     * Las crea el Admin SDK (servidor). El panel B&L las lee y actualiza.
+     */
+    match /bl_case_intakes/{intakeId} {
+      allow read, update, delete: if isAdmin();
+      allow create: if false;
+    }
+
+    /**
+     * Notas / publicaciones CMS de Bengolea & Lamas.
+     * Lectura pública si `published == true`. Escritura solo admin.
+     */
+    match /bl_publications/{publicationId} {
+      allow get: if (resource.data.published == true) || isAdmin();
+      allow list: if isAdmin() || resource.data.published == true;
+      allow create: if isAdmin();
+      allow update, delete: if isAdmin() && resource != null;
+    }
   }
 }

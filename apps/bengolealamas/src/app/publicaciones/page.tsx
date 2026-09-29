@@ -1,26 +1,33 @@
 import type { Metadata } from 'next';
-import { ContentEmptyState } from '@/components/content-empty-state';
+import { PublicationList } from '@/components/publication-list';
 import { PageShell } from '@/components/page-shell';
+import { getAllPublicPublications } from '@/lib/bl-cms-publications';
 import { blPageMetadata } from '@/lib/page-metadata';
+
+export const revalidate = 60;
 
 export const metadata: Metadata = blPageMetadata({
   title: 'Publicaciones',
-  description: 'Artículos jurídicos, análisis y doctrina del estudio.',
+  description: 'Artículos jurídicos, análisis y notas del Estudio Bengolea & Lamas.',
   path: '/publicaciones',
 });
 
-export default function PublicacionesPage() {
+export default async function PublicacionesPage() {
+  const items = await getAllPublicPublications();
+  const cmsCount = items.filter((p) => p.source === 'cms').length;
+
   return (
     <PageShell
       title="Publicaciones"
-      description="Doctrina y artículos del estudio."
+      description="Doctrina, análisis y novedades del estudio."
       path="/publicaciones"
       breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Publicaciones' }]}
     >
-      <ContentEmptyState
-        title="Sin publicaciones indexadas aún"
-        description="El listado se alimentará desde Firestore con siteId bl. Mientras tanto, esta sección confirma routing y SEO."
-      />
+      <p className="mb-8 max-w-2xl text-sm text-muted-foreground">
+        {items.length} notas del estudio.
+        {cmsCount ? ` ${cmsCount} publicadas desde el panel.` : null}
+      </p>
+      <PublicationList items={items} />
     </PageShell>
   );
 }
