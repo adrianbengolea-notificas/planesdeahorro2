@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { MessageCircle, RotateCcw, Send } from 'lucide-react';
-import { continueCaseIntake } from '@/actions/case-intake';
+import { continueCaseIntake, retryCaseIntakeDelivery } from '@/actions/case-intake';
 import { CASE_INTAKE_COPY, CASE_INTAKE_INITIAL_MESSAGE } from '@/config/case-intake';
 import type { ChatMessage } from '@/lib/chat-types';
 import { cn } from '@/lib/utils';
@@ -67,9 +67,16 @@ export function CaseIntakeChat() {
   };
 
   const retryAfterEmailFailure = () => {
+    const pending = last?.pendingSubmission;
     startTransition(async () => {
-      const reply = await continueCaseIntake(messages);
+      const reply = pending
+        ? await retryCaseIntakeDelivery({
+            structuredData: pending,
+            intakeId: last?.intakeId,
+          })
+        : await continueCaseIntake(messages);
       setMessages((prev) => [...prev, reply]);
+      if (reply.leadCaptured) trackIntakeEvent('case_chat_completed');
     });
   };
 

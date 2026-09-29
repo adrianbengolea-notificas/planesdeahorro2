@@ -201,6 +201,10 @@ export type ChatMessage = {
   leadCaptured?: boolean;
   /** true cuando falló el envío por email (reintento sin reiniciar relato). */
   submissionFailed?: boolean;
+  /** Datos estructurados del cierre para reintentar persistencia/email sin IA. */
+  pendingSubmission?: Record<string, unknown>;
+  /** ID en Firestore si ya se persistió pero falló el mail. */
+  intakeId?: string;
 };
 
 /** Documento de conocimiento para alimentar el contexto de la IA. Solo accesible por admins. */

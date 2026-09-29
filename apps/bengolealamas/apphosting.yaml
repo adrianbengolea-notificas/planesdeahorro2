@@ -17,3 +17,12 @@ env:
     availability:
       - BUILD
       - RUNTIME
+  # Backend IA (app raíz / adrianbengolea.com.ar). Mismo INTAKE_BRIDGE_SECRET que planesdeahorro2.
+  - variable: INTAKE_BRIDGE_URL
+    value: https://adrianbengolea.com.ar/api/case-intake/continue
+    availability:
+      - RUNTIME
+  - variable: INTAKE_BRIDGE_SECRET
+    secret: INTAKE_BRIDGE_SECRET
+    availability:
+      - RUNTIME

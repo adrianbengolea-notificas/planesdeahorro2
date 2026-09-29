@@ -1,10 +1,8 @@
 import 'server-only';
 
 import { evaluateBlCaseIntake } from '@/ai/flows/case-intake-bl-flow';
-import { getBlPublicAppUrl } from '@/lib/bl-public-app-url';
 import type { BlConversationOutput } from '@/lib/case-intake-bl-types';
-import { persistBlCaseIntake } from '@/lib/persist-bl-case-intake';
-import { sendBlIntakeEmail } from '@/lib/send-bl-intake-email';
+import { deliverBlCaseIntake } from '@/server/bl-case-intake-delivery';
 import type { ChatMessage } from '@/lib/types';
 
 function messageForAiFailure(error: unknown): string {
@@ -24,19 +22,31 @@ export async function processBlCaseIntakeConversation(history: ChatMessage[]): P
     const assistantOutput: BlConversationOutput = await evaluateBlCaseIntake(history);
 
     if (assistantOutput.isFinished && assistantOutput.structuredData) {
-      const persisted = await persistBlCaseIntake(assistantOutput.structuredData);
-      const openInAdminUrl = persisted.ok
-        ? `${getBlPublicAppUrl()}/admin/consultas/${encodeURIComponent(persisted.id)}`
-        : undefined;
-      const emailResult = await sendBlIntakeEmail(assistantOutput.structuredData, { openInAdminUrl });
-      if (!persisted.ok && !emailResult.success) {
+      const structured = assistantOutput.structuredData;
+      const delivery = await deliverBlCaseIntake(structured);
+
+      if (!delivery.persisted && !delivery.emailSent) {
         return {
           id: `error-email-${Date.now()}`,
           role: 'system',
           content:
-            'No pudimos registrar tu consulta. Por favor, intentá nuevamente con el botón de reintentar o usá el formulario de contacto. No hace falta repetir todo el relato si el asistente ya lo tiene en esta conversación.',
+            'No pudimos registrar tu consulta. Usá «Reintentar envío» (no hace falta repetir el relato) o el formulario de contacto.',
           isFinished: false,
           submissionFailed: true,
+          pendingSubmission: structured as unknown as Record<string, unknown>,
+        };
+      }
+
+      if (!delivery.emailSent) {
+        return {
+          id: `error-email-${Date.now()}`,
+          role: 'system',
+          content:
+            'Tu consulta quedó registrada, pero el aviso al estudio falló. Podés reintentar el envío sin volver a charlar con el asistente.',
+          isFinished: false,
+          submissionFailed: true,
+          pendingSubmission: structured as unknown as Record<string, unknown>,
+          intakeId: delivery.intakeId,
         };
       }
 

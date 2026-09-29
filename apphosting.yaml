@@ -43,3 +43,17 @@ env:
     secret: NOTIFICASHUB_INBOUND_SECRET
     availability:
       - RUNTIME
+  # Puente del chat B&L (`/api/case-intake/*`). Mismo secreto en backend bengolealamas.
+  # Crear: `firebase apphosting:secrets:set INTAKE_BRIDGE_SECRET`
+  - variable: INTAKE_BRIDGE_SECRET
+    secret: INTAKE_BRIDGE_SECRET
+    availability:
+      - RUNTIME
+  - variable: BL_PUBLIC_APP_URL
+    value: https://bengolealamas.com.ar
+    availability:
+      - RUNTIME
+  - variable: CASE_INTAKE_EMAIL
+    value: abengolea1@gmail.com
+    availability:
+      - RUNTIME

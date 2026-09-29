@@ -50,9 +50,39 @@ Al cerrar el chat, el backend de Adrian guarda el caso en Firestore (`bl_case_in
 - Tamaño máximo de mensajes y historial.
 - Secreto de puente; sin claves en el cliente.
 
+## Reintento sin IA
+
+`POST /api/case-intake/finalize` — mismo auth que `continue`. Body:
+
+```json
+{ "structuredData": { ... }, "intakeId": "opcional-si-ya-está-en-firestore" }
+```
+
+El cliente B&L usa `retryCaseIntakeDelivery` cuando `submissionFailed` trae `pendingSubmission`.
+
+## App Hosting (Firebase)
+
+1. **Secreto compartido** (una sola vez):  
+   `firebase apphosting:secrets:set INTAKE_BRIDGE_SECRET`  
+   Otorgar acceso al backend **planesdeahorro2** y **bengolealamas** (Environment → Secret).
+
+2. **Backend planesdeahorro2** (`apphosting.yaml` raíz): `GEMINI_API_KEY`, `RESEND_API_KEY`, `INTAKE_BRIDGE_SECRET`, `BL_PUBLIC_APP_URL`, `CASE_INTAKE_EMAIL`.
+
+3. **Backend bengolealamas** (`apps/bengolealamas/apphosting.yaml`): `INTAKE_BRIDGE_URL`, `INTAKE_BRIDGE_SECRET`, más `NEXT_PUBLIC_*`.
+
+4. Redeploy de **ambos** backends tras cambiar secretos.
+
+## Smoke test local
+
+Con Adrian en `:9002` y variables en el shell:
+
+```bash
+npm run smoke:bl-intake
+```
+
+Opcional: `SMOKE_RUN_AI=1` para un turno real contra Gemini.
+
 ## Pendiente
 
-- Reintento de email sin re-ejecutar toda la conversación (hoy reintenta el último turno vía IA).
 - Adjuntos de documentación (fase 2).
 - Extraer componente compartido `<LegalIntakeChat practice="..." />` entre ambos sitios.
-- Pruebas E2E en staging con Resend y Gemini antes de deploy B&L.

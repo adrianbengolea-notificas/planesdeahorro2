@@ -2,13 +2,21 @@
 
 import type { ChatMessage } from '@/lib/chat-types';
 
-function bridgeUrl(): string | null {
+function bridgeBaseUrl(): string | null {
   const url = process.env.INTAKE_BRIDGE_URL?.trim();
   return url || null;
 }
 
+function bridgeHeaders(secret: string): HeadersInit {
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${secret}`,
+    'X-Intake-Site': 'bengolea-lamas',
+  };
+}
+
 export async function continueCaseIntake(history: ChatMessage[]): Promise<ChatMessage> {
-  const url = bridgeUrl();
+  const url = bridgeBaseUrl();
   const secret = process.env.INTAKE_BRIDGE_SECRET?.trim();
 
   if (!url || !secret) {
@@ -23,11 +31,7 @@ export async function continueCaseIntake(history: ChatMessage[]): Promise<ChatMe
   try {
     const res = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${secret}`,
-        'X-Intake-Site': 'bengolea-lamas',
-      },
+      headers: bridgeHeaders(secret),
       body: JSON.stringify({ history }),
       cache: 'no-store',
     });
@@ -64,6 +68,72 @@ export async function continueCaseIntake(history: ChatMessage[]): Promise<ChatMe
       id: `error-network-${Date.now()}`,
       role: 'system',
       content: 'Error de red al contactar el asistente. Revisá tu conexión e intentá otra vez.',
+    };
+  }
+}
+
+/** Reintenta persistencia/email con los datos ya cerrados por la IA (sin nuevo turno Gemini). */
+export async function retryCaseIntakeDelivery(input: {
+  structuredData: Record<string, unknown>;
+  intakeId?: string;
+}): Promise<ChatMessage> {
+  const continueUrl = bridgeBaseUrl();
+  const secret = process.env.INTAKE_BRIDGE_SECRET?.trim();
+
+  if (!continueUrl || !secret) {
+    return {
+      id: `error-config-${Date.now()}`,
+      role: 'system',
+      content: 'El asistente no está configurado en este entorno. Usá contacto o WhatsApp.',
+    };
+  }
+
+  const finalizeUrl = continueUrl.replace(/\/continue\/?$/, '/finalize');
+
+  try {
+    const res = await fetch(finalizeUrl, {
+      method: 'POST',
+      headers: bridgeHeaders(secret),
+      body: JSON.stringify({
+        structuredData: input.structuredData,
+        intakeId: input.intakeId,
+      }),
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      console.error('[case-intake] finalize HTTP', res.status);
+      return {
+        id: `error-finalize-${Date.now()}`,
+        role: 'system',
+        content: 'No pudimos reenviar la consulta. Intentá de nuevo en unos minutos.',
+        submissionFailed: true,
+        pendingSubmission: input.structuredData,
+        intakeId: input.intakeId,
+      };
+    }
+
+    const data = (await res.json()) as { message?: ChatMessage };
+    if (!data.message?.content) {
+      return {
+        id: `error-empty-${Date.now()}`,
+        role: 'system',
+        content: 'Respuesta inválida al reintentar.',
+        submissionFailed: true,
+        pendingSubmission: input.structuredData,
+        intakeId: input.intakeId,
+      };
+    }
+    return data.message;
+  } catch (e) {
+    console.error('[case-intake] finalize fetch failed', e);
+    return {
+      id: `error-network-${Date.now()}`,
+      role: 'system',
+      content: 'Error de red al reintentar el envío.',
+      submissionFailed: true,
+      pendingSubmission: input.structuredData,
+      intakeId: input.intakeId,
     };
   }
 }
