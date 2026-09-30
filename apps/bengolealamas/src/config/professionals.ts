@@ -50,10 +50,10 @@ export const TEAM: ProfessionalSummary[] = [
   {
     slug: 'carlos-alberto-lamas',
     name: 'Carlos Alberto Lamas',
-    jobTitle: 'Abogado — Socio',
-    specialties: ['Litigación', 'Asesoramiento jurídico'],
+    jobTitle: 'Abogado — Socio fundador · In memoriam',
+    specialties: ['Legado institucional', 'Litigación', 'Asesoramiento jurídico'],
     teaser:
-      'Socio del estudio, con práctica profesional vinculada al servicio jurídico y la defensa de los derechos de quienes nos consultan.',
+      'Socio del estudio y parte fundamental de su historia. Su trayectoria, compromiso con la abogacía y dedicación a quienes confiaron en el estudio constituyen un legado presente en nuestra práctica profesional.',
     image: '/images/profesionales/carlos-alberto-lamas.jpg',
     imageAlt: 'Carlos Alberto Lamas',
   },
