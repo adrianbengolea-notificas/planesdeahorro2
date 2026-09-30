@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { useAuth, useUser } from '@/firebase/provider';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,22 @@ import { Loader2, Lock, ShieldOff } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import Link from 'next/link';
 import { firebaseConfig } from '@/firebase/config';
+
+function authErrorMessage(err: unknown, fallback: string): string {
+  const code = err && typeof err === 'object' && 'code' in err ? String((err as { code: string }).code) : '';
+  if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+    return 'Email o contraseña incorrectos.';
+  }
+  if (code === 'auth/too-many-requests') return 'Demasiados intentos. Probá más tarde.';
+  if (code === 'auth/popup-closed-by-user') return 'Cerraste la ventana de Google. Probá de nuevo.';
+  if (code === 'auth/unauthorized-domain') {
+    return 'Este dominio no está autorizado en Firebase Auth. Agregalo en Consola → Authentication → Dominios autorizados.';
+  }
+  if (code === 'auth/account-exists-with-different-credential') {
+    return 'Ya existe una cuenta con ese email usando otro método. Entrá con email/contraseña o vinculá Google en Firebase.';
+  }
+  return fallback;
+}
 
 function AdminLoginCard() {
   const auth = useAuth();
@@ -26,14 +42,21 @@ function AdminLoginCard() {
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password);
     } catch (err: unknown) {
-      const code = err && typeof err === 'object' && 'code' in err ? String((err as { code: string }).code) : '';
-      if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
-        setError('Email o contraseña incorrectos.');
-      } else if (code === 'auth/too-many-requests') {
-        setError('Demasiados intentos. Probá más tarde.');
-      } else {
-        setError('No se pudo iniciar sesión. Verificá los datos o la configuración de Firebase Auth.');
-      }
+      setError(authErrorMessage(err, 'No se pudo iniciar sesión. Verificá los datos o la configuración de Firebase Auth.'));
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleGoogleSignIn() {
+    setError(null);
+    setSubmitting(true);
+    try {
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      await signInWithPopup(auth, provider);
+    } catch (err: unknown) {
+      setError(authErrorMessage(err, 'No se pudo iniciar sesión con Google.'));
     } finally {
       setSubmitting(false);
     }
@@ -51,7 +74,7 @@ function AdminLoginCard() {
             <CardTitle>Acceso al panel</CardTitle>
           </div>
           <CardDescription>
-            Iniciá sesión con la cuenta de administrador. Tu usuario debe existir en la colección{' '}
+            Iniciá sesión con email/contraseña o Google. Tu usuario debe existir en la colección{' '}
             <span className="font-mono text-xs">admin_users</span> en Firestore para ver evaluaciones y gestionar
             contenido.
           </CardDescription>
@@ -94,6 +117,17 @@ function AdminLoginCard() {
               )}
             </Button>
           </form>
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center" aria-hidden>
+              <span className="w-full border-t border-border" />
+            </div>
+            <p className="relative flex justify-center text-xs uppercase tracking-wide text-muted-foreground">
+              <span className="bg-card px-2">o</span>
+            </p>
+          </div>
+          <Button type="button" variant="outline" className="w-full" disabled={submitting} onClick={() => void handleGoogleSignIn()}>
+            Continuar con Google
+          </Button>
         </CardContent>
       </Card>
     </div>

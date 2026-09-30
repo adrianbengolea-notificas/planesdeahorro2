@@ -25,7 +25,7 @@ Variables en Environment (o `apphosting.yaml`):
 
 El chat con IA **no** corre en este backend: llama al puente en la app Adrian.
 
-Panel admin: `/admin` (consultas + publicaciones). Usa el mismo proyecto Firebase y `admin_users`. En App Hosting alcanza ADC; en local, las mismas credenciales de Admin SDK que Adrian (`FIREBASE_SERVICE_ACCOUNT_PATH` o JSON). Después del cambio de reglas: `firebase deploy --only firestore:rules`.
+Panel admin: `/admin` (consultas + publicaciones). Usa el mismo proyecto Firebase y `admin_users`. Login con **email/contraseña** o **Google** (Firebase Console → Authentication → Sign-in method → Google habilitado; dominios autorizados: `localhost`, dominio `hosted.app` del deploy y `bengolealamas.com.ar`). Tras el primer login con Google, ejecutá `npx tsx scripts/grant-admin.ts tu@gmail.com` si el UID cambió respecto a la cuenta solo-email. En App Hosting alcanza ADC; en local, las mismas credenciales de Admin SDK que Adrian (`FIREBASE_SERVICE_ACCOUNT_PATH` o JSON). Después del cambio de reglas: `firebase deploy --only firestore:rules`.
 
 **No** configures root `.` con `APP_SITE_ID=bl` ni `GOOGLE_NODE_RUN_SCRIPTS=build:bl`: el deploy de `05cf4a8` falla porque el adaptador Next.js de App Hosting no encuentra el artefacto en la raíz del repo.
 

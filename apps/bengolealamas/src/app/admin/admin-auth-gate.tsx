@@ -2,12 +2,28 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { Loader2, Lock, ShieldOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth, useFirestore, useUser } from '@/firebase/provider';
 import { firebaseConfig } from '@/firebase/config';
+
+function authErrorMessage(err: unknown, fallback: string): string {
+  const code = err && typeof err === 'object' && 'code' in err ? String((err as { code: string }).code) : '';
+  if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+    return 'Email o contraseña incorrectos.';
+  }
+  if (code === 'auth/too-many-requests') return 'Demasiados intentos. Probá más tarde.';
+  if (code === 'auth/popup-closed-by-user') return 'Cerraste la ventana de Google. Probá de nuevo.';
+  if (code === 'auth/unauthorized-domain') {
+    return 'Este dominio no está autorizado en Firebase Auth. Agregalo en Consola → Authentication → Dominios autorizados.';
+  }
+  if (code === 'auth/account-exists-with-different-credential') {
+    return 'Ya existe una cuenta con ese email usando otro método. Entrá con email/contraseña o vinculá Google en Firebase.';
+  }
+  return fallback;
+}
 
 function AdminLoginCard() {
   const auth = useAuth();
@@ -28,14 +44,26 @@ function AdminLoginCard() {
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password);
     } catch (err: unknown) {
-      const code = err && typeof err === 'object' && 'code' in err ? String((err as { code: string }).code) : '';
-      if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
-        setError('Email o contraseña incorrectos.');
-      } else if (code === 'auth/too-many-requests') {
-        setError('Demasiados intentos. Probá más tarde.');
-      } else {
-        setError('No se pudo iniciar sesión.');
-      }
+      setError(authErrorMessage(err, 'No se pudo iniciar sesión.'));
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleGoogleSignIn() {
+    setError(null);
+    setSubmitting(true);
+    if (!auth) {
+      setError('Todavía se está conectando el acceso. Probá de nuevo en unos segundos.');
+      setSubmitting(false);
+      return;
+    }
+    try {
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      await signInWithPopup(auth, provider);
+    } catch (err: unknown) {
+      setError(authErrorMessage(err, 'No se pudo iniciar sesión con Google.'));
     } finally {
       setSubmitting(false);
     }
@@ -49,8 +77,8 @@ function AdminLoginCard() {
           <h1 className="font-headline text-2xl">Panel del estudio</h1>
         </div>
         <p className="mb-6 text-sm text-muted-foreground">
-          Ingresá con la misma cuenta de administrador. Debe existir en{' '}
-          <span className="font-mono text-xs">admin_users</span>.
+          Ingresá con email y contraseña o con Google. Tu usuario (cualquier método) debe existir en{' '}
+          <span className="font-mono text-xs">admin_users</span> en Firestore.
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
@@ -95,6 +123,24 @@ function AdminLoginCard() {
             )}
           </Button>
         </form>
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center" aria-hidden>
+            <span className="w-full border-t border-border" />
+          </div>
+          <p className="relative flex justify-center text-xs uppercase tracking-wide text-muted-foreground">
+            <span className="bg-background px-2">o</span>
+          </p>
+        </div>
+        <Button type="button" variant="outline" className="w-full" disabled={submitting} onClick={() => void handleGoogleSignIn()}>
+          {submitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Conectando…
+            </>
+          ) : (
+            'Continuar con Google'
+          )}
+        </Button>
       </div>
     </div>
   );
