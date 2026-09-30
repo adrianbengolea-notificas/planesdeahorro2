@@ -9,6 +9,7 @@
     "dev:clean": "npm run clean && npm run dev",
     "prebuild": "npm install clsx@^2.1.1 tailwind-merge@^3.0.1 --prefix ../../packages/shared --no-package-lock --ignore-scripts --no-fund --no-audit",
     "build": "next build",
+    "postbuild": "node scripts/copy-standalone-public.mjs",
     "start": "next start -p 9003",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"

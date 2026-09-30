@@ -4,8 +4,13 @@ import path from 'path';
 const appNodeModules = path.join(__dirname, 'node_modules');
 
 const nextConfig: NextConfig = {
+  // App Hosting ejecuta standalone; public/ debe copiarse en postbuild (ver scripts/copy-standalone-public.mjs).
+  output: 'standalone',
   // Raíz de esta app (no el monorepo): el adaptador App Hosting espera standalone bajo apps/bengolealamas/.next.
   outputFileTracingRoot: path.join(__dirname),
+  outputFileTracingIncludes: {
+    '/*': ['./public/**/*'],
+  },
   async redirects() {
     return [
       { source: '/estudio', destination: '/informacion', permanent: true },

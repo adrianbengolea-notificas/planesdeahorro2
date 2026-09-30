@@ -12,6 +12,8 @@ Este directorio incluye su propio **`package-lock.json`** y dependencias `file:.
 
 Adrian (`planesdeahorro2`) usa root **`.`** (raíz del repo).
 
+El build usa `output: standalone` y `postbuild` copia `public/` al bundle (sin eso, logo/fotos del carrusel dan **404** en App Hosting).
+
 Variables en Environment (o `apphosting.yaml`):
 
 | Variable | Uso |
