@@ -46,5 +46,6 @@ export const SITE_SAME_AS: readonly string[] = [
 ];
 
 export const UCU_URL = 'https://ucu.org.ar';
+export const NOTIFICAS_URL = 'https://www.notificas.com';
 
 export const SITE_LOCALE = 'es_AR';

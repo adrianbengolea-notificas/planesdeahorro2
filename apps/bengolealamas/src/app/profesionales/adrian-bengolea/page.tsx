@@ -7,7 +7,7 @@ import { breadcrumbJsonLd } from '@repo/shared/schema';
 import { ProfileCta } from '@/components/professionals/profile-cta';
 import { ProfileSection } from '@/components/professionals/profile-section';
 import { PublicationCards } from '@/components/professionals/publication-cards';
-import { ADRIAN_PLANES_SITE_URL, UCU_URL, socialLinks } from '@/config/site';
+import { ADRIAN_PLANES_SITE_URL, NOTIFICAS_URL, UCU_URL, socialLinks } from '@/config/site';
 import { ADRIAN_UCU_PUBLICATIONS } from '@/config/publications-adrian';
 import { BAR_SAN_NICOLAS, getProfessionalBySlug } from '@/config/professionals';
 import { getBlSiteSeoConfig } from '@/config/seo';
@@ -20,12 +20,12 @@ const canonical = `${siteSeo.siteUrl.replace(/\/$/, '')}/profesionales/adrian-be
 export const metadata: Metadata = {
   title: 'Adrián Bengolea | Abogado en San Nicolás | Bengolea & Lamas',
   description:
-    'Dr. Adrián Bengolea. Abogado en San Nicolás de los Arroyos. Defensa del consumidor, planes de ahorro, litigación civil y comercial y acciones colectivas.',
+    'Dr. Adrián Bengolea. Abogado en San Nicolás. Director Ejecutivo de Usuarios y Consumidores Unidos (UCU), fundador de Notificas SRL. Defensa del consumidor, planes de ahorro y litigación civil y comercial.',
   alternates: { canonical },
   openGraph: {
     title: 'Adrián Bengolea | Abogado en San Nicolás | Bengolea & Lamas',
     description:
-      'Dr. Adrián Bengolea. Abogado en San Nicolás de los Arroyos. Defensa del consumidor, planes de ahorro, litigación civil y comercial y acciones colectivas.',
+      'Dr. Adrián Bengolea. Abogado en San Nicolás. Director Ejecutivo de UCU, fundador de Notificas SRL. Defensa del consumidor, planes de ahorro y litigación civil y comercial.',
     url: canonical,
     images: [{ url: '/images/profesionales/adrian-bengolea.jpg', alt: 'Dr. Adrián Bengolea' }],
   },
@@ -34,6 +34,7 @@ export const metadata: Metadata = {
 const sameAs = [
   ADRIAN_PLANES_SITE_URL,
   UCU_URL,
+  NOTIFICAS_URL,
   socialLinks.facebook,
 ].filter(Boolean);
 
@@ -43,7 +44,7 @@ export default function AdrianBengoleaProfilePage() {
     path: '/profesionales/adrian-bengolea',
     jobTitle: 'Abogado',
     description:
-      'Abogado en San Nicolás de los Arroyos. Defensa del consumidor, planes de ahorro y litigación civil y comercial.',
+      'Abogado en San Nicolás. Director Ejecutivo de Usuarios y Consumidores Unidos (UCU) y fundador de Notificas SRL.',
     image: `${siteSeo.siteUrl.replace(/\/$/, '')}/images/profesionales/adrian-bengolea.jpg`,
     sameAs,
     knowsAbout: [
@@ -88,6 +89,17 @@ export default function AdrianBengoleaProfilePage() {
               <div>
                 <h1 className="font-headline text-3xl font-normal text-foreground md:text-4xl">Dr. Adrián Bengolea</h1>
                 <p className="mt-2 text-lg text-accent">Abogado</p>
+                <p className="mt-3 text-sm leading-relaxed text-foreground/90">
+                  Director Ejecutivo de{' '}
+                  <a href={UCU_URL} className="text-accent hover:underline" rel="noopener noreferrer">
+                    Usuarios y Consumidores Unidos (UCU)
+                  </a>
+                  . Fundador de{' '}
+                  <a href={NOTIFICAS_URL} className="text-accent hover:underline" rel="noopener noreferrer">
+                    Notificas SRL
+                  </a>
+                  .
+                </p>
                 <p className="mt-4 text-sm text-muted-foreground">
                   {BAR_SAN_NICOLAS.registration} — {BAR_SAN_NICOLAS.association}
                 </p>
@@ -105,9 +117,16 @@ export default function AdrianBengoleaProfilePage() {
           <ProfileSection title="Perfil profesional">
             <p>
               Adrián Bengolea es abogado matriculado en el {BAR_SAN_NICOLAS.association} ({BAR_SAN_NICOLAS.registration}),
-              provincia de Buenos Aires. Integra el Estudio Jurídico Bengolea & Lamas y desarrolla su práctica con
-              orientación a la defensa de consumidores en conflictos individuales y colectivos, el asesoramiento y la
-              litigación en materia civil y comercial.
+              provincia de Buenos Aires. Integra el Estudio Jurídico Bengolea & Lamas y es Director Ejecutivo de{' '}
+              <a href={UCU_URL} className="text-accent hover:underline" rel="noopener noreferrer">
+                Usuarios y Consumidores Unidos (UCU)
+              </a>{' '}
+              y fundador de{' '}
+              <a href={NOTIFICAS_URL} className="text-accent hover:underline" rel="noopener noreferrer">
+                Notificas SRL
+              </a>
+              . Desarrolla su práctica con orientación a la defensa de consumidores en conflictos individuales y
+              colectivos, el asesoramiento y la litigación en materia civil y comercial.
             </p>
             <p>
               En el sitio profesional{' '}
@@ -119,12 +138,8 @@ export default function AdrianBengoleaProfilePage() {
               la normativa aplicable a los contratos de adhesión.
             </p>
             <p>
-              En publicaciones oficiales del sitio de{' '}
-              <a href={UCU_URL} className="text-accent hover:underline" rel="noopener noreferrer">
-                Usuarios y Consumidores Unidos (UCU)
-              </a>{' '}
-              se lo identifica como Director Ejecutivo de la asociación y autor de materiales orientados a la defensa de
-              consumidores y a la difusión de herramientas para abogados en derecho del consumidor.
+              En el sitio de UCU publica materiales orientados a la defensa de consumidores y a la difusión de
+              herramientas para abogados en derecho del consumidor.
             </p>
             <p>
               Su labor combina el análisis de cada situación concreta, la preparación de estrategias probatorias y la

@@ -69,7 +69,7 @@ export const TEAM: ProfessionalSummary[] = [
       'Acciones colectivas',
     ],
     teaser:
-      'Abogado matriculado en San Nicolás, integrante del estudio desde 2000. Referente en defensa del consumidor, procesos colectivos y planes de ahorro automotor.',
+      'Abogado matriculado en San Nicolás e integrante del estudio desde 2000. Director Ejecutivo de Usuarios y Consumidores Unidos (UCU) y fundador de Notificas SRL. Referente en defensa del consumidor, procesos colectivos y planes de ahorro automotor.',
     image: '/images/profesionales/adrian-bengolea.jpg',
     imageAlt: 'Dr. Adrián Bengolea',
     imageTodo: true,
