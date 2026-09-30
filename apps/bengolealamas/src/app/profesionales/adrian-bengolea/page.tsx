@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { CoverImage } from '@/components/cover-image';
 import Link from 'next/link';
+import { ProfilePhoto } from '@/components/professionals/profile-photo';
 import { JsonLd } from '@repo/shared/components/json-ld';
 import { Breadcrumbs } from '@repo/shared/components/breadcrumbs';
 import { breadcrumbJsonLd } from '@repo/shared/schema';
@@ -9,10 +9,11 @@ import { ProfileSection } from '@/components/professionals/profile-section';
 import { PublicationCards } from '@/components/professionals/publication-cards';
 import { ADRIAN_PLANES_SITE_URL, UCU_URL, socialLinks } from '@/config/site';
 import { ADRIAN_UCU_PUBLICATIONS } from '@/config/publications-adrian';
-import { BAR_SAN_NICOLAS } from '@/config/professionals';
+import { BAR_SAN_NICOLAS, getProfessionalBySlug } from '@/config/professionals';
 import { getBlSiteSeoConfig } from '@/config/seo';
 import { personJsonLd } from '@/lib/schema';
 
+const profile = getProfessionalBySlug('adrian-bengolea')!;
 const siteSeo = getBlSiteSeoConfig();
 const canonical = `${siteSeo.siteUrl.replace(/\/$/, '')}/profesionales/adrian-bengolea`;
 
@@ -75,9 +76,10 @@ export default function AdrianBengoleaProfilePage() {
               className="mb-8 text-muted-foreground"
             />
             <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start">
-              <CoverImage
-                src="/images/profesionales/adrian-bengolea.jpg"
-                alt="Dr. Adrián Bengolea"
+              <ProfilePhoto
+                src={profile.image}
+                pending={profile.imageTodo}
+                alt={profile.imageAlt}
                 className="mx-auto aspect-[3/4] w-full max-w-sm lg:mx-0"
                 imageClassName="object-top"
                 sizes="(max-width: 1024px) 80vw, 360px"
@@ -187,6 +189,26 @@ export default function AdrianBengoleaProfilePage() {
             </p>
           </ProfileSection>
 
+          <ProfileSection title="Trayectoria y formación">
+            <p>
+              Abogado egresado de la Facultad de Derecho de la Universidad Nacional de Rosario (2000). Integra el
+              Estudio Jurídico Bengolea desde febrero de 2000. Es asociado fundador y Director Ejecutivo de Usuarios y
+              Consumidores Unidos (UCU) y fundador de Notificas SRL.
+            </p>
+            <p>
+              Completó el Master en Asesoramiento Jurídico de Empresas de la Universidad Austral (Rosario) y posgrados
+              en defensa del consumidor y procesos colectivos. Fue docente en cursos de posgrado sobre procesos
+              colectivos y acciones de clase en la Universidad Nacional del Litoral y en la Universidad Católica
+              Argentina.
+            </p>
+            <p>
+              Participó como ponente y expositor en congresos y jornadas nacionales de derecho procesal y del consumidor
+              y presidió la Comisión de Jóvenes Abogados del Departamento Judicial de San Nicolás (2003–2005). Cuenta
+              con numerosas publicaciones doctrinales en derecho del consumidor, procesos colectivos y responsabilidad
+              civil.
+            </p>
+          </ProfileSection>
+
           <ProfileSection title="Actividad académica y divulgación">
             <p>
               En el sitio de UCU se publican artículos y comunicados firmados por Adrián Bengolea sobre defensa del
@@ -196,10 +218,6 @@ export default function AdrianBengoleaProfilePage() {
                 adrianbengolea.com.ar
               </a>{' '}
               orientados a consumidores con conflictos en planes de ahorro.
-            </p>
-            <p className="text-sm italic">
-              Referencias concretas a jornadas o cursos específicos se incorporarán cuando estén verificadas en fuentes
-              públicas independientes.
             </p>
           </ProfileSection>
 

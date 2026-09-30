@@ -69,6 +69,10 @@ export default function ProfesionalesPage() {
               Más información institucional
             </Link>
             {' · '}
+            <Link href="/servicios" className="font-medium text-accent hover:underline">
+              Servicios del estudio
+            </Link>
+            {' · '}
             <Link href="/areas-de-practica" className="font-medium text-accent hover:underline">
               Áreas de práctica
             </Link>

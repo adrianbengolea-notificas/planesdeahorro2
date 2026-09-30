@@ -23,5 +23,6 @@ Fecha de consulta de este documento: **2026-09-28** (UTC-3).
 - Cargo **actual** de Adrián Bengolea en UCU (las fuentes citadas son publicaciones en ucu.org.ar; conviene confirmar vigencia).
 - Matrícula, formación académica y áreas detalladas de Carlos Alberto Bengolea y Carlos Alberto Lamas.
 - Instagram y LinkedIn institucionales exactos (campos vacíos con TODO en `socialLinks`).
-- Fotografía oficial de Adrián Bengolea (en repo se usa `estudio-mark.jpg` copiada como placeholder).
+- Fotografía oficial de Adrián Bengolea e Ignacio Goñi (`imageTodo` en listado y perfiles).
+- Biografía pública de Ignacio Goñi (matrícula, formación, áreas).
 - Participaciones en jornadas/congresos con cita fehaciente (no incluidas hasta tener URL).

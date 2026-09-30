@@ -38,22 +38,6 @@ export const BAR_SAN_NICOLAS = {
 
 export const TEAM: ProfessionalSummary[] = [
   {
-    slug: 'adrian-bengolea',
-    name: 'Adrián Bengolea',
-    honorific: 'Dr.',
-    jobTitle: 'Abogado',
-    specialties: [
-      'Defensa del consumidor',
-      'Planes de ahorro',
-      'Derecho civil y comercial',
-      'Acciones colectivas',
-    ],
-    teaser:
-      'Abogado matriculado en San Nicolás, integrante del estudio y referente en defensa del consumidor y conflictos con planes de ahorro automotor.',
-    image: '/images/profesionales/adrian-bengolea.jpg',
-    imageAlt: 'Dr. Adrián Bengolea',
-  },
-  {
     slug: 'carlos-alberto-bengolea',
     name: 'Carlos Alberto Bengolea',
     jobTitle: 'Abogado — Socio fundador',
@@ -72,6 +56,33 @@ export const TEAM: ProfessionalSummary[] = [
       'Socio del estudio, con práctica profesional vinculada al servicio jurídico y la defensa de los derechos de quienes nos consultan.',
     image: '/images/profesionales/carlos-alberto-lamas.jpg',
     imageAlt: 'Carlos Alberto Lamas',
+  },
+  {
+    slug: 'adrian-bengolea',
+    name: 'Adrián Bengolea',
+    honorific: 'Dr.',
+    jobTitle: 'Abogado',
+    specialties: [
+      'Defensa del consumidor',
+      'Planes de ahorro',
+      'Derecho civil y comercial',
+      'Acciones colectivas',
+    ],
+    teaser:
+      'Abogado matriculado en San Nicolás, integrante del estudio desde 2000. Referente en defensa del consumidor, procesos colectivos y planes de ahorro automotor.',
+    image: '/images/profesionales/adrian-bengolea.jpg',
+    imageAlt: 'Dr. Adrián Bengolea',
+    imageTodo: true,
+  },
+  {
+    slug: 'ignacio-goni',
+    name: 'Ignacio Goñi',
+    jobTitle: 'Abogado',
+    specialties: ['Litigación', 'Asesoramiento jurídico'],
+    teaser:
+      'Integrante del equipo del estudio. Perfil profesional y áreas de actuación en actualización.',
+    imageAlt: 'Ignacio Goñi',
+    imageTodo: true,
   },
 ];
 
