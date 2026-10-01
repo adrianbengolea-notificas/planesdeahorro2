@@ -5,7 +5,8 @@ import { BL_PUBLICATIONS_COLLECTION } from '@repo/content-types';
 import { getAdminFirestore, requireAdminSession } from '@/firebase/admin';
 import { mapCmsPublication } from '@/lib/bl-cms-publications';
 import type { CmsPublicationRecord } from '@/lib/bl-cms-types';
-import { bodyToHtml, slugify } from '@/lib/slugify';
+import { htmlHasContent, sanitizeRichHtml } from '@/lib/sanitize-rich-html';
+import { slugify } from '@/lib/slugify';
 
 export type AdminResult<T = void> = { ok: true; data?: T } | { ok: false; error: string };
 
@@ -26,7 +27,7 @@ function normalizePayload(input: PublicationPayload): { ok: true; data: Publicat
   const title = input.title.trim();
   const slug = slugify(input.slug || input.title);
   const excerpt = input.excerpt.trim();
-  const body = bodyToHtml(input.body);
+  const body = sanitizeRichHtml(input.body);
   const author = input.author.trim() || 'Estudio Bengolea & Lamas';
   const publishDate = input.publishDate.trim() || new Date().toISOString();
   const heroImage = (input.heroImage ?? '').trim();
@@ -36,7 +37,7 @@ function normalizePayload(input: PublicationPayload): { ok: true; data: Publicat
   if (title.length < 5) return { ok: false, error: 'El título debe tener al menos 5 caracteres.' };
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return { ok: false, error: 'Slug inválido.' };
   if (excerpt.length < 10) return { ok: false, error: 'El extracto debe tener al menos 10 caracteres.' };
-  if (body.length < 20) return { ok: false, error: 'El cuerpo de la nota es demasiado corto.' };
+  if (!htmlHasContent(body)) return { ok: false, error: 'El cuerpo de la nota es demasiado corto.' };
   if (body.length > 200_000) return { ok: false, error: 'El cuerpo es demasiado largo.' };
 
   return {

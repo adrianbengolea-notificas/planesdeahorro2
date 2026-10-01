@@ -5,9 +5,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createBlPublication, deleteBlPublication, updateBlPublication, type PublicationPayload } from '@/actions/admin-publicaciones';
 import { Button } from '@/components/ui/button';
+import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { TEAM } from '@/config/professionals';
 import { useUser } from '@/firebase/provider';
 import type { CmsPublicationRecord } from '@/lib/bl-cms-types';
+import { htmlHasContent } from '@/lib/sanitize-rich-html';
 import { slugify } from '@/lib/slugify';
 
 const AUTHORS = ['Estudio Bengolea & Lamas', ...TEAM.map((p) => p.name)];
@@ -50,6 +52,11 @@ export function PublicationForm({ mode, initial }: Props) {
     if (!user) return;
     setSaving(true);
     setError(null);
+    if (!htmlHasContent(body)) {
+      setError('El cuerpo de la nota es demasiado corto.');
+      setSaving(false);
+      return;
+    }
     const token = await user.getIdToken();
     const payload: PublicationPayload = {
       title,
@@ -91,7 +98,7 @@ export function PublicationForm({ mode, initial }: Props) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto max-w-3xl space-y-5 p-6 md:p-10">
+    <form onSubmit={onSubmit} className="mx-auto max-w-4xl space-y-5 p-6 md:p-10">
       <Link href="/admin/publicaciones" className="text-sm text-accent hover:underline">
         ← Volver
       </Link>
@@ -129,19 +136,10 @@ export function PublicationForm({ mode, initial }: Props) {
           className="mt-1 w-full border border-border px-3 py-2"
         />
       </label>
-      <label className="block text-sm">
-        Cuerpo
-        <textarea
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          required
-          rows={16}
-          className="mt-1 w-full border border-border px-3 py-2 font-mono text-sm"
-        />
-        <span className="mt-1 block text-xs text-muted-foreground">
-          Texto plano (se convierte en párrafos) o HTML básico: p, h2, ul, a, strong.
-        </span>
-      </label>
+      <div className="block text-sm">
+        <span className="mb-1 block">Cuerpo</span>
+        <RichTextEditor value={body} onChange={setBody} />
+      </div>
       <div className="grid gap-4 md:grid-cols-2">
         <label className="block text-sm">
           Autor

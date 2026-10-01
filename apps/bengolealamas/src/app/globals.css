@@ -42,6 +42,19 @@
     @apply max-w-full overflow-x-hidden;
   }
 
+  .publication-prose p,
+  .publication-prose div,
+  .publication-prose li {
+    text-wrap: pretty;
+  }
+
+  .publication-prose [style*='text-align: justify'],
+  .publication-prose [style*='text-align:justify'] {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+  }
+
   .publication-prose figure {
     @apply my-6 max-w-full overflow-hidden rounded-lg;
   }
