@@ -3,6 +3,7 @@ export type CmsPublicationRecord = {
   title: string;
   slug: string;
   excerpt: string;
+  tags: string[];
   body: string;
   author: string;
   publishDate: string;

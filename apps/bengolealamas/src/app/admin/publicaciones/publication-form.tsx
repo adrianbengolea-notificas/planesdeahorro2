@@ -9,6 +9,7 @@ import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { TEAM } from '@/config/professionals';
 import { useUser } from '@/firebase/provider';
 import type { CmsPublicationRecord } from '@/lib/bl-cms-types';
+import { formatTagsCsv, parseTags } from '@/lib/publication-tags';
 import { htmlHasContent } from '@/lib/sanitize-rich-html';
 import { slugify } from '@/lib/slugify';
 
@@ -31,6 +32,7 @@ export function PublicationForm({ mode, initial }: Props) {
   const [slug, setSlug] = useState(initial?.slug ?? '');
   const [slugTouched, setSlugTouched] = useState(Boolean(initial?.slug));
   const [excerpt, setExcerpt] = useState(initial?.excerpt ?? '');
+  const [tagsCsv, setTagsCsv] = useState(formatTagsCsv(initial?.tags));
   const [body, setBody] = useState(initial?.body ?? '');
   const [author, setAuthor] = useState(initial?.author || AUTHORS[0]);
   const [publishDate, setPublishDate] = useState(toDateInput(initial?.publishDate ?? ''));
@@ -41,6 +43,7 @@ export function PublicationForm({ mode, initial }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const tagPreview = parseTags(tagsCsv);
 
   function onTitle(next: string) {
     setTitle(next);
@@ -62,6 +65,7 @@ export function PublicationForm({ mode, initial }: Props) {
       title,
       slug,
       excerpt,
+      tags: tagsCsv,
       body,
       author,
       publishDate: new Date(`${publishDate}T12:00:00-03:00`).toISOString(),
@@ -135,6 +139,27 @@ export function PublicationForm({ mode, initial }: Props) {
           rows={3}
           className="mt-1 w-full border border-border px-3 py-2"
         />
+      </label>
+      <label className="block text-sm">
+        Etiquetas
+        <input
+          value={tagsCsv}
+          onChange={(e) => setTagsCsv(e.target.value)}
+          placeholder="planes de ahorro, consumidor, bancos"
+          className="mt-1 w-full border border-border px-3 py-2"
+        />
+        <span className="mt-1 block text-xs text-muted-foreground">
+          Palabras o frases separadas por coma. Podés pegar una lista completa.
+        </span>
+        {tagPreview.length ? (
+          <span className="mt-2 flex flex-wrap gap-1.5">
+            {tagPreview.map((tag) => (
+              <span key={tag.toLowerCase()} className="border border-border px-2 py-0.5 text-[11px] uppercase tracking-wide text-muted-foreground">
+                {tag}
+              </span>
+            ))}
+          </span>
+        ) : null}
       </label>
       <div className="block text-sm">
         <span className="mb-1 block">Cuerpo</span>

@@ -9,6 +9,7 @@ import {
   getBlPublications,
 } from '@/lib/bl-publications';
 import type { CmsPublicationRecord } from '@/lib/bl-cms-types';
+import { parseTags } from '@/lib/publication-tags';
 
 export type { CmsPublicationRecord };
 
@@ -36,6 +37,7 @@ export function mapCmsPublication(id: string, data: Record<string, unknown>): Cm
     title: str(data.title),
     slug: str(data.slug),
     excerpt: str(data.excerpt),
+    tags: parseTags(Array.isArray(data.tags) ? data.tags.map(str) : str(data.tags)),
     body: str(data.body),
     author: str(data.author) || 'Estudio Bengolea & Lamas',
     publishDate: isoDate(data.publishDate) || str(data.publishDate),
@@ -51,6 +53,7 @@ function cmsToPublic(row: CmsPublicationRecord): BlPublication {
   return {
     title: row.title,
     excerpt: row.excerpt,
+    tags: row.tags,
     publishDate: row.publishDate,
     author: row.author,
     legacyUrl: '',

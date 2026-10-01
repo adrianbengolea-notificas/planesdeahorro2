@@ -8,6 +8,7 @@ import { normalizePublicationHtml } from '@/lib/normalize-publication-html';
 export type BlPublication = {
   title: string;
   excerpt: string;
+  tags?: string[];
   publishDate: string;
   author: string;
   legacyUrl: string;

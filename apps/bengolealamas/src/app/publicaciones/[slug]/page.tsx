@@ -5,6 +5,7 @@ import { JsonLd } from '@repo/shared/components/json-ld';
 import { Breadcrumbs } from '@repo/shared/components/breadcrumbs';
 import { breadcrumbJsonLd } from '@repo/shared/schema';
 import { PublicationBody } from '@/components/publication-body';
+import { PublicationTags } from '@/components/publication-tags';
 import { resolvePublicPublication } from '@/lib/bl-cms-publications';
 import {
   encodeSlug,
@@ -69,6 +70,7 @@ export default async function PublicacionDetailPage({ params }: PageProps) {
             {pub.author || 'Estudio Bengolea & Lamas'}
             {pub.publishDate ? ` · ${formatPublicationDate(pub.publishDate)}` : null}
           </p>
+          <PublicationTags tags={pub.tags} className="mt-4" linkToFilter />
         </header>
         {bodyHtml ? (
           <PublicationBody html={bodyHtml} heroImage={pub.heroImage} title={pub.title} />

@@ -1,6 +1,7 @@
 import { FileText } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { PublicationTags } from '@/components/publication-tags';
 import type { BlPublication } from '@/lib/bl-publications';
 import { formatPublicationDate, publicationPath, resolvePublicationThumbnail } from '@/lib/bl-publications';
 
@@ -73,6 +74,7 @@ export function PublicationList({ items }: Props) {
                     {pub.excerpt}
                   </p>
                 ) : null}
+                <PublicationTags tags={pub.tags} className="mt-3" linkToFilter />
                 <Link href={href} className="mt-4 inline-flex w-fit text-sm font-medium text-accent hover:underline">
                   Leer nota →
                 </Link>

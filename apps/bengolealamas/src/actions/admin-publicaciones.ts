@@ -5,6 +5,7 @@ import { BL_PUBLICATIONS_COLLECTION } from '@repo/content-types';
 import { getAdminFirestore, requireAdminSession } from '@/firebase/admin';
 import { mapCmsPublication } from '@/lib/bl-cms-publications';
 import type { CmsPublicationRecord } from '@/lib/bl-cms-types';
+import { parseTags } from '@/lib/publication-tags';
 import { htmlHasContent, sanitizeRichHtml } from '@/lib/sanitize-rich-html';
 import { slugify } from '@/lib/slugify';
 
@@ -14,6 +15,7 @@ export type PublicationPayload = {
   title: string;
   slug: string;
   excerpt: string;
+  tags?: string | string[];
   body: string;
   author: string;
   publishDate: string;
@@ -27,6 +29,7 @@ function normalizePayload(input: PublicationPayload): { ok: true; data: Publicat
   const title = input.title.trim();
   const slug = slugify(input.slug || input.title);
   const excerpt = input.excerpt.trim();
+  const tags = parseTags(input.tags);
   const body = sanitizeRichHtml(input.body);
   const author = input.author.trim() || 'Estudio Bengolea & Lamas';
   const publishDate = input.publishDate.trim() || new Date().toISOString();
@@ -46,6 +49,7 @@ function normalizePayload(input: PublicationPayload): { ok: true; data: Publicat
       title,
       slug,
       excerpt,
+      tags,
       body,
       author,
       publishDate,

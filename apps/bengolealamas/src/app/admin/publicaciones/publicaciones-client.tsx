@@ -7,6 +7,7 @@ import { listBlPublications } from '@/actions/admin-publicaciones';
 import { buttonVariants } from '@/components/ui/button';
 import { useUser } from '@/firebase/provider';
 import type { CmsPublicationRecord } from '@/lib/bl-cms-types';
+import { formatTagsCsv } from '@/lib/publication-tags';
 import { cn } from '@/lib/utils';
 
 function formatDate(iso: string): string {
@@ -77,6 +78,7 @@ export function PublicacionesClient() {
                 <p className="font-medium">{row.title}</p>
                 <p className="text-xs text-muted-foreground">
                   {row.published ? 'Publicada' : 'Borrador'} · {formatDate(row.publishDate)} · /{row.slug}
+                  {row.tags?.length ? ` · ${formatTagsCsv(row.tags)}` : ''}
                 </p>
               </div>
               <Link href={`/admin/publicaciones/${row.id}`} className="text-sm font-medium text-accent hover:underline">
