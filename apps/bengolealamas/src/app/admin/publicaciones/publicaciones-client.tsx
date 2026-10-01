@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
-import { listBlPublications } from '@/actions/admin-publicaciones';
-import { buttonVariants } from '@/components/ui/button';
+import { listBlPublications, setBlPublicationPublished } from '@/actions/admin-publicaciones';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { useUser } from '@/firebase/provider';
 import type { CmsPublicationRecord } from '@/lib/bl-cms-types';
 import { formatTagsCsv } from '@/lib/publication-tags';
@@ -24,6 +24,7 @@ export function PublicacionesClient() {
   const [rows, setRows] = useState<CmsPublicationRecord[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -47,6 +48,20 @@ export function PublicacionesClient() {
       cancelled = true;
     };
   }, [user]);
+
+  async function togglePublished(row: CmsPublicationRecord) {
+    if (!user || togglingId) return;
+    setTogglingId(row.id);
+    setError(null);
+    const token = await user.getIdToken();
+    const result = await setBlPublicationPublished(token, row.id, !row.published);
+    setTogglingId(null);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setRows((current) => current.map((item) => (item.id === row.id ? { ...item, published: !item.published } : item)));
+  }
 
   return (
     <div className="mx-auto max-w-5xl p-6 md:p-10">
@@ -81,9 +96,20 @@ export function PublicacionesClient() {
                   {row.tags?.length ? ` · ${formatTagsCsv(row.tags)}` : ''}
                 </p>
               </div>
-              <Link href={`/admin/publicaciones/${row.id}`} className="text-sm font-medium text-accent hover:underline">
-                Editar
-              </Link>
+              <div className="flex flex-wrap items-center gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={togglingId === row.id}
+                  onClick={() => void togglePublished(row)}
+                >
+                  {togglingId === row.id ? 'Actualizando…' : row.published ? 'Pasar a borrador' : 'Publicar'}
+                </Button>
+                <Link href={`/admin/publicaciones/${row.id}`} className="text-sm font-medium text-accent hover:underline">
+                  Editar
+                </Link>
+              </div>
             </li>
           ))}
         </ul>

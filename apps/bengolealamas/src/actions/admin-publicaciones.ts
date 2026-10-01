@@ -1,8 +1,9 @@
 'use server';
 
+import { randomBytes, randomUUID } from 'node:crypto';
 import { FieldValue } from 'firebase-admin/firestore';
 import { BL_PUBLICATIONS_COLLECTION } from '@repo/content-types';
-import { getAdminFirestore, requireAdminSession } from '@/firebase/admin';
+import { getAdminBucket, getAdminFirestore, requireAdminSession } from '@/firebase/admin';
 import { mapCmsPublication } from '@/lib/bl-cms-publications';
 import type { CmsPublicationRecord } from '@/lib/bl-cms-types';
 import { parseTags } from '@/lib/publication-tags';
@@ -109,6 +110,7 @@ export async function createBlPublication(
       siteId: 'bl',
       kind: 'publication',
       ...normalized.data,
+      published: false,
       authorId: session.uid,
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
@@ -139,6 +141,71 @@ export async function updateBlPublication(
     return { ok: true };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'No se pudo guardar la nota.' };
+  }
+}
+
+export async function setBlPublicationPublished(
+  idToken: string,
+  id: string,
+  published: boolean,
+): Promise<AdminResult> {
+  try {
+    await requireAdminSession(idToken);
+    if (!id.trim()) return { ok: false, error: 'Falta el identificador.' };
+    await getAdminFirestore().collection(BL_PUBLICATIONS_COLLECTION).doc(id).update({
+      published: published === true,
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'No se pudo actualizar el estado.' };
+  }
+}
+
+const COVER_MAX_BYTES = 6 * 1024 * 1024;
+const COVER_TYPES: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+};
+
+export async function uploadBlPublicationCover(
+  idToken: string,
+  formData: FormData,
+): Promise<AdminResult<{ url: string }>> {
+  try {
+    await requireAdminSession(idToken);
+    const file = formData.get('file');
+    if (!(file instanceof File) || file.size === 0) {
+      return { ok: false, error: 'Seleccioná una imagen.' };
+    }
+    if (file.size > COVER_MAX_BYTES) {
+      return { ok: false, error: 'La imagen supera el máximo de 6 MB.' };
+    }
+    const mime = (file.type || '').toLowerCase();
+    const extFromName = file.name.toLowerCase().match(/\.(jpe?g|png|webp)$/)?.[1];
+    const ext = COVER_TYPES[mime] || (extFromName === 'jpeg' ? 'jpg' : extFromName);
+    if (!ext) {
+      return { ok: false, error: 'Usá JPG, PNG o WebP.' };
+    }
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const objectPath = `bl-publication-covers/${randomUUID()}.${ext}`;
+    const token = randomBytes(32).toString('hex');
+    const bucket = getAdminBucket();
+    await bucket.file(objectPath).save(buffer, {
+      resumable: false,
+      metadata: {
+        contentType: COVER_TYPES[mime] ? mime : `image/${ext === 'jpg' ? 'jpeg' : ext}`,
+        cacheControl: 'public, max-age=31536000',
+        metadata: { firebaseStorageDownloadTokens: token },
+      },
+    });
+    const url = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(objectPath)}?alt=media&token=${token}`;
+    return { ok: true, data: { url } };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'No se pudo subir la imagen.' };
   }
 }
 

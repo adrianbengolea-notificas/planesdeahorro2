@@ -91,6 +91,14 @@ export function getAdminStorage() {
   return getStorage(getAdminApp());
 }
 
+export function resolveStorageBucketName(): string {
+  return process.env.FIREBASE_STORAGE_BUCKET?.trim() || firebaseConfig.storageBucket;
+}
+
+export function getAdminBucket() {
+  return getStorage(getAdminApp()).bucket(resolveStorageBucketName());
+}
+
 export async function verifySessionIsAdmin(idToken: string): Promise<{ uid: string; admin: boolean }> {
   const decoded = await getAuth(getAdminApp()).verifyIdToken(idToken);
   const snap = await getAdminFirestore().collection('admin_users').doc(decoded.uid).get();

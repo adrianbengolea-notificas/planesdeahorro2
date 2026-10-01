@@ -3,7 +3,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { createBlPublication, deleteBlPublication, updateBlPublication, type PublicationPayload } from '@/actions/admin-publicaciones';
+import {
+  createBlPublication,
+  deleteBlPublication,
+  updateBlPublication,
+  uploadBlPublicationCover,
+  type PublicationPayload,
+} from '@/actions/admin-publicaciones';
 import { Button } from '@/components/ui/button';
 import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { TEAM } from '@/config/professionals';
@@ -41,23 +47,25 @@ export function PublicationForm({ mode, initial }: Props) {
   const [seoTitle, setSeoTitle] = useState(initial?.seoTitle ?? '');
   const [seoDescription, setSeoDescription] = useState(initial?.seoDescription ?? '');
   const [error, setError] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState<'draft' | 'status' | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const [coverError, setCoverError] = useState<string | null>(null);
   const tagPreview = parseTags(tagsCsv);
+  const busy = saving !== null || deleting || uploadingCover;
 
   function onTitle(next: string) {
     setTitle(next);
     if (!slugTouched) setSlug(slugify(next));
   }
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!user) return;
-    setSaving(true);
+  async function saveNote(nextPublished: boolean, intent: 'draft' | 'status') {
+    if (!user || busy) return;
+    setSaving(intent);
     setError(null);
     if (!htmlHasContent(body)) {
       setError('El cuerpo de la nota es demasiado corto.');
-      setSaving(false);
+      setSaving(null);
       return;
     }
     const token = await user.getIdToken();
@@ -69,7 +77,7 @@ export function PublicationForm({ mode, initial }: Props) {
       body,
       author,
       publishDate: new Date(`${publishDate}T12:00:00-03:00`).toISOString(),
-      published,
+      published: mode === 'create' ? false : nextPublished,
       heroImage,
       seoTitle,
       seoDescription,
@@ -78,14 +86,38 @@ export function PublicationForm({ mode, initial }: Props) {
       mode === 'create'
         ? await createBlPublication(token, payload)
         : await updateBlPublication(token, initial!.id, payload);
-    setSaving(false);
+    setSaving(null);
     if (!result.ok) {
       setError(result.error);
       return;
     }
+    setPublished(mode === 'create' ? false : nextPublished);
     const id = mode === 'create' ? result.data?.id : initial?.id;
     router.push(id ? `/admin/publicaciones/${id}` : '/admin/publicaciones');
     router.refresh();
+  }
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    await saveNote(published, 'draft');
+  }
+
+  async function onCoverFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file || !user) return;
+    setUploadingCover(true);
+    setCoverError(null);
+    const token = await user.getIdToken();
+    const fd = new FormData();
+    fd.set('file', file);
+    const result = await uploadBlPublicationCover(token, fd);
+    setUploadingCover(false);
+    if (!result.ok) {
+      setCoverError(result.error);
+      return;
+    }
+    setHeroImage(result.data?.url ?? '');
   }
 
   async function onDelete() {
@@ -106,7 +138,12 @@ export function PublicationForm({ mode, initial }: Props) {
       <Link href="/admin/publicaciones" className="text-sm text-accent hover:underline">
         ← Volver
       </Link>
-      <h1 className="font-headline text-3xl">{mode === 'create' ? 'Nueva nota' : 'Editar nota'}</h1>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <h1 className="font-headline text-3xl">{mode === 'create' ? 'Nueva nota' : 'Editar nota'}</h1>
+        <p className={`text-sm ${published ? 'text-accent' : 'text-muted-foreground'}`}>
+          {mode === 'create' || !published ? 'Borrador — no visible en el sitio' : 'Publicada — visible en el sitio'}
+        </p>
+      </div>
 
       <label className="block text-sm">
         Título
@@ -191,14 +228,40 @@ export function PublicationForm({ mode, initial }: Props) {
           />
         </label>
       </div>
-      <label className="block text-sm">
-        Imagen de portada (URL o ruta /…)
+      <div className="block text-sm">
+        <span className="mb-1 block">Imagen de portada</span>
+        {heroImage ? (
+          <div className="mb-3 overflow-hidden border border-border bg-muted">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={heroImage} alt="" className="max-h-56 w-full object-cover" />
+          </div>
+        ) : null}
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="inline-flex cursor-pointer items-center border border-border px-3 py-2 text-sm hover:bg-secondary">
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="sr-only"
+              disabled={busy}
+              onChange={(e) => void onCoverFile(e)}
+            />
+            {uploadingCover ? 'Subiendo…' : 'Subir archivo'}
+          </label>
+          {heroImage ? (
+            <button type="button" className="text-sm text-muted-foreground hover:text-foreground" onClick={() => setHeroImage('')} disabled={busy}>
+              Quitar
+            </button>
+          ) : null}
+        </div>
         <input
           value={heroImage}
           onChange={(e) => setHeroImage(e.target.value)}
-          className="mt-1 w-full border border-border px-3 py-2"
+          placeholder="O pegá una URL / ruta /…"
+          className="mt-3 w-full border border-border px-3 py-2"
         />
-      </label>
+        {coverError ? <p className="mt-1 text-xs text-red-700">{coverError}</p> : null}
+        <span className="mt-1 block text-xs text-muted-foreground">JPG, PNG o WebP, hasta 6 MB.</span>
+      </div>
       <label className="block text-sm">
         Título SEO (opcional)
         <input value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} className="mt-1 w-full border border-border px-3 py-2" />
@@ -212,24 +275,24 @@ export function PublicationForm({ mode, initial }: Props) {
           className="mt-1 w-full border border-border px-3 py-2"
         />
       </label>
-      <label className="inline-flex items-center gap-2 text-sm">
-        <input type="checkbox" checked={published} onChange={(e) => setPublished(e.target.checked)} />
-        Publicada (visible en el sitio)
-      </label>
-
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
 
       <div className="flex flex-wrap gap-3">
-        <Button type="submit" disabled={saving}>
-          {saving ? 'Guardando…' : mode === 'create' ? 'Crear nota' : 'Guardar cambios'}
+        <Button type="submit" disabled={busy}>
+          {saving === 'draft' ? 'Guardando…' : mode === 'create' ? 'Guardar borrador' : 'Guardar cambios'}
         </Button>
+        {mode === 'edit' ? (
+          <Button type="button" variant="outline" disabled={busy} onClick={() => void saveNote(!published, 'status')}>
+            {saving === 'status' ? 'Actualizando…' : published ? 'Pasar a borrador' : 'Publicar'}
+          </Button>
+        ) : null}
         {mode === 'edit' && published && slug ? (
           <a href={`/publicaciones/${slug}`} target="_blank" rel="noreferrer" className="border border-border px-4 py-2 text-sm">
             Ver en el sitio
           </a>
         ) : null}
         {mode === 'edit' ? (
-          <Button type="button" variant="outline" onClick={() => void onDelete()} disabled={deleting}>
+          <Button type="button" variant="outline" onClick={() => void onDelete()} disabled={busy}>
             {deleting ? 'Eliminando…' : 'Eliminar'}
           </Button>
         ) : null}
