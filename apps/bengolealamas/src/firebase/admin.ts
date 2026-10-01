@@ -69,6 +69,7 @@ export function getAdminApp(): App {
         clientEmail: parsed.client_email,
         privateKey: parsed.private_key?.replace(/\\n/g, '\n'),
       }),
+      storageBucket: resolveStorageBucketName(),
     });
   }
 
@@ -80,6 +81,7 @@ export function getAdminApp(): App {
   return initializeApp({
     credential: applicationDefault(),
     projectId,
+    storageBucket: resolveStorageBucketName(),
   });
 }
 

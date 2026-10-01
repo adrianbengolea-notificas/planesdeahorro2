@@ -1,9 +1,9 @@
 'use server';
 
-import { randomBytes, randomUUID } from 'node:crypto';
 import { FieldValue } from 'firebase-admin/firestore';
 import { BL_PUBLICATIONS_COLLECTION } from '@repo/content-types';
-import { getAdminBucket, getAdminFirestore, requireAdminSession } from '@/firebase/admin';
+import { getAdminFirestore, requireAdminSession } from '@/firebase/admin';
+import { savePublicationCover } from '@/lib/save-publication-cover';
 import { mapCmsPublication } from '@/lib/bl-cms-publications';
 import type { CmsPublicationRecord } from '@/lib/bl-cms-types';
 import { parseTags } from '@/lib/publication-tags';
@@ -29,7 +29,8 @@ export type PublicationPayload = {
 function normalizePayload(input: PublicationPayload): { ok: true; data: PublicationPayload } | { ok: false; error: string } {
   const title = input.title.trim();
   const slug = slugify(input.slug || input.title);
-  const excerpt = input.excerpt.trim();
+  const publishing = input.published === true;
+  const excerpt = input.excerpt.trim() || (publishing ? '' : title);
   const tags = parseTags(input.tags);
   const body = sanitizeRichHtml(input.body);
   const author = input.author.trim() || 'Estudio Bengolea & Lamas';
@@ -38,10 +39,11 @@ function normalizePayload(input: PublicationPayload): { ok: true; data: Publicat
   const seoTitle = (input.seoTitle ?? '').trim();
   const seoDescription = (input.seoDescription ?? '').trim();
 
-  if (title.length < 5) return { ok: false, error: 'El título debe tener al menos 5 caracteres.' };
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return { ok: false, error: 'Slug inválido.' };
-  if (excerpt.length < 10) return { ok: false, error: 'El extracto debe tener al menos 10 caracteres.' };
-  if (!htmlHasContent(body)) return { ok: false, error: 'El cuerpo de la nota es demasiado corto.' };
+  if (title.length < 3) return { ok: false, error: 'El título debe tener al menos 3 caracteres.' };
+  if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return { ok: false, error: 'Slug inválido. Completá el título o la URL.' };
+  if (publishing && excerpt.length < 10) return { ok: false, error: 'El extracto debe tener al menos 10 caracteres para publicar.' };
+  if (publishing && !htmlHasContent(body)) return { ok: false, error: 'El cuerpo de la nota es demasiado corto para publicar.' };
+  if (!publishing && !htmlHasContent(body, 1)) return { ok: false, error: 'Escribí al menos un párrafo en el cuerpo para guardar el borrador.' };
   if (body.length > 200_000) return { ok: false, error: 'El cuerpo es demasiado largo.' };
 
   return {
@@ -110,7 +112,6 @@ export async function createBlPublication(
       siteId: 'bl',
       kind: 'publication',
       ...normalized.data,
-      published: false,
       authorId: session.uid,
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
@@ -162,14 +163,6 @@ export async function setBlPublicationPublished(
   }
 }
 
-const COVER_MAX_BYTES = 6 * 1024 * 1024;
-const COVER_TYPES: Record<string, string> = {
-  'image/jpeg': 'jpg',
-  'image/jpg': 'jpg',
-  'image/png': 'png',
-  'image/webp': 'webp',
-};
-
 export async function uploadBlPublicationCover(
   idToken: string,
   formData: FormData,
@@ -177,33 +170,17 @@ export async function uploadBlPublicationCover(
   try {
     await requireAdminSession(idToken);
     const file = formData.get('file');
-    if (!(file instanceof File) || file.size === 0) {
+    if (typeof file !== 'object' || file === null || typeof (file as Blob).arrayBuffer !== 'function') {
       return { ok: false, error: 'Seleccioná una imagen.' };
     }
-    if (file.size > COVER_MAX_BYTES) {
-      return { ok: false, error: 'La imagen supera el máximo de 6 MB.' };
-    }
-    const mime = (file.type || '').toLowerCase();
-    const extFromName = file.name.toLowerCase().match(/\.(jpe?g|png|webp)$/)?.[1];
-    const ext = COVER_TYPES[mime] || (extFromName === 'jpeg' ? 'jpg' : extFromName);
-    if (!ext) {
-      return { ok: false, error: 'Usá JPG, PNG o WebP.' };
-    }
-
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const objectPath = `bl-publication-covers/${randomUUID()}.${ext}`;
-    const token = randomBytes(32).toString('hex');
-    const bucket = getAdminBucket();
-    await bucket.file(objectPath).save(buffer, {
-      resumable: false,
-      metadata: {
-        contentType: COVER_TYPES[mime] ? mime : `image/${ext === 'jpg' ? 'jpeg' : ext}`,
-        cacheControl: 'public, max-age=31536000',
-        metadata: { firebaseStorageDownloadTokens: token },
-      },
+    const blob = file as Blob & { name?: string; type: string };
+    if (!blob.size) return { ok: false, error: 'Seleccioná una imagen.' };
+    const saved = await savePublicationCover({
+      buffer: Buffer.from(await blob.arrayBuffer()),
+      mime: blob.type || '',
+      fileName: blob.name || 'portada.jpg',
     });
-    const url = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(objectPath)}?alt=media&token=${token}`;
-    return { ok: true, data: { url } };
+    return { ok: true, data: { url: saved.url } };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'No se pudo subir la imagen.' };
   }

@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
   transpilePackages: ['@repo/shared', '@repo/content-types'],
   typescript: { ignoreBuildErrors: false },
   eslint: { ignoreDuringBuilds: false },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '8mb',
+    },
+  },
   // No mapear @repo/shared ni @repo/content-types a /src: rompe subpaths (@repo/shared/components/json-ld).
   // Turbopack y webpack resuelven vía package.json "exports" + transpilePackages.
   turbopack: {

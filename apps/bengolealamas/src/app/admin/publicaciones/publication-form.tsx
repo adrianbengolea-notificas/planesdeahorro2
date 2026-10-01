@@ -7,7 +7,6 @@ import {
   createBlPublication,
   deleteBlPublication,
   updateBlPublication,
-  uploadBlPublicationCover,
   type PublicationPayload,
 } from '@/actions/admin-publicaciones';
 import { Button } from '@/components/ui/button';
@@ -52,72 +51,106 @@ export function PublicationForm({ mode, initial }: Props) {
   const [uploadingCover, setUploadingCover] = useState(false);
   const [coverError, setCoverError] = useState<string | null>(null);
   const tagPreview = parseTags(tagsCsv);
-  const busy = saving !== null || deleting || uploadingCover;
+  const savingNow = saving !== null;
 
   function onTitle(next: string) {
     setTitle(next);
     if (!slugTouched) setSlug(slugify(next));
   }
 
-  async function saveNote(nextPublished: boolean, intent: 'draft' | 'status') {
-    if (!user || busy) return;
+  async function saveNote(nextPublished: boolean) {
+    if (savingNow || deleting) return;
+    if (!user) {
+      setError('Ingresá de nuevo para guardar.');
+      return;
+    }
+    const intent = nextPublished ? 'status' : 'draft';
     setSaving(intent);
     setError(null);
-    if (!htmlHasContent(body)) {
-      setError('El cuerpo de la nota es demasiado corto.');
+    if (nextPublished && !htmlHasContent(body)) {
+      setError('El cuerpo de la nota es demasiado corto para publicar.');
       setSaving(null);
       return;
     }
-    const token = await user.getIdToken();
-    const payload: PublicationPayload = {
-      title,
-      slug,
-      excerpt,
-      tags: tagsCsv,
-      body,
-      author,
-      publishDate: new Date(`${publishDate}T12:00:00-03:00`).toISOString(),
-      published: mode === 'create' ? false : nextPublished,
-      heroImage,
-      seoTitle,
-      seoDescription,
-    };
-    const result =
-      mode === 'create'
-        ? await createBlPublication(token, payload)
-        : await updateBlPublication(token, initial!.id, payload);
-    setSaving(null);
-    if (!result.ok) {
-      setError(result.error);
+    if (!nextPublished && !htmlHasContent(body, 1)) {
+      setError('Escribí al menos un párrafo en el cuerpo para guardar el borrador.');
+      setSaving(null);
       return;
     }
-    setPublished(mode === 'create' ? false : nextPublished);
-    const id = mode === 'create' ? result.data?.id : initial?.id;
-    router.push(id ? `/admin/publicaciones/${id}` : '/admin/publicaciones');
-    router.refresh();
-  }
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    await saveNote(published, 'draft');
+    try {
+      const token = await user.getIdToken();
+      const payload: PublicationPayload = {
+        title,
+        slug: slug || slugify(title),
+        excerpt: excerpt.trim() || title.trim(),
+        tags: tagsCsv,
+        body,
+        author,
+        publishDate: new Date(`${publishDate || toDateInput('')}T12:00:00-03:00`).toISOString(),
+        published: nextPublished,
+        heroImage,
+        seoTitle,
+        seoDescription,
+      };
+      const result =
+        mode === 'create'
+          ? await createBlPublication(token, payload)
+          : await updateBlPublication(token, initial!.id, payload);
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      setPublished(nextPublished);
+      const id = mode === 'create' ? result.data?.id : initial?.id;
+      router.push(id ? `/admin/publicaciones/${id}` : '/admin/publicaciones');
+      router.refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'No se pudo guardar la nota.');
+    } finally {
+      setSaving(null);
+    }
   }
 
   async function onCoverFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file || !user) return;
-    setUploadingCover(true);
-    setCoverError(null);
-    const token = await user.getIdToken();
-    const fd = new FormData();
-    fd.set('file', file);
-    const result = await uploadBlPublicationCover(token, fd);
-    setUploadingCover(false);
-    if (!result.ok) {
-      setCoverError(result.error);
+    if (file.size > 6 * 1024 * 1024) {
+      setCoverError('La imagen supera el máximo de 6 MB.');
       return;
     }
-    setHeroImage(result.data?.url ?? '');
+    setUploadingCover(true);
+    setCoverError(null);
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 25_000);
+    try {
+      const token = await user.getIdToken();
+      const fd = new FormData();
+      fd.set('file', file);
+      const res = await fetch('/api/admin/publication-cover', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+        signal: controller.signal,
+      });
+      const payload = (await res.json().catch(() => null)) as { ok?: boolean; url?: string; error?: string } | null;
+      if (!res.ok || !payload?.ok || !payload.url) {
+        setCoverError(payload?.error || `No se pudo subir la imagen (${res.status}).`);
+        return;
+      }
+      setHeroImage(payload.url);
+    } catch (err) {
+      setCoverError(
+        err instanceof Error && err.name === 'AbortError'
+          ? 'La subida tardó demasiado. Probá una imagen más liviana (JPG o WebP).'
+          : err instanceof Error
+            ? err.message
+            : 'No se pudo subir la imagen.',
+      );
+    } finally {
+      window.clearTimeout(timer);
+      setUploadingCover(false);
+    }
   }
 
   async function onDelete() {
@@ -134,7 +167,13 @@ export function PublicationForm({ mode, initial }: Props) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto max-w-4xl space-y-5 p-6 md:p-10">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        void saveNote(false);
+      }}
+      className="mx-auto max-w-4xl space-y-5 p-6 md:p-10"
+    >
       <Link href="/admin/publicaciones" className="text-sm text-accent hover:underline">
         ← Volver
       </Link>
@@ -150,7 +189,6 @@ export function PublicationForm({ mode, initial }: Props) {
         <input
           value={title}
           onChange={(e) => onTitle(e.target.value)}
-          required
           className="mt-1 w-full border border-border px-3 py-2"
         />
       </label>
@@ -162,7 +200,6 @@ export function PublicationForm({ mode, initial }: Props) {
             setSlugTouched(true);
             setSlug(slugify(e.target.value));
           }}
-          required
           className="mt-1 w-full border border-border px-3 py-2 font-mono text-sm"
         />
         <span className="mt-1 block text-xs text-muted-foreground">/publicaciones/{slug || '…'}</span>
@@ -172,7 +209,6 @@ export function PublicationForm({ mode, initial }: Props) {
         <textarea
           value={excerpt}
           onChange={(e) => setExcerpt(e.target.value)}
-          required
           rows={3}
           className="mt-1 w-full border border-border px-3 py-2"
         />
@@ -223,7 +259,6 @@ export function PublicationForm({ mode, initial }: Props) {
             type="date"
             value={publishDate}
             onChange={(e) => setPublishDate(e.target.value)}
-            required
             className="mt-1 w-full border border-border px-3 py-2"
           />
         </label>
@@ -242,13 +277,13 @@ export function PublicationForm({ mode, initial }: Props) {
               type="file"
               accept="image/jpeg,image/png,image/webp"
               className="sr-only"
-              disabled={busy}
+              disabled={uploadingCover || savingNow}
               onChange={(e) => void onCoverFile(e)}
             />
             {uploadingCover ? 'Subiendo…' : 'Subir archivo'}
           </label>
           {heroImage ? (
-            <button type="button" className="text-sm text-muted-foreground hover:text-foreground" onClick={() => setHeroImage('')} disabled={busy}>
+            <button type="button" className="text-sm text-muted-foreground hover:text-foreground" onClick={() => setHeroImage('')} disabled={uploadingCover}>
               Quitar
             </button>
           ) : null}
@@ -277,22 +312,32 @@ export function PublicationForm({ mode, initial }: Props) {
       </label>
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
 
-      <div className="flex flex-wrap gap-3">
-        <Button type="submit" disabled={busy}>
-          {saving === 'draft' ? 'Guardando…' : mode === 'create' ? 'Guardar borrador' : 'Guardar cambios'}
-        </Button>
-        {mode === 'edit' ? (
-          <Button type="button" variant="outline" disabled={busy} onClick={() => void saveNote(!published, 'status')}>
-            {saving === 'status' ? 'Actualizando…' : published ? 'Pasar a borrador' : 'Publicar'}
+      <div className="sticky bottom-0 z-10 -mx-6 flex flex-wrap gap-3 border-t border-border bg-background px-6 py-4 md:-mx-10 md:px-10">
+        {published ? (
+          <Button type="button" disabled={savingNow || deleting} onClick={() => void saveNote(true)}>
+            {saving === 'status' ? 'Guardando…' : 'Guardar cambios'}
           </Button>
-        ) : null}
-        {mode === 'edit' && published && slug ? (
-          <a href={`/publicaciones/${slug}`} target="_blank" rel="noreferrer" className="border border-border px-4 py-2 text-sm">
+        ) : (
+          <Button type="button" disabled={savingNow || deleting} onClick={() => void saveNote(false)}>
+            {saving === 'draft' ? 'Guardando…' : 'Guardar borrador'}
+          </Button>
+        )}
+        {published ? (
+          <Button type="button" variant="outline" disabled={savingNow || deleting} onClick={() => void saveNote(false)}>
+            {saving === 'draft' ? 'Actualizando…' : 'Pasar a borrador'}
+          </Button>
+        ) : (
+          <Button type="button" disabled={savingNow || deleting} onClick={() => void saveNote(true)}>
+            {saving === 'status' ? 'Publicando…' : 'Publicar'}
+          </Button>
+        )}
+        {published && slug ? (
+          <a href={`/publicaciones/${slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center border border-border px-4 py-2 text-sm">
             Ver en el sitio
           </a>
         ) : null}
         {mode === 'edit' ? (
-          <Button type="button" variant="outline" onClick={() => void onDelete()} disabled={busy}>
+          <Button type="button" variant="outline" onClick={() => void onDelete()} disabled={savingNow || deleting}>
             {deleting ? 'Eliminando…' : 'Eliminar'}
           </Button>
         ) : null}
