@@ -41,13 +41,13 @@ export const HOME_SLIDES: HomeSlide[] = [
     title: 'Solvencia técnica',
     image: '/brand/hero-solvencia.jpg',
     primaryCta: { label: 'Solicitar turno', href: '/contacto' },
-    secondaryCta: { label: 'Información', href: '/informacion' },
+    secondaryCta: { label: 'Servicios', href: '/servicios' },
   },
   {
     id: 'experiencia',
     title: 'Experiencia',
     image: '/brand/hero-experiencia.jpg',
-    primaryCta: { label: 'Información', href: '/informacion' },
+    primaryCta: { label: 'Servicios', href: '/servicios' },
   },
 ];
 
@@ -57,7 +57,6 @@ export const WIX_NAV = [
   { href: '/publicaciones', label: 'Publicaciones' },
   { href: '/servicios', label: 'Servicios' },
   { href: '/profesionales', label: 'Profesionales' },
-  { href: '/informacion', label: 'Información' },
 ] as const;
 
 export const FOUNDERS = [

@@ -65,10 +65,6 @@ export default function ProfesionalesPage() {
             ))}
           </div>
           <p className="mt-6 text-sm text-muted-foreground">
-            <Link href="/informacion" className="font-medium text-accent hover:underline">
-              Más información institucional
-            </Link>
-            {' · '}
             <Link href="/servicios" className="font-medium text-accent hover:underline">
               Servicios del estudio
             </Link>

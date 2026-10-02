@@ -17,7 +17,6 @@ export const BL_STATIC_SITEMAP_PATHS: string[] = [
   '/jurisprudencia',
   '/preguntas-frecuentes',
   '/contacto',
-  '/informacion',
   '/consultas-online',
   '/privacidad',
   '/planes-de-ahorro',
