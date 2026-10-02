@@ -76,12 +76,12 @@ export const TEAM: ProfessionalSummary[] = [
   },
   {
     slug: 'ignacio-goni',
-    name: 'Ignacio Goñi',
-    jobTitle: 'Abogado',
-    specialties: ['Litigación', 'Asesoramiento jurídico'],
+    name: 'Ignacio Goñi Bengolea',
+    jobTitle: 'Abogado — Litigación · Derecho bancario · Tributario · Seguros',
+    specialties: ['Litigación', 'Derecho bancario', 'Derecho tributario', 'Seguros', 'Daños'],
     teaser:
-      'Integrante del equipo del estudio. Perfil profesional y áreas de actuación en actualización.',
-    imageAlt: 'Ignacio Goñi',
+      'Graduado en la UBA, con posgrado en Derecho de Daños. Más de veinte años en litigación y asesoramiento; abogado apoderado del Banco de la Nación Argentina desde 2011.',
+    imageAlt: 'Ignacio Goñi Bengolea',
     imageTodo: true,
   },
 ];
