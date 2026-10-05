@@ -137,7 +137,14 @@ export function PublicacionesClient() {
                 >
                   {togglingId === row.id ? 'Actualizando…' : row.published ? 'Pasar a borrador' : 'Publicar'}
                 </Button>
-                <Link href={`/admin/publicaciones/${encodeURIComponent(row.id)}`} className="text-sm font-medium text-accent hover:underline">
+                <Link
+                  href={
+                    row.origin === 'legacy'
+                      ? `/admin/publicaciones/migrada?slug=${encodeURIComponent(row.slug)}`
+                      : `/admin/publicaciones/${row.id}`
+                  }
+                  className="text-sm font-medium text-accent hover:underline"
+                >
                   Editar
                 </Link>
               </div>

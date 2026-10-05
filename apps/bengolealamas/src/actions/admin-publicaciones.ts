@@ -81,6 +81,19 @@ async function slugTaken(slug: string, exceptId?: string): Promise<boolean> {
   return snap.docs.some((d) => d.id !== exceptId);
 }
 
+function decodeLegacySlug(id: string): string | null {
+  let value = id.trim();
+  try {
+    value = decodeURIComponent(value);
+  } catch {
+    /* keep raw */
+  }
+  for (const prefix of ['legacy:', 'legacy--']) {
+    if (value.startsWith(prefix)) return value.slice(prefix.length);
+  }
+  return null;
+}
+
 function legacyToAdminRow(pub: {
   title: string;
   excerpt: string;
@@ -92,7 +105,7 @@ function legacyToAdminRow(pub: {
   migratedAt?: string;
 }): CmsPublicationRecord {
   return {
-    id: `legacy:${pub.slug}`,
+    id: `legacy--${pub.slug}`,
     origin: 'legacy',
     title: pub.title,
     slug: pub.slug,
@@ -130,7 +143,12 @@ export async function adoptLegacyPublication(
 ): Promise<AdminResult<{ id: string }>> {
   try {
     const session = await requireAdminSession(idToken);
-    const decoded = slug.trim();
+    let decoded = slug.trim();
+    try {
+      decoded = decodeURIComponent(decoded);
+    } catch {
+      /* keep */
+    }
     if (!decoded) return { ok: false, error: 'Falta el slug.' };
     const existing = await getCmsRecordBySlug(decoded);
     if (existing) return { ok: true, data: { id: existing.id } };
@@ -173,15 +191,26 @@ export async function getBlPublication(
 ): Promise<AdminResult<CmsPublicationRecord>> {
   try {
     await requireAdminSession(idToken);
-    if (id.startsWith('legacy:')) {
-      const adopted = await adoptLegacyPublication(idToken, id.slice('legacy:'.length));
+    const legacySlug = decodeLegacySlug(id);
+    if (legacySlug) {
+      const adopted = await adoptLegacyPublication(idToken, legacySlug);
       if (!adopted.ok) return adopted;
       if (!adopted.data?.id) return { ok: false, error: 'No se pudo abrir la nota migrada.' };
       id = adopted.data.id;
     }
     const snap = await getAdminFirestore().collection(BL_PUBLICATIONS_COLLECTION).doc(id).get();
-    if (!snap.exists) return { ok: false, error: 'Nota no encontrada.' };
-    return { ok: true, data: mapCmsPublication(snap.id, snap.data() ?? {}) };
+    if (snap.exists) return { ok: true, data: mapCmsPublication(snap.id, snap.data() ?? {}) };
+
+    const bySlug = await getCmsRecordBySlug(id);
+    if (bySlug) return { ok: true, data: bySlug };
+
+    const adopted = await adoptLegacyPublication(idToken, id);
+    if (adopted.ok && adopted.data?.id) {
+      const created = await getAdminFirestore().collection(BL_PUBLICATIONS_COLLECTION).doc(adopted.data.id).get();
+      if (created.exists) return { ok: true, data: mapCmsPublication(created.id, created.data() ?? {}) };
+    }
+
+    return { ok: false, error: 'Nota no encontrada.' };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'No se pudo leer la nota.' };
   }
@@ -243,9 +272,11 @@ export async function setBlPublicationPublished(
   try {
     await requireAdminSession(idToken);
     if (!id.trim()) return { ok: false, error: 'Falta el identificador.' };
-    if (id.startsWith('legacy:')) {
-      const adopted = await adoptLegacyPublication(idToken, id.slice('legacy:'.length));
-      if (!adopted.ok || !adopted.data?.id) return adopted;
+    const legacySlug = decodeLegacySlug(id);
+    if (legacySlug) {
+      const adopted = await adoptLegacyPublication(idToken, legacySlug);
+      if (!adopted.ok) return adopted;
+      if (!adopted.data?.id) return { ok: false, error: 'No se pudo abrir la nota migrada.' };
       id = adopted.data.id;
     }
     await getAdminFirestore().collection(BL_PUBLICATIONS_COLLECTION).doc(id).update({
