@@ -72,7 +72,6 @@ export const TEAM: ProfessionalSummary[] = [
       'Abogado matriculado en San Nicolás e integrante del estudio desde 2000. Director Ejecutivo de Usuarios y Consumidores Unidos (UCU) y fundador de Notificas SRL. Referente en defensa del consumidor, procesos colectivos y planes de ahorro automotor.',
     image: '/images/profesionales/adrian-bengolea.jpg',
     imageAlt: 'Dr. Adrián Bengolea',
-    imageTodo: true,
   },
   {
     slug: 'ignacio-goni',
@@ -81,8 +80,8 @@ export const TEAM: ProfessionalSummary[] = [
     specialties: ['Litigación', 'Derecho bancario', 'Derecho tributario', 'Seguros', 'Daños'],
     teaser:
       'Graduado en la UBA, con posgrado en Derecho de Daños. Más de veinte años en litigación y asesoramiento; abogado apoderado del Banco de la Nación Argentina desde 2011.',
+    image: '/images/profesionales/ignacio-goni.jpg',
     imageAlt: 'Ignacio Goñi Bengolea',
-    imageTodo: true,
   },
 ];
 
