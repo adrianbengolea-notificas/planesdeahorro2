@@ -1,6 +1,6 @@
 /**
- * Registro de áreas de práctica (rutas futuras). Solo entradas con `published: true`
- * deben aparecer en sitemap y recibir página generada.
+ * Registro de áreas de práctica. Solo entradas con `published: true`
+ * aparecen en sitemap y reciben página propia.
  */
 export type PracticeAreaEntry = {
   id: string;
@@ -31,35 +31,35 @@ export const PRACTICE_AREAS: PracticeAreaEntry[] = [
     title: 'Fraude bancario',
     path: '/bancos/fraude-bancario',
     description: 'Transferencias y operaciones no reconocidas; responsabilidad de la entidad financiera.',
-    published: false,
+    published: true,
   },
   {
     id: 'bancos-debitos',
     title: 'Débitos no autorizados',
     path: '/bancos/debitos-no-autorizados',
     description: 'Cargos en cuenta o tarjeta sin consentimiento válido.',
-    published: false,
+    published: true,
   },
   {
     id: 'bancos-debin',
     title: 'DEBIN',
     path: '/bancos/debin',
     description: 'Débitos inmediatos y controversias sobre autorización.',
-    published: false,
+    published: true,
   },
   {
     id: 'bancos-tarjetas',
     title: 'Tarjetas de crédito',
     path: '/bancos/tarjetas-de-credito',
     description: 'Cargos indebidos, refinanciaciones y cláusulas abusivas.',
-    published: false,
+    published: true,
   },
   {
     id: 'bancos-habeas',
     title: 'Habeas data',
     path: '/bancos/habeas-data',
     description: 'Protección de datos personales en relaciones con entidades financieras.',
-    published: false,
+    published: true,
   },
   {
     id: 'planes-ahorro',
@@ -73,14 +73,14 @@ export const PRACTICE_AREAS: PracticeAreaEntry[] = [
     title: 'Seguros',
     path: '/seguros',
     description: 'Denegación de cobertura, baja de póliza y reclamos al asegurador.',
-    published: false,
+    published: true,
   },
   {
     id: 'servicios-publicos',
     title: 'Servicios públicos',
     path: '/servicios-publicos',
     description: 'Tarifas, facturación y calidad del servicio.',
-    published: false,
+    published: true,
   },
   {
     id: 'civil',
@@ -101,35 +101,70 @@ export const PRACTICE_AREAS: PracticeAreaEntry[] = [
     title: 'Derecho comercial',
     path: '/derecho-comercial',
     description: 'Sociedades, contratos mercantiles y conflictos entre empresas.',
-    published: false,
+    published: true,
   },
   {
     id: 'empresas',
     title: 'Empresas',
     path: '/empresas',
     description: 'Asesoramiento y litigios vinculados a actividad empresarial.',
-    published: false,
+    published: true,
   },
   {
     id: 'administrativo',
     title: 'Derecho administrativo',
     path: '/derecho-administrativo',
     description: 'Actos de la administración pública y procedimientos.',
-    published: false,
+    published: true,
   },
   {
     id: 'colectivas',
     title: 'Acciones colectivas',
     path: '/acciones-colectivas',
     description: 'Defensa de intereses difusos y procesos representativos.',
-    published: false,
+    published: true,
   },
   {
     id: 'salud',
     title: 'Salud y discapacidad',
     path: '/salud-y-discapacidad',
     description: 'Coberturas, prestaciones y derechos de pacientes.',
-    published: false,
+    published: true,
+  },
+  {
+    id: 'laboral',
+    title: 'Derecho laboral',
+    path: '/derecho-laboral',
+    description: 'Consultas de trabajadores y pymes: contratación, salarios, desvinculaciones y reclamos.',
+    published: true,
+  },
+  {
+    id: 'familia',
+    title: 'Derecho de familia',
+    path: '/derecho-de-familia',
+    description: 'Alimentos, divorcio, cuidado personal y acuerdos familiares.',
+    published: true,
+  },
+  {
+    id: 'medio-ambiente',
+    title: 'Medio ambiente',
+    path: '/medio-ambiente',
+    description: 'Conflictos vecinales, daños y actuaciones administrativas con impacto ambiental.',
+    published: true,
+  },
+  {
+    id: 'tributario',
+    title: 'Conflictos tributarios',
+    path: '/conflictos-tributarios',
+    description: 'Ganancias, tasas municipales y reclamos fiscales.',
+    published: true,
+  },
+  {
+    id: 'procesal',
+    title: 'Cuestiones procesales complejas',
+    path: '/cuestiones-procesales',
+    description: 'Preparación del litigio, prueba, medidas y recursos.',
+    published: true,
   },
 ];
 

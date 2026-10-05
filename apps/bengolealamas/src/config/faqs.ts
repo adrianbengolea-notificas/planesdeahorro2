@@ -21,7 +21,7 @@ export const STUDIO_FAQS: StudioFaq[] = [
   {
     question: '¿En qué materias trabaja el estudio?',
     answer:
-      'Trabaja en derecho civil, comercial y defensa del consumidor, y también en daños y perjuicios, bancos y servicios financieros, seguros, empresas, derecho administrativo y acciones colectivas. Hay fichas publicadas de consumidor, bancos, civil y daños.',
+      'Trabaja en derecho civil, comercial y defensa del consumidor, y también en daños, bancos, seguros, empresas, laboral, familia, administrativo, tributario, acciones colectivas, salud y cuestiones procesales. Cada área tiene ficha propia en Áreas de práctica.',
   },
   {
     question: '¿Cómo se contacta al estudio?',

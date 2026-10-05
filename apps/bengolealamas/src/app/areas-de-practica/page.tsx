@@ -16,7 +16,7 @@ export default function AreasDePracticaPage() {
   return (
     <PageShell
       title="Áreas de práctica"
-      description="Mapa de especialidades. Las fichas publicadas tienen página propia; el resto se habilita de forma gradual."
+      description="Mapa de especialidades del estudio. Cada área tiene página propia, con el recorte del conflicto y sin duplicar el sitio de planes de ahorro."
       path="/areas-de-practica"
       breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Áreas de práctica' }]}
     >

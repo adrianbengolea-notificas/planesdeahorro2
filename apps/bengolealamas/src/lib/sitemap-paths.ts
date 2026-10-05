@@ -41,9 +41,27 @@ function priorityFor(path: string): number {
   ) {
     return 0.85;
   }
-  if (path === '/defensa-del-consumidor' || path === '/bancos' || path === '/derecho-civil' || path === '/danos-y-perjuicios') {
+  if (
+    path === '/defensa-del-consumidor' ||
+    path === '/bancos' ||
+    path === '/derecho-civil' ||
+    path === '/danos-y-perjuicios' ||
+    path === '/seguros' ||
+    path === '/derecho-comercial' ||
+    path === '/empresas' ||
+    path === '/derecho-administrativo' ||
+    path === '/acciones-colectivas' ||
+    path === '/salud-y-discapacidad' ||
+    path === '/servicios-publicos' ||
+    path === '/derecho-laboral' ||
+    path === '/derecho-de-familia' ||
+    path === '/medio-ambiente' ||
+    path === '/conflictos-tributarios' ||
+    path === '/cuestiones-procesales'
+  ) {
     return 0.8;
   }
+  if (path.startsWith('/bancos/')) return 0.7;
   if (path === '/publicaciones') return 0.65;
   if (path.startsWith('/publicaciones/')) return 0.6;
   if (path === '/planes-de-ahorro') return 0.55;

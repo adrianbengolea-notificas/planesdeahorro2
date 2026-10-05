@@ -82,11 +82,13 @@ ${professionalLines}
 ## Áreas de práctica publicadas
 
 ${publishedAreas.map((a) => mdLink(a.title, a.path, a.description)).join('\n')}
-
-## Áreas en preparación (no inventar contenido de ficha)
-
-${upcomingAreas.map((a) => `- ${a.title}: ${a.description}`).join('\n')}
-
+${
+  upcomingAreas.length > 0
+    ? `\n## Áreas en preparación (no inventar contenido de ficha)\n\n${upcomingAreas
+        .map((a) => `- ${a.title}: ${a.description}`)
+        .join('\n')}\n`
+    : ''
+}
 ## Planes de ahorro (otro dominio)
 
 Los conflictos de planes de ahorro automotriz se atienden en el estudio, pero el contenido especializado vive en ${ADRIAN_PLANES_SITE_URL}. Hub institucional: ${absoluteUrl(site, '/planes-de-ahorro')}. No copiar ni resumir en profundidad los artículos de ese dominio.
