@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 import { listBlPublications, setBlPublicationPublished } from '@/actions/admin-publicaciones';
@@ -25,6 +25,7 @@ export function PublicacionesClient() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -49,6 +50,15 @@ export function PublicacionesClient() {
     };
   }, [user]);
 
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return rows;
+    return rows.filter((row) => {
+      const hay = [row.title, row.slug, row.author, formatTagsCsv(row.tags)].join(' ').toLowerCase();
+      return hay.includes(q);
+    });
+  }, [query, rows]);
+
   async function togglePublished(row: CmsPublicationRecord) {
     if (!user || togglingId) return;
     setTogglingId(row.id);
@@ -60,7 +70,14 @@ export function PublicacionesClient() {
       setError(result.error);
       return;
     }
-    setRows((current) => current.map((item) => (item.id === row.id ? { ...item, published: !item.published } : item)));
+    const nextId = result.data?.id ?? row.id;
+    setRows((current) =>
+      current.map((item) =>
+        item.id === row.id || item.slug === row.slug
+          ? { ...item, id: nextId, origin: 'cms', published: !row.published }
+          : item,
+      ),
+    );
   }
 
   return (
@@ -69,7 +86,8 @@ export function PublicacionesClient() {
         <div>
           <h1 className="font-headline text-3xl">Publicaciones</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Notas nuevas del CMS. Las migradas de Wix siguen en el sitio hasta que las reemplaces con el mismo slug.
+            Todas las notas del sitio, incluidas las migradas de Wix. Al editarlas podés etiquetarlas, cambiar la
+            portada y publicar o pasarlas a borrador.
           </p>
         </div>
         <Link href="/admin/publicaciones/nuevo" className={cn(buttonVariants())}>
@@ -77,22 +95,35 @@ export function PublicacionesClient() {
         </Link>
       </div>
 
+      <label className="mt-8 block text-sm">
+        Buscar
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Título, etiqueta, autor o URL"
+          className="mt-1 w-full border border-border px-3 py-2"
+        />
+      </label>
+
       {loading ? (
         <div className="mt-10 flex justify-center">
           <Loader2 className="h-7 w-7 animate-spin text-primary" />
         </div>
       ) : error ? (
         <p className="mt-8 text-sm text-red-700">{error}</p>
-      ) : rows.length === 0 ? (
-        <p className="mt-8 text-sm text-muted-foreground">Todavía no hay notas en el CMS.</p>
+      ) : visible.length === 0 ? (
+        <p className="mt-8 text-sm text-muted-foreground">
+          {rows.length === 0 ? 'Todavía no hay notas.' : 'Ninguna nota coincide con la búsqueda.'}
+        </p>
       ) : (
         <ul className="mt-8 divide-y divide-border border border-border">
-          {rows.map((row) => (
+          {visible.map((row) => (
             <li key={row.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-4">
               <div>
                 <p className="font-medium">{row.title}</p>
                 <p className="text-xs text-muted-foreground">
-                  {row.published ? 'Publicada' : 'Borrador'} · {formatDate(row.publishDate)} · /{row.slug}
+                  {row.published ? 'Publicada' : 'Borrador'}
+                  {row.origin === 'legacy' ? ' · migrada' : ''} · {formatDate(row.publishDate)} · /{row.slug}
                   {row.tags?.length ? ` · ${formatTagsCsv(row.tags)}` : ''}
                 </p>
               </div>
@@ -106,7 +137,7 @@ export function PublicacionesClient() {
                 >
                   {togglingId === row.id ? 'Actualizando…' : row.published ? 'Pasar a borrador' : 'Publicar'}
                 </Button>
-                <Link href={`/admin/publicaciones/${row.id}`} className="text-sm font-medium text-accent hover:underline">
+                <Link href={`/admin/publicaciones/${encodeURIComponent(row.id)}`} className="text-sm font-medium text-accent hover:underline">
                   Editar
                 </Link>
               </div>

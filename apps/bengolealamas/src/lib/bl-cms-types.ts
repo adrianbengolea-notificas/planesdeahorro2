@@ -1,5 +1,6 @@
 export type CmsPublicationRecord = {
   id: string;
+  origin?: 'cms' | 'legacy';
   title: string;
   slug: string;
   excerpt: string;

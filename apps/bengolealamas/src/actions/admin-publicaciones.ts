@@ -4,11 +4,17 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { BL_PUBLICATIONS_COLLECTION } from '@repo/content-types';
 import { getAdminFirestore, requireAdminSession } from '@/firebase/admin';
 import { savePublicationCover } from '@/lib/save-publication-cover';
-import { mapCmsPublication } from '@/lib/bl-cms-publications';
+import { getCmsRecordBySlug, listAllCmsRecords, mapCmsPublication } from '@/lib/bl-cms-publications';
 import type { CmsPublicationRecord } from '@/lib/bl-cms-types';
+import {
+  getBlPublicationBySlug,
+  getBlPublications,
+  readPublicationHtml,
+  resolvePublicationThumbnail,
+} from '@/lib/bl-publications';
 import { parseTags } from '@/lib/publication-tags';
 import { htmlHasContent, sanitizeRichHtml } from '@/lib/sanitize-rich-html';
-import { slugify } from '@/lib/slugify';
+import { normalizeAdminSlug } from '@/lib/slugify';
 
 export type AdminResult<T = void> = { ok: true; data?: T } | { ok: false; error: string };
 
@@ -28,7 +34,7 @@ export type PublicationPayload = {
 
 function normalizePayload(input: PublicationPayload): { ok: true; data: PublicationPayload } | { ok: false; error: string } {
   const title = input.title.trim();
-  const slug = slugify(input.slug || input.title);
+  const slug = normalizeAdminSlug(input.slug || input.title);
   const publishing = input.published === true;
   const excerpt = input.excerpt.trim() || (publishing ? '' : title);
   const tags = parseTags(input.tags);
@@ -40,11 +46,13 @@ function normalizePayload(input: PublicationPayload): { ok: true; data: Publicat
   const seoDescription = (input.seoDescription ?? '').trim();
 
   if (title.length < 3) return { ok: false, error: 'El título debe tener al menos 3 caracteres.' };
-  if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return { ok: false, error: 'Slug inválido. Completá el título o la URL.' };
+  if (!slug || !/^[-a-z0-9_\u00C0-\u024F]+$/i.test(slug)) {
+    return { ok: false, error: 'Slug inválido. Completá el título o la URL.' };
+  }
+  if (body.length > 400_000) return { ok: false, error: 'El cuerpo es demasiado largo.' };
   if (publishing && excerpt.length < 10) return { ok: false, error: 'El extracto debe tener al menos 10 caracteres para publicar.' };
   if (publishing && !htmlHasContent(body)) return { ok: false, error: 'El cuerpo de la nota es demasiado corto para publicar.' };
   if (!publishing && !htmlHasContent(body, 1)) return { ok: false, error: 'Escribí al menos un párrafo en el cuerpo para guardar el borrador.' };
-  if (body.length > 200_000) return { ok: false, error: 'El cuerpo es demasiado largo.' };
 
   return {
     ok: true,
@@ -73,13 +81,89 @@ async function slugTaken(slug: string, exceptId?: string): Promise<boolean> {
   return snap.docs.some((d) => d.id !== exceptId);
 }
 
+function legacyToAdminRow(pub: {
+  title: string;
+  excerpt: string;
+  tags?: string[];
+  publishDate: string;
+  author: string;
+  slug: string;
+  heroImage?: string | null;
+  migratedAt?: string;
+}): CmsPublicationRecord {
+  return {
+    id: `legacy:${pub.slug}`,
+    origin: 'legacy',
+    title: pub.title,
+    slug: pub.slug,
+    excerpt: pub.excerpt,
+    tags: pub.tags ?? [],
+    body: '',
+    author: pub.author || 'Estudio Bengolea & Lamas',
+    publishDate: pub.publishDate,
+    published: true,
+    heroImage: pub.heroImage ?? '',
+    seoTitle: '',
+    seoDescription: '',
+    updatedAt: pub.migratedAt ?? pub.publishDate ?? null,
+  };
+}
+
 export async function listBlPublications(idToken: string): Promise<AdminResult<CmsPublicationRecord[]>> {
   try {
     await requireAdminSession(idToken);
-    const snap = await getAdminFirestore().collection(BL_PUBLICATIONS_COLLECTION).orderBy('updatedAt', 'desc').limit(200).get();
-    return { ok: true, data: snap.docs.map((d) => mapCmsPublication(d.id, d.data())) };
+    const cms = await listAllCmsRecords();
+    const occupied = new Set(cms.map((row) => row.slug));
+    const legacy = getBlPublications()
+      .filter((pub) => !occupied.has(pub.slug))
+      .map(legacyToAdminRow);
+    const rows = [...cms, ...legacy].sort((a, b) => (b.publishDate || '').localeCompare(a.publishDate || ''));
+    return { ok: true, data: rows };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'No se pudieron listar las notas.' };
+  }
+}
+
+export async function adoptLegacyPublication(
+  idToken: string,
+  slug: string,
+): Promise<AdminResult<{ id: string }>> {
+  try {
+    const session = await requireAdminSession(idToken);
+    const decoded = slug.trim();
+    if (!decoded) return { ok: false, error: 'Falta el slug.' };
+    const existing = await getCmsRecordBySlug(decoded);
+    if (existing) return { ok: true, data: { id: existing.id } };
+
+    const pub = getBlPublicationBySlug(decoded);
+    if (!pub) return { ok: false, error: 'No se encontró la nota migrada.' };
+
+    const html = pub.contentFile ? readPublicationHtml(pub.contentFile) : '';
+    const body = sanitizeRichHtml(html || `<p>${pub.excerpt || pub.title}</p>`);
+    const heroImage = resolvePublicationThumbnail(pub) ?? '';
+
+    const ref = await getAdminFirestore().collection(BL_PUBLICATIONS_COLLECTION).add({
+      siteId: 'bl',
+      kind: 'publication',
+      title: pub.title,
+      slug: pub.slug,
+      excerpt: (pub.excerpt || pub.title).trim(),
+      tags: pub.tags ?? [],
+      body,
+      author: pub.author || 'Estudio Bengolea & Lamas',
+      publishDate: pub.publishDate || new Date().toISOString(),
+      published: true,
+      heroImage,
+      seoTitle: '',
+      seoDescription: '',
+      adoptedFrom: 'wix',
+      authorId: session.uid,
+      createdAt: FieldValue.serverTimestamp(),
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    return { ok: true, data: { id: ref.id } };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'No se pudo abrir la nota migrada.' };
   }
 }
 
@@ -89,6 +173,12 @@ export async function getBlPublication(
 ): Promise<AdminResult<CmsPublicationRecord>> {
   try {
     await requireAdminSession(idToken);
+    if (id.startsWith('legacy:')) {
+      const adopted = await adoptLegacyPublication(idToken, id.slice('legacy:'.length));
+      if (!adopted.ok) return adopted;
+      if (!adopted.data?.id) return { ok: false, error: 'No se pudo abrir la nota migrada.' };
+      id = adopted.data.id;
+    }
     const snap = await getAdminFirestore().collection(BL_PUBLICATIONS_COLLECTION).doc(id).get();
     if (!snap.exists) return { ok: false, error: 'Nota no encontrada.' };
     return { ok: true, data: mapCmsPublication(snap.id, snap.data() ?? {}) };
@@ -149,15 +239,20 @@ export async function setBlPublicationPublished(
   idToken: string,
   id: string,
   published: boolean,
-): Promise<AdminResult> {
+): Promise<AdminResult<{ id: string }>> {
   try {
     await requireAdminSession(idToken);
     if (!id.trim()) return { ok: false, error: 'Falta el identificador.' };
+    if (id.startsWith('legacy:')) {
+      const adopted = await adoptLegacyPublication(idToken, id.slice('legacy:'.length));
+      if (!adopted.ok || !adopted.data?.id) return adopted;
+      id = adopted.data.id;
+    }
     await getAdminFirestore().collection(BL_PUBLICATIONS_COLLECTION).doc(id).update({
       published: published === true,
       updatedAt: FieldValue.serverTimestamp(),
     });
-    return { ok: true };
+    return { ok: true, data: { id } };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'No se pudo actualizar el estado.' };
   }

@@ -46,6 +46,7 @@ export function mapCmsPublication(id: string, data: Record<string, unknown>): Cm
     seoTitle: str(data.seoTitle),
     seoDescription: str(data.seoDescription),
     updatedAt: isoDate(data.updatedAt),
+    origin: 'cms',
   };
 }
 
@@ -68,19 +69,25 @@ function cmsToPublic(row: CmsPublicationRecord): BlPublication {
   };
 }
 
-export async function listPublishedCmsPublications(): Promise<BlPublication[]> {
+export async function listAllCmsRecords(): Promise<CmsPublicationRecord[]> {
   try {
-    const snap = await getAdminFirestore().collection(BL_PUBLICATIONS_COLLECTION).where('published', '==', true).get();
-    return snap.docs
-      .map((doc) => cmsToPublic(mapCmsPublication(doc.id, doc.data())))
-      .sort((a, b) => (b.publishDate || '').localeCompare(a.publishDate || ''));
+    const snap = await getAdminFirestore().collection(BL_PUBLICATIONS_COLLECTION).get();
+    return snap.docs.map((doc) => mapCmsPublication(doc.id, doc.data()));
   } catch (e) {
     console.warn('[bl-cms] no se pudieron leer publicaciones CMS', e);
     return [];
   }
 }
 
-export async function getCmsPublicationBySlug(slug: string): Promise<BlPublication | null> {
+export async function listPublishedCmsPublications(): Promise<BlPublication[]> {
+  const rows = await listAllCmsRecords();
+  return rows
+    .filter((row) => row.published)
+    .map(cmsToPublic)
+    .sort((a, b) => (b.publishDate || '').localeCompare(a.publishDate || ''));
+}
+
+export async function getCmsRecordBySlug(slug: string): Promise<CmsPublicationRecord | null> {
   const decoded = decodeSafe(slug);
   try {
     const snap = await getAdminFirestore()
@@ -88,26 +95,30 @@ export async function getCmsPublicationBySlug(slug: string): Promise<BlPublicati
       .where('slug', '==', decoded)
       .limit(4)
       .get();
-    const published = snap.docs
-      .map((doc) => mapCmsPublication(doc.id, doc.data()))
-      .find((row) => row.published);
-    return published ? cmsToPublic(published) : null;
+    return snap.docs[0] ? mapCmsPublication(snap.docs[0].id, snap.docs[0].data()) : null;
   } catch (e) {
     console.warn('[bl-cms] no se pudo leer la publicación CMS', e);
     return null;
   }
 }
 
+export async function getCmsPublicationBySlug(slug: string): Promise<BlPublication | null> {
+  const row = await getCmsRecordBySlug(slug);
+  if (!row?.published) return null;
+  return cmsToPublic(row);
+}
+
 export async function getAllPublicPublications(): Promise<BlPublication[]> {
-  const cms = await listPublishedCmsPublications();
-  const cmsSlugs = new Set(cms.map((p) => p.slug));
-  const legacy = getBlPublications().filter((p) => !cmsSlugs.has(p.slug));
+  const cmsRows = await listAllCmsRecords();
+  const occupied = new Set(cmsRows.map((row) => row.slug));
+  const cms = cmsRows.filter((row) => row.published).map(cmsToPublic);
+  const legacy = getBlPublications().filter((p) => !occupied.has(p.slug));
   return [...cms, ...legacy].sort((a, b) => (b.publishDate || '').localeCompare(a.publishDate || ''));
 }
 
 export async function resolvePublicPublication(slug: string): Promise<BlPublication | null> {
-  const cms = await getCmsPublicationBySlug(slug);
-  if (cms) return cms;
+  const row = await getCmsRecordBySlug(slug);
+  if (row) return row.published ? cmsToPublic(row) : null;
   return getBlPublicationBySlug(slug) ?? null;
 }
 

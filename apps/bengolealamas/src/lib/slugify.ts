@@ -1,3 +1,12 @@
+const ADMIN_SLUG = /^[-a-z0-9_\u00C0-\u024F]+$/i;
+
+/** Conserva slugs migrados de Wix (tildes, guion inicial, _) y normaliza el resto. */
+export function normalizeAdminSlug(input: string): string {
+  const trimmed = input.trim();
+  if (trimmed && ADMIN_SLUG.test(trimmed) && trimmed.length <= 200) return trimmed;
+  return slugify(trimmed);
+}
+
 export function slugify(input: string): string {
   return input
     .normalize('NFD')
