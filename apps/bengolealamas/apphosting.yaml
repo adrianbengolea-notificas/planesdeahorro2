@@ -8,7 +8,7 @@ runConfig:
 
 env:
   - variable: NEXT_PUBLIC_APP_URL
-    value: https://bengolealamas--planesdeahorro-77c3e.us-east4.hosted.app
+    value: https://bengolealamas.com.ar
     availability:
       - BUILD
       - RUNTIME

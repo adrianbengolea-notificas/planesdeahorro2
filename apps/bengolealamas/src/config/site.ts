@@ -13,13 +13,27 @@ export const DEFAULT_DESCRIPTION =
 /** Host canónico (sin www, sin protocolo). */
 export const CANONICAL_HOST = 'bengolealamas.com.ar';
 
+export const PUBLIC_SITE_ORIGIN = `https://${CANONICAL_HOST}`;
+
+function isPreviewOrigin(value: string): boolean {
+  try {
+    const host = new URL(value).hostname.toLowerCase();
+    return host.endsWith('.hosted.app') || host.endsWith('.web.app') || host.endsWith('.firebaseapp.com');
+  } catch {
+    return false;
+  }
+}
+
 /**
- * URL pública del sitio. En producción/staging definir NEXT_PUBLIC_APP_URL.
+ * URL pública del sitio. En local puede ser localhost; en producción siempre el dominio custom.
+ * Las URLs de App Hosting (*.hosted.app) no deben salir en canonical, sitemap ni JSON-LD.
  * Nunca usar el dominio de adrianbengolea.com.ar aquí.
  */
 export function getSiteUrl(): string {
-  const fromEnv = process.env.NEXT_PUBLIC_APP_URL?.trim();
-  if (fromEnv) return fromEnv.replace(/\/$/, '');
+  const fromEnv = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, '') ?? '';
+  if (fromEnv && !isPreviewOrigin(fromEnv)) return fromEnv;
+  if (fromEnv && isPreviewOrigin(fromEnv)) return PUBLIC_SITE_ORIGIN;
+  if (process.env.NODE_ENV === 'production') return PUBLIC_SITE_ORIGIN;
   const vercel = process.env.VERCEL_URL?.trim();
   if (vercel) return `https://${vercel.replace(/\/$/, '')}`;
   return 'http://localhost:9003';

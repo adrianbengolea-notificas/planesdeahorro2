@@ -37,6 +37,9 @@ export const metadata: Metadata = {
   }),
   applicationName: SITE_TITLE,
   category: 'legal',
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim()
+    ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION.trim() } }
+    : {}),
   other: {
     'geo.region': 'AR-B',
     'geo.placename': 'San Nicolás de los Arroyos',

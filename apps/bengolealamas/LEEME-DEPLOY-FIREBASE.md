@@ -19,7 +19,7 @@ Variables en Environment (o `apphosting.yaml`):
 | Variable | Uso |
 |----------|-----|
 | `NEXT_PUBLIC_SITE_ID` | `bl` |
-| `NEXT_PUBLIC_APP_URL` | URL pública del sitio (dominio o `hosted.app`) |
+| `NEXT_PUBLIC_APP_URL` | `https://bengolealamas.com.ar` (no usar `*.hosted.app` en canonicals) |
 | `INTAKE_BRIDGE_URL` | `https://adrianbengolea.com.ar/api/case-intake/continue` |
 | `INTAKE_BRIDGE_SECRET` | Secreto compartido con backend **planesdeahorro2** (ver `docs/case-intake-bengolealamas.md`) |
 

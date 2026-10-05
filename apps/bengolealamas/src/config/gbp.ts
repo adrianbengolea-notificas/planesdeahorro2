@@ -29,6 +29,8 @@ export const STUDIO_HOURS = {
   display: 'Lunes a viernes, 8:30 a 12:20 y 17:00 a 20:00',
   gbpMorning: '8:30–12:20',
   gbpAfternoon: '17:00–20:00',
+  /** Si el panel de Google solo admite intervalos de 15 min, usar 12:15. */
+  gbpMorningFallback: '8:30–12:15',
 } as const;
 
 export function studioHoursJsonLd() {
