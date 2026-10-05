@@ -10,7 +10,7 @@ export const BAR_REGISTRATION = 'Tomo 8, Folio 84';
 export const BAR_REGISTRATION_LABEL = `${BAR_REGISTRATION} — ${BAR_ASSOCIATION}`;
 
 export const FIRM_NAME = 'Estudio Jurídico Bengolea & Lamas';
-export const FIRM_URL = 'https://www.bengolealamas.com.ar';
+export const FIRM_URL = 'https://bengolealamas.com.ar';
 export const FIRM_FACEBOOK_URL = 'https://www.facebook.com/estudiobl/';
 
 /** Perfiles oficiales del mismo profesional / estudio (sameAs para buscadores e IA). */

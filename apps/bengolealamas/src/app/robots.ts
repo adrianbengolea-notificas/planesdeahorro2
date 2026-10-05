@@ -11,11 +11,12 @@ const AI_CRAWLERS = [
   'Claude-SearchBot',
   'anthropic-ai',
   'Google-Extended',
-  'Googlebot',
   'PerplexityBot',
   'Perplexity-User',
-  'Applebot',
   'Applebot-Extended',
+  'Bytespider',
+  'Amazonbot',
+  'meta-externalagent',
 ];
 
 const DISALLOW = ['/api/', '/admin', '/admin/'];

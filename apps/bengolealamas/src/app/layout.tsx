@@ -4,7 +4,8 @@ import { JsonLd } from '@repo/shared/components/json-ld';
 import { createMetadataBase, buildPageMetadata } from '@repo/shared/seo';
 import { SiteChrome } from '@/components/site-chrome';
 import { getBlSiteSeoConfig } from '@/config/seo';
-import { DEFAULT_DESCRIPTION, SITE_TITLE } from '@/config/site';
+import { STUDIO_GEO, studioGeoIcbm } from '@/config/gbp';
+import { SITE_TITLE, DEFAULT_DESCRIPTION } from '@/config/site';
 import { siteIdentityJsonLd } from '@/lib/schema';
 import { cn } from '@/lib/utils';
 import './globals.css';
@@ -36,6 +37,12 @@ export const metadata: Metadata = {
   }),
   applicationName: SITE_TITLE,
   category: 'legal',
+  other: {
+    'geo.region': 'AR-B',
+    'geo.placename': 'San Nicolás de los Arroyos',
+    'geo.position': `${STUDIO_GEO.latitude};${STUDIO_GEO.longitude}`,
+    ICBM: studioGeoIcbm(),
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -47,6 +54,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           type="text/plain"
           title="Índice para modelos de IA"
           href={`${siteSeo.siteUrl.replace(/\/$/, '')}/llms.txt`}
+        />
+        <link
+          rel="alternate"
+          type="text/plain"
+          title="Fuente completa para modelos de IA"
+          href={`${siteSeo.siteUrl.replace(/\/$/, '')}/llms-full.txt`}
         />
       </head>
       <body className="flex min-h-screen flex-col">

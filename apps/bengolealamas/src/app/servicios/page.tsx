@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageShell } from '@/components/page-shell';
+import { PRACTICE_AREAS } from '@/config/practice-areas';
 import { blPageMetadata } from '@/lib/page-metadata';
 import {
   SERVICIOS_ALLIANCES,
@@ -11,11 +12,24 @@ import {
   SERVICIOS_TUTORIA,
 } from '@/config/servicios';
 
+const SPECIALIZATION_LINKS: Record<string, string> = {
+  Consumidor: '/defensa-del-consumidor',
+  'Daños y perjuicios': '/danos-y-perjuicios',
+};
+
+const publishedFichas = PRACTICE_AREAS.filter((a) => a.published && a.id !== 'planes-ahorro');
+
 export const metadata: Metadata = blPageMetadata({
   title: 'Servicios y áreas de competencia',
   description:
     'Perfil del Estudio Jurídico Bengolea & Lamas: litigio, prevención de conflictos, alianzas estratégicas y áreas de especialización en San Nicolás.',
   path: '/servicios',
+  keywords: [
+    'servicios jurídicos San Nicolás',
+    'defensa del consumidor',
+    'daños y perjuicios',
+    'asesoramiento empresas',
+  ],
 });
 
 export default function ServiciosPage() {
@@ -71,7 +85,15 @@ export default function ServiciosPage() {
           {SERVICIOS_SPECIALIZATION.columns.map((column) => (
             <ul key={column[0]} className="list-inside list-disc space-y-2 text-sm text-muted-foreground">
               {column.map((item) => (
-                <li key={item}>{item}</li>
+                <li key={item}>
+                  {SPECIALIZATION_LINKS[item] ? (
+                    <Link href={SPECIALIZATION_LINKS[item]} className="text-accent hover:underline">
+                      {item}
+                    </Link>
+                  ) : (
+                    item
+                  )}
+                </li>
               ))}
             </ul>
           ))}
@@ -81,6 +103,23 @@ export default function ServiciosPage() {
             Mapa de áreas de práctica del sitio
           </Link>
         </p>
+      </section>
+
+      <section className="mt-14 scroll-mt-24" aria-labelledby="fichas-heading">
+        <h2 id="fichas-heading" className="font-headline text-xl font-normal text-foreground md:text-2xl">
+          Fichas de práctica
+        </h2>
+        <ul className="mt-6 grid gap-4 md:grid-cols-2">
+          {publishedFichas.map((area) => (
+            <li key={area.id} className="border border-border p-5">
+              <h3 className="font-headline text-base font-normal text-foreground">{area.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{area.description}</p>
+              <Link href={area.path} className="mt-3 inline-block text-sm font-medium text-accent hover:underline">
+                Leer ficha
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="mt-14 scroll-mt-24 border-t border-border pt-12" aria-labelledby="corporativos-heading">

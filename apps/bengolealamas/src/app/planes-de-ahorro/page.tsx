@@ -8,7 +8,7 @@ import { blPageMetadata } from '@/lib/page-metadata';
 export const metadata: Metadata = blPageMetadata({
   title: 'Planes de ahorro',
   description:
-    'El estudio atiende conflictos de planes de ahorro. El contenido especializado se publica en adrianbengolea.com.ar.',
+    'El Estudio Bengolea & Lamas atiende conflictos de planes de ahorro automotriz. El contenido especializado está en adrianbengolea.com.ar.',
   path: '/planes-de-ahorro',
 });
 

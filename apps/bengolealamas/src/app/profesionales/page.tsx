@@ -6,21 +6,19 @@ import { ProfessionalCard } from '@/components/professionals/professional-card';
 import { ProfileCta } from '@/components/professionals/profile-cta';
 import { getBlSiteSeoConfig } from '@/config/seo';
 import { PROFESSIONALS_HERO, PROFESSIONALS_TRADITION, TEAM } from '@/config/professionals';
+import { blPageMetadata } from '@/lib/page-metadata';
+import { professionalsItemListJsonLd } from '@/lib/schema';
 
 const siteSeo = getBlSiteSeoConfig();
 
-export const metadata: Metadata = {
+export const metadata: Metadata = blPageMetadata({
   title: 'Abogados en San Nicolás | Profesionales | Bengolea & Lamas',
   description:
     'Conocé al equipo de abogados de Bengolea & Lamas en San Nicolás de los Arroyos. Experiencia en litigación, derecho civil y comercial, defensa del consumidor y asesoramiento jurídico.',
-  alternates: { canonical: `${siteSeo.siteUrl.replace(/\/$/, '')}/profesionales` },
-  openGraph: {
-    title: 'Abogados en San Nicolás | Profesionales | Bengolea & Lamas',
-    description:
-      'Conocé al equipo de abogados de Bengolea & Lamas en San Nicolás de los Arroyos. Experiencia en litigación, derecho civil y comercial, defensa del consumidor y asesoramiento jurídico.',
-    url: `${siteSeo.siteUrl.replace(/\/$/, '')}/profesionales`,
-  },
-};
+  path: '/profesionales',
+  absoluteTitle: true,
+  keywords: ['abogados San Nicolás', 'equipo Bengolea Lamas', 'estudio jurídico profesionales'],
+});
 
 export default function ProfesionalesPage() {
   const breadcrumbs = breadcrumbJsonLd(siteSeo, [
@@ -30,7 +28,7 @@ export default function ProfesionalesPage() {
 
   return (
     <>
-      <JsonLd data={breadcrumbs} />
+      <JsonLd data={[breadcrumbs, professionalsItemListJsonLd()]} />
       <header className="border-b border-border bg-background">
         <div className="container mx-auto max-w-5xl px-4 py-12 md:px-8 md:py-16">
           <p className="text-xs font-medium uppercase tracking-[0.25em] text-accent">Equipo</p>

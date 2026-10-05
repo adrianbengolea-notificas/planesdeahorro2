@@ -1,7 +1,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { STUDIO_HOURS } from '@/config/gbp';
 import { socialLinks } from '@/config/site';
-import { STUDIO_ADDRESS, STUDIO_EMAIL } from '@/config/wix-brand';
+import {
+  STUDIO_ADDRESS,
+  STUDIO_EMAIL,
+  STUDIO_PHONES,
+  studioPhoneE164,
+} from '@/config/wix-brand';
 
 export function WixFooterStrip() {
   return (
@@ -30,11 +36,24 @@ export function WixFooterStrip() {
         ) : null}
       </div>
       <p className="px-4 text-xs leading-relaxed text-muted-foreground md:text-sm">
-        Estudio Jurídico Bengolea & Lamas - {STUDIO_ADDRESS.city} - {STUDIO_ADDRESS.street} -{' '}
+        Estudio Jurídico Bengolea & Lamas — {STUDIO_ADDRESS.street}, {STUDIO_ADDRESS.city} ({STUDIO_ADDRESS.postalCode})
+        {' — '}
         <Link href={`mailto:${STUDIO_EMAIL}`} className="text-accent hover:underline">
           {STUDIO_EMAIL}
         </Link>
       </p>
+      <p className="mt-2 px-4 text-xs text-muted-foreground">
+        {STUDIO_PHONES.map((tel, i) => (
+          <span key={tel}>
+            {i > 0 ? ' · ' : null}
+            <a href={`tel:${studioPhoneE164(tel)}`} className="hover:text-foreground">
+              {tel}
+            </a>
+          </span>
+        ))}
+      </p>
+      <p className="mt-2 px-4 text-xs text-muted-foreground">{STUDIO_HOURS.display}</p>
     </footer>
   );
 }
+

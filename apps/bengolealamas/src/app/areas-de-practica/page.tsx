@@ -6,15 +6,17 @@ import { blPageMetadata } from '@/lib/page-metadata';
 
 export const metadata: Metadata = blPageMetadata({
   title: 'Áreas de práctica',
-  description: 'Especialidades del estudio: consumo, bancos, civil, comercial, seguros, empresas y más.',
+  description:
+    'Especialidades del Estudio Bengolea & Lamas en San Nicolás: consumo, bancos, civil, comercial, seguros, empresas y más.',
   path: '/areas-de-practica',
+  keywords: ['áreas de práctica', 'abogados civil comercial', 'defensa del consumidor San Nicolás'],
 });
 
 export default function AreasDePracticaPage() {
   return (
     <PageShell
       title="Áreas de práctica"
-      description="Mapa de especialidades. Las fichas con contenido propio se habilitan de forma gradual."
+      description="Mapa de especialidades. Las fichas publicadas tienen página propia; el resto se habilita de forma gradual."
       path="/areas-de-practica"
       breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Áreas de práctica' }]}
     >

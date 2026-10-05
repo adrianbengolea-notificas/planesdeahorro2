@@ -1,15 +1,15 @@
 import type { MetadataRoute } from 'next';
 import { absoluteUrl } from '@repo/shared/seo';
 import { getBlSiteSeoConfig } from '@/config/seo';
-import { getBlSitemapPaths } from '@/lib/sitemap-paths';
+import { getBlSitemapEntries } from '@/lib/sitemap-paths';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const site = getBlSiteSeoConfig();
-  const now = new Date();
-  const paths = await getBlSitemapPaths();
-  return paths.map((path) => ({    url: absoluteUrl(site, path),
-    lastModified: now,
-    changeFrequency: path === '/' ? 'weekly' : 'monthly',
-    priority: path === '/' ? 1 : 0.7,
+  const entries = await getBlSitemapEntries();
+  return entries.map((entry) => ({
+    url: absoluteUrl(site, entry.path),
+    lastModified: entry.lastModified,
+    changeFrequency: entry.changeFrequency,
+    priority: entry.priority,
   }));
 }

@@ -30,14 +30,11 @@ export function HomeHeroCarousel({ slides }: Props) {
   const slide = slides[index];
 
   return (
-    <section
-      className="relative w-full bg-background px-4 pt-2 md:px-8 md:pt-4"
-      aria-roledescription="carousel"
-      aria-label="Presentación"
-    >
-      {/* Wix original: slideshow ~980×399 px, centrado (no full-bleed). */}
-      <div className="relative mx-auto w-full max-w-[980px] overflow-hidden bg-muted">
-        <div className="relative h-[220px] w-full sm:h-[280px] md:h-[340px] lg:h-[400px]">
+    <section className="relative w-full bg-background" aria-roledescription="carousel" aria-label="Presentación">
+      {/* Mismo contenedor que el header (max-w-6xl): ancho “de la web”, sin full-bleed ni altura gigante. */}
+      <div className="mx-auto w-full max-w-6xl px-4 pt-2 md:px-8 md:pt-4">
+        <div className="relative w-full overflow-hidden bg-muted">
+          <div className="relative h-[220px] w-full sm:h-[300px] md:h-[380px] lg:h-[470px]">
           {slides.map((s, i) => (
           <div
             key={s.id}
@@ -52,7 +49,7 @@ export function HomeHeroCarousel({ slides }: Props) {
               alt=""
               fill
               className="object-cover object-center"
-              sizes="(max-width: 980px) 100vw, 980px"
+              sizes="(max-width: 1152px) 100vw, 1152px"
               priority={i === 0}
             />
           </div>
@@ -60,7 +57,7 @@ export function HomeHeroCarousel({ slides }: Props) {
 
           <div className="absolute inset-0 z-20 flex items-stretch">
             <div className="flex w-full max-w-md flex-col justify-center bg-black/45 px-6 py-6 sm:px-8 sm:py-8 md:px-10 md:py-10">
-              <h2 className="font-headline text-2xl font-normal text-white sm:text-3xl md:text-4xl">{slide.title}</h2>
+              <p className="font-headline text-2xl font-normal text-white sm:text-3xl md:text-4xl">{slide.title}</p>
               <div className="mt-4 flex flex-wrap gap-3 sm:mt-6">
               {slide.primaryCta ? (
                 <Link
@@ -114,6 +111,7 @@ export function HomeHeroCarousel({ slides }: Props) {
               />
             ))}
           </nav>
+          </div>
         </div>
       </div>
     </section>

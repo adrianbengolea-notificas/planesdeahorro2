@@ -13,8 +13,7 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      { source: '/estudio', destination: '/servicios', permanent: true },
-      { source: '/informacion', destination: '/servicios', permanent: false },
+      { source: '/informacion', destination: '/estudio', permanent: true },
     ];
   },
   transpilePackages: ['@repo/shared', '@repo/content-types'],

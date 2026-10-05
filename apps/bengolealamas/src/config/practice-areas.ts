@@ -17,14 +17,14 @@ export const PRACTICE_AREAS: PracticeAreaEntry[] = [
     title: 'Defensa del consumidor',
     path: '/defensa-del-consumidor',
     description: 'Reclamos frente a empresas de servicios, bancos, aseguradoras y contratos de adhesión.',
-    published: false,
+    published: true,
   },
   {
     id: 'bancos',
     title: 'Bancos y servicios financieros',
     path: '/bancos',
     description: 'Fraude, débitos no autorizados, DEBIN, tarjetas y protección de datos.',
-    published: false,
+    published: true,
   },
   {
     id: 'bancos-fraude',
@@ -87,14 +87,14 @@ export const PRACTICE_AREAS: PracticeAreaEntry[] = [
     title: 'Derecho civil',
     path: '/derecho-civil',
     description: 'Contratos, obligaciones, responsabilidad y conflictos patrimoniales.',
-    published: false,
+    published: true,
   },
   {
     id: 'danos',
     title: 'Daños y perjuicios',
     path: '/danos-y-perjuicios',
     description: 'Indemnizaciones por accidentes, mala praxis y responsabilidad civil.',
-    published: false,
+    published: true,
   },
   {
     id: 'comercial',

@@ -23,6 +23,9 @@ export type BlPublication = {
   scrapeError?: string;
   /** HTML de notas cargadas desde el CMS (Firestore). */
   bodyHtml?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  updatedAt?: string | null;
 };
 
 type PublicationsFile = {

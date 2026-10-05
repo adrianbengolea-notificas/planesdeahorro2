@@ -18,10 +18,13 @@ export function getBlSiteSeoConfig(): SiteSeoConfig {
     keywords: [
       'estudio jurídico San Nicolás',
       'abogados San Nicolás de los Arroyos',
-      'defensa del consumidor',
+      'Bengolea & Lamas',
+      'Bengolea Lamas',
+      'defensa del consumidor San Nicolás',
       'derecho civil',
       'derecho comercial',
-      'Bengolea Lamas',
+      'daños y perjuicios',
+      'abogados Belgrano 174',
     ],
   };
 }

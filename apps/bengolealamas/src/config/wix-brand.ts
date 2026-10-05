@@ -4,7 +4,22 @@ export const STUDIO_ADDRESS = {
   street: 'Belgrano 174',
   city: 'San Nicolás de los Arroyos',
   province: 'Provincia de Buenos Aires',
+  postalCode: '2900',
+  country: 'AR',
 } as const;
+
+export function studioPhoneE164(local: string): string {
+  return `+54${local.replace(/\D/g, '')}`;
+}
+
+export function studioMapsSearchUrl(): string {
+  const query = `${STUDIO_ADDRESS.street}, ${STUDIO_ADDRESS.city}, Buenos Aires, Argentina`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+export function formatStudioAddressLine(): string {
+  return `${STUDIO_ADDRESS.street}, ${STUDIO_ADDRESS.city} (${STUDIO_ADDRESS.postalCode}), ${STUDIO_ADDRESS.province}, Argentina`;
+}
 
 export const STUDIO_EMAIL = 'estudio@bengolealamas.com.ar';
 

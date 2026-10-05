@@ -15,6 +15,8 @@ import {
   readPublicationHtml,
 } from '@/lib/bl-publications';
 import { getBlSiteSeoConfig } from '@/config/seo';
+import { blPageMetadata } from '@/lib/page-metadata';
+import { articleJsonLd } from '@/lib/schema';
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -29,14 +31,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const pub = await resolvePublicPublication(slug);
   if (!pub) return { title: 'Publicación' };
-  const siteSeo = getBlSiteSeoConfig();
-  const canonical = `${siteSeo.siteUrl.replace(/\/$/, '')}${publicationPath(pub.slug)}`;
-  return {
-    title: `${pub.title} | Bengolea & Lamas`,
-    description: pub.excerpt.slice(0, 160) || pub.title,
-    alternates: { canonical },
-    openGraph: { title: pub.title, description: pub.excerpt.slice(0, 160), url: canonical },
-  };
+  const description = (pub.seoDescription || pub.excerpt || pub.title).slice(0, 160);
+  return blPageMetadata({
+    title: pub.seoTitle || pub.title,
+    description,
+    path: publicationPath(pub.slug),
+    ogType: 'article',
+    publishedTime: pub.publishDate || undefined,
+    modifiedTime: pub.updatedAt || pub.publishDate || undefined,
+    authors: pub.author ? [pub.author] : ['Estudio Bengolea & Lamas'],
+    keywords: pub.tags,
+  });
 }
 
 export default async function PublicacionDetailPage({ params }: PageProps) {
@@ -54,7 +59,7 @@ export default async function PublicacionDetailPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd data={breadcrumbs} />
+      <JsonLd data={[breadcrumbs, articleJsonLd(pub)]} />
       <article className="mx-auto max-w-3xl px-4 py-12 md:px-8 md:py-16">
         <Breadcrumbs
           items={[

@@ -62,6 +62,9 @@ function cmsToPublic(row: CmsPublicationRecord): BlPublication {
     source: 'cms',
     heroImage: row.heroImage || null,
     bodyHtml: row.body,
+    seoTitle: row.seoTitle || undefined,
+    seoDescription: row.seoDescription || undefined,
+    updatedAt: row.updatedAt,
   };
 }
 
