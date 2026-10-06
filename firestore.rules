@@ -312,5 +312,17 @@ service cloud.firestore {
       allow create: if isAdmin();
       allow update, delete: if isAdmin() && resource != null;
     }
+
+    /**
+     * Listas CSV de correo y envíos de notas (Bengolea & Lamas).
+     * Las escribe el Admin SDK; el cliente no debe leer ni enumerar destinos.
+     */
+    match /bl_mailing_lists/{listId} {
+      allow read, write: if false;
+    }
+
+    match /bl_mailing_sends/{sendId} {
+      allow read, write: if false;
+    }
   }
 }

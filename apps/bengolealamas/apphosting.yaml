@@ -26,3 +26,17 @@ env:
     secret: INTAKE_BRIDGE_SECRET
     availability:
       - RUNTIME
+  # Resend: listas CSV + envío de notas. Crear el secreto en el backend bengolealamas
+  # (`firebase apphosting:secrets:set RESEND_API_KEY`). From institucional del estudio.
+  - variable: RESEND_API_KEY
+    secret: RESEND_API_KEY
+    availability:
+      - RUNTIME
+  - variable: RESEND_BL_FROM
+    value: estudio@bengolealamas.com.ar
+    availability:
+      - RUNTIME
+  - variable: RESEND_BL_REPLY_TO
+    value: estudio@bengolealamas.com.ar
+    availability:
+      - RUNTIME

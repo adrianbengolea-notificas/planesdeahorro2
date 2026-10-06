@@ -72,3 +72,9 @@ export const BL_CASE_INTAKES_COLLECTION = 'bl_case_intakes';
 
 /** Notas / publicaciones CMS de B&L. */
 export const BL_PUBLICATIONS_COLLECTION = 'bl_publications';
+
+/** Listas de correo (CSV) del panel B&L. Solo admin. */
+export const BL_MAILING_LISTS_COLLECTION = 'bl_mailing_lists';
+
+/** Historial de envíos de notas a listas. Solo admin. */
+export const BL_MAILING_SENDS_COLLECTION = 'bl_mailing_sends';

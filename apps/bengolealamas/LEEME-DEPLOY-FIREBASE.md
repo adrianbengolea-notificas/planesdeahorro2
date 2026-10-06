@@ -22,10 +22,13 @@ Variables en Environment (o `apphosting.yaml`):
 | `NEXT_PUBLIC_APP_URL` | `https://bengolealamas.com.ar` (no usar `*.hosted.app` en canonicals) |
 | `INTAKE_BRIDGE_URL` | `https://adrianbengolea.com.ar/api/case-intake/continue` |
 | `INTAKE_BRIDGE_SECRET` | Secreto compartido con backend **planesdeahorro2** (ver `docs/case-intake-bengolealamas.md`) |
+| `RESEND_API_KEY` | Secreto Resend (mismo que Adrian, o uno de la cuenta). Crear: `firebase apphosting:secrets:set RESEND_API_KEY` |
+| `RESEND_BL_FROM` | Remitente de notas a listas: `estudio@bengolealamas.com.ar` (verificar el dominio en Resend + DNS en Wix) |
+| `RESEND_BL_REPLY_TO` | Respuestas de esos envíos. Default: `estudio@bengolealamas.com.ar` |
 
 El chat con IA **no** corre en este backend: llama al puente en la app Adrian.
 
-Panel admin: `/admin` (consultas + publicaciones). Usa el mismo proyecto Firebase y `admin_users`. Login con **email/contraseña** o **Google** (Firebase Console → Authentication → Sign-in method → Google habilitado; dominios autorizados: `localhost`, dominio `hosted.app` del deploy y `bengolealamas.com.ar`). Tras el primer login con Google, ejecutá `npx tsx scripts/grant-admin.ts tu@gmail.com` si el UID cambió respecto a la cuenta solo-email. En App Hosting alcanza ADC; en local, las mismas credenciales de Admin SDK que Adrian (`FIREBASE_SERVICE_ACCOUNT_PATH` o JSON). Después del cambio de reglas: `firebase deploy --only firestore:rules`.
+Panel admin: `/admin` (consultas, publicaciones y listas de mail). Usa el mismo proyecto Firebase y `admin_users`. Login con **email/contraseña** o **Google** (Firebase Console → Authentication → Sign-in method → Google habilitado; dominios autorizados: `localhost`, dominio `hosted.app` del deploy y `bengolealamas.com.ar`). Tras el primer login con Google, ejecutá `npx tsx scripts/grant-admin.ts tu@gmail.com` si el UID cambió respecto a la cuenta solo-email. En App Hosting alcanza ADC; en local, las mismas credenciales de Admin SDK que Adrian (`FIREBASE_SERVICE_ACCOUNT_PATH` o JSON). Después del cambio de reglas: `firebase deploy --only firestore:rules`.
 
 **No** configures root `.` con `APP_SITE_ID=bl` ni `GOOGLE_NODE_RUN_SCRIPTS=build:bl`: el deploy de `05cf4a8` falla porque el adaptador Next.js de App Hosting no encuentra el artefacto en la raíz del repo.
 

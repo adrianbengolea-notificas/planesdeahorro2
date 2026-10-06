@@ -147,6 +147,14 @@ export function PublicacionesClient() {
                 >
                   Editar
                 </Link>
+                {row.origin !== 'legacy' ? (
+                  <Link
+                    href={`/admin/publicaciones/${row.id}#compartir`}
+                    className="text-sm font-medium text-accent hover:underline"
+                  >
+                    Enviar
+                  </Link>
+                ) : null}
               </div>
             </li>
           ))}

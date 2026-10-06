@@ -17,6 +17,7 @@ import type { CmsPublicationRecord } from '@/lib/bl-cms-types';
 import { formatTagsCsv, parseTags } from '@/lib/publication-tags';
 import { htmlHasContent } from '@/lib/sanitize-rich-html';
 import { slugify } from '@/lib/slugify';
+import { ShareNoteEmail } from './share-note-email';
 
 const AUTHORS = ['Estudio Bengolea & Lamas', ...TEAM.map((p) => p.name)];
 
@@ -167,12 +168,13 @@ export function PublicationForm({ mode, initial }: Props) {
   }
 
   return (
+    <div className="mx-auto max-w-4xl space-y-5 p-6 md:p-10">
     <form
       onSubmit={(e) => {
         e.preventDefault();
         void saveNote(false);
       }}
-      className="mx-auto max-w-4xl space-y-5 p-6 md:p-10"
+      className="space-y-5"
     >
       <Link href="/admin/publicaciones" className="text-sm text-accent hover:underline">
         ← Volver
@@ -343,5 +345,7 @@ export function PublicationForm({ mode, initial }: Props) {
         ) : null}
       </div>
     </form>
+      {mode === 'edit' && initial ? <ShareNoteEmail publicationId={initial.id} published={published} /> : null}
+    </div>
   );
 }

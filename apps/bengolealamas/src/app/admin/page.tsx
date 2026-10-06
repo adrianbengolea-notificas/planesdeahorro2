@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, ClipboardList, FileText } from 'lucide-react';
+import { ArrowRight, ClipboardList, FileText, Mail } from 'lucide-react';
 
 const cards = [
   {
@@ -16,6 +16,13 @@ const cards = [
     description: 'Creá y publicá notas del estudio. Las publicadas aparecen en /publicaciones.',
     cta: 'Gestionar notas',
   },
+  {
+    href: '/admin/listas-mail',
+    icon: Mail,
+    title: 'Listas de mail',
+    description: 'Cargá CSV de destinatarios y, desde cada nota, compartila por Resend a esas listas.',
+    cta: 'Gestionar listas',
+  },
 ];
 
 export default function AdminHomePage() {
@@ -27,7 +34,7 @@ export default function AdminHomePage() {
         Sitio institucional Bengolea & Lamas. Las consultas del asistente y las notas nuevas viven acá, separadas del
         panel de planes de ahorro.
       </p>
-      <div className="mt-10 grid gap-px border border-border bg-border md:grid-cols-2">
+      <div className="mt-10 grid gap-px border border-border bg-border md:grid-cols-3">
         {cards.map((card) => {
           const Icon = card.icon;
           return (

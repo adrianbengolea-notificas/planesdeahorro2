@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { ClipboardList, FileText, LayoutDashboard } from 'lucide-react';
+import { ClipboardList, FileText, LayoutDashboard, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth, useUser } from '@/firebase/provider';
 import { cn } from '@/lib/utils';
@@ -13,6 +13,7 @@ const nav = [
   { href: '/admin', label: 'Inicio', icon: LayoutDashboard },
   { href: '/admin/consultas', label: 'Consultas', icon: ClipboardList },
   { href: '/admin/publicaciones', label: 'Publicaciones', icon: FileText },
+  { href: '/admin/listas-mail', label: 'Listas de mail', icon: Mail },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
@@ -71,7 +72,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           <Link href="/admin" className="text-sm font-medium">
             Admin B&L
           </Link>
-          <div className="flex gap-3 text-sm">
+          <div className="flex flex-wrap gap-3 text-sm">
             {nav.map((item) => (
               <Link key={item.href} href={item.href} className="text-accent">
                 {item.label}
