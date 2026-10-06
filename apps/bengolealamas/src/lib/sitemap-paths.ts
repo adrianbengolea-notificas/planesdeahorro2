@@ -65,7 +65,8 @@ function priorityFor(path: string): number {
   if (path === '/publicaciones') return 0.65;
   if (path.startsWith('/publicaciones/')) return 0.6;
   if (path === '/planes-de-ahorro') return 0.55;
-  if (path === '/privacidad' || path === '/jurisprudencia') return 0.2;
+  if (path === '/jurisprudencia') return 0.5;
+  if (path === '/privacidad') return 0.3;
   return 0.45;
 }
 

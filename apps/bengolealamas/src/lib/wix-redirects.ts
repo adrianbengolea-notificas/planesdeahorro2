@@ -24,9 +24,37 @@ function normalizeRedirectPath(path: string): string {
   return withSlash.replace(/\/+$/, '') || '/';
 }
 
+function decodePathSegment(segment: string): string {
+  try {
+    return decodeURIComponent(segment);
+  } catch {
+    return segment;
+  }
+}
+
 function findWixRedirect(pathname: string): WixRedirectRule | undefined {
   const normalized = normalizeRedirectPath(pathname);
-  return file.rules.find((r) => normalizeRedirectPath(r.from) === normalized);
+  const exact = file.rules.find((r) => normalizeRedirectPath(r.from) === normalized);
+  if (exact) return exact;
+
+  // Wix blog: /single-post/{slug} o /single-post/YYYY/MM/DD/{slug}
+  if (normalized === '/single-post' || normalized.startsWith('/single-post/')) {
+    const rest = normalized.slice('/single-post/'.length);
+    if (!rest) {
+      return { from: normalized, to: '/publicaciones', status: 301 };
+    }
+    const slug = decodePathSegment(rest.split('/').filter(Boolean).pop() || '');
+    if (!slug) {
+      return { from: normalized, to: '/publicaciones', status: 301 };
+    }
+    const mapped = file.rules.find((r) => {
+      const toSlug = normalizeRedirectPath(r.to).split('/').pop();
+      return toSlug === slug;
+    });
+    return mapped ?? { from: normalized, to: `/publicaciones/${slug}`, status: 301 };
+  }
+
+  return undefined;
 }
 
 export function resolveLegacyRedirect(pathname: string) {

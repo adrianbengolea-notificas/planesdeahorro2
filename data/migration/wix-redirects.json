@@ -1,4 +1,140 @@
 {
   "version": 1,
-  "rules": []
+  "rules": [
+    {
+      "from": "/single-post/reclamos-por-planes-de-ahorro",
+      "to": "/publicaciones/reclamos-por-planes-de-ahorro",
+      "status": 301
+    },
+    {
+      "from": "/single-post/los-cargos-adicionales-al-precio-y-un-nuevo-análisis-de-abusividad-desde-la-neurociencia-y-los-sesgo",
+      "to": "/publicaciones/los-cargos-adicionales-al-precio-y-un-nuevo-análisis-de-abusividad-desde-la-neurociencia-y-los-sesgo",
+      "status": 301
+    },
+    {
+      "from": "/single-post/importante-fallo-de-la-suprema-corte-prioridad-para-casos-de-incapacidad-y-actualización-de-cobertu",
+      "to": "/publicaciones/importante-fallo-de-la-suprema-corte-prioridad-para-casos-de-incapacidad-y-actualización-de-cobertu",
+      "status": 301
+    },
+    {
+      "from": "/single-post/con-profundo-pesar-comunicamos-el-fallecimiento-del-dr-carlos-alberto-lamas",
+      "to": "/publicaciones/con-profundo-pesar-comunicamos-el-fallecimiento-del-dr-carlos-alberto-lamas",
+      "status": 301
+    },
+    {
+      "from": "/single-post/importante-victoria-legal-en-defensa-del-derecho-a-la-salud-de-un-niño-con-discapacidad",
+      "to": "/publicaciones/importante-victoria-legal-en-defensa-del-derecho-a-la-salud-de-un-niño-con-discapacidad",
+      "status": 301
+    },
+    {
+      "from": "/single-post/logramos-una-resolucion-histórica-en-favor-de-personas-con-discapacidad-ante-la-scba",
+      "to": "/publicaciones/logramos-una-resolucion-histórica-en-favor-de-personas-con-discapacidad-ante-la-scba",
+      "status": 301
+    },
+    {
+      "from": "/single-post/estudio-bengolea-lamas-logra-fallo-favorable-para-familia-en-litigio-con-municipalidad-de-san-pedr",
+      "to": "/publicaciones/estudio-bengolea-lamas-logra-fallo-favorable-para-familia-en-litigio-con-municipalidad-de-san-pedr",
+      "status": 301
+    },
+    {
+      "from": "/single-post/nuevo-fallo-confirma-descuentos-de-ganancias-sobre-jubilaciones-son-inconstitucionales",
+      "to": "/publicaciones/nuevo-fallo-confirma-descuentos-de-ganancias-sobre-jubilaciones-son-inconstitucionales",
+      "status": 301
+    },
+    {
+      "from": "/single-post/consultoría-para-abogados-a-distancia-en-defensa-del-consumidor",
+      "to": "/publicaciones/consultoría-para-abogados-a-distancia-en-defensa-del-consumidor",
+      "status": 301
+    },
+    {
+      "from": "/single-post/fideicomiso-pinar-del-rio-y-el_riesgo-de-perderlo-todo",
+      "to": "/publicaciones/fideicomiso-pinar-del-rio-y-el_riesgo-de-perderlo-todo",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2016/12/28/bienvenidos-a-nuestro-sitio",
+      "to": "/publicaciones/bienvenidos-a-nuestro-sitio",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2017/01/18/consejos-para-proteger-los-derechos-de-los-vecinos-afectados-por-la-inundación-en-la-emil",
+      "to": "/publicaciones/consejos-para-proteger-los-derechos-de-los-vecinos-afectados-por-la-inundación-en-la-emil",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2017/01/26/el-preocupante-tema-de-los-fideicomisos-inmobiliarios",
+      "to": "/publicaciones/el-preocupante-tema-de-los-fideicomisos-inmobiliarios",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2017/02/01/horarios-y-días-de-atención-de-los-profesionales-del-estudio",
+      "to": "/publicaciones/horarios-y-días-de-atención-de-los-profesionales-del-estudio",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2017/05/16/bl-obtiene-medida-autosatisfactiva-en-contra-del-banco-santander-rio-sa-por-violación-al",
+      "to": "/publicaciones/bl-obtiene-medida-autosatisfactiva-en-contra-del-banco-santander-rio-sa-por-violación-al",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2017/05/24/consultas-jurídicas-online-desde-cualquier-lugar-del-país",
+      "to": "/publicaciones/consultas-jurídicas-online-desde-cualquier-lugar-del-país",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2017/09/20/bl-obtiene-medida-cautelar-contra-oslara-por-by-pass-gástrico-negado",
+      "to": "/publicaciones/bl-obtiene-medida-cautelar-contra-oslara-por-by-pass-gástrico-negado",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2017/10/03/uniones-convicenciales-cuidado-no-es-lo-mismo-que-el-matrimonio",
+      "to": "/publicaciones/uniones-convicenciales-cuidado-no-es-lo-mismo-que-el-matrimonio",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2018/02/07/bl-representará-a-empleados-de-techint-por-descuentos-compulsivos-del-banco-francés",
+      "to": "/publicaciones/bl-representará-a-empleados-de-techint-por-descuentos-compulsivos-del-banco-francés",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2018/04/12/el-daño-punitivo-en-la-defensa-del-consumidor",
+      "to": "/publicaciones/el-daño-punitivo-en-la-defensa-del-consumidor",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2019/01/30/afectados-por-el-aumento-de-los-planes-de-ahorro-qué-hacer",
+      "to": "/publicaciones/afectados-por-el-aumento-de-los-planes-de-ahorro-qué-hacer",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2020/03/20/cuarentena-el-estudio-bengolealamas-atenderá-por-whatsapp",
+      "to": "/publicaciones/cuarentena-el-estudio-bengolealamas-atenderá-por-whatsapp",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2020/04/29/contratos-de-alquiler-comercial-los-inquilinos-deben-pagar-durante-la-cuarentena-obligat",
+      "to": "/publicaciones/contratos-de-alquiler-comercial-los-inquilinos-deben-pagar-durante-la-cuarentena-obligat",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2020/06/17/-pueden-retener-impuestos-a-las-ganancias-sobre-tu-jubilación",
+      "to": "/publicaciones/-pueden-retener-impuestos-a-las-ganancias-sobre-tu-jubilación",
+      "status": 301
+    },
+    {
+      "from": "/single-post/2020/08/25/bl-obtiene-medida-cautelar-contra-aca-salud-por-expulsar-una-familia-de-su-prepaga",
+      "to": "/publicaciones/bl-obtiene-medida-cautelar-contra-aca-salud-por-expulsar-una-familia-de-su-prepaga",
+      "status": 301
+    },
+    {
+      "from": "/single-post/alquileres-recaudos-finalizacion",
+      "to": "/publicaciones/alquileres-recaudos-finalizacion",
+      "status": 301
+    },
+    {
+      "from": "/single-post/vender-automovil-sin-tener-inconvenientes",
+      "to": "/publicaciones/vender-automovil-sin-tener-inconvenientes",
+      "status": 301
+    }
+  ]
 }

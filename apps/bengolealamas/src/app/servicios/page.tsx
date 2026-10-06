@@ -13,8 +13,16 @@ import {
 } from '@/config/servicios';
 
 const SPECIALIZATION_LINKS: Record<string, string> = {
+  'Asesoramiento jurídico de empresas': '/empresas',
   Consumidor: '/defensa-del-consumidor',
+  Laboral: '/derecho-laboral',
+  Familia: '/derecho-de-familia',
   'Daños y perjuicios': '/danos-y-perjuicios',
+  'Acciones colectivas': '/acciones-colectivas',
+  'Cuestiones procesales complejas': '/cuestiones-procesales',
+  'Medio ambiente': '/medio-ambiente',
+  'Derecho administrativo': '/derecho-administrativo',
+  'Conflictos tributarios': '/conflictos-tributarios',
 };
 
 const publishedFichas = PRACTICE_AREAS.filter((a) => a.published && a.id !== 'planes-ahorro');
@@ -127,7 +135,11 @@ export default function ServiciosPage() {
           {SERVICIOS_CORPORATE.title}
         </h2>
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground md:text-base">
-          {SERVICIOS_CORPORATE.body}
+          {SERVICIOS_CORPORATE.body}{' '}
+          <Link href="/empresas" className="font-medium text-accent hover:underline">
+            Ficha de empresas
+          </Link>
+          .
         </p>
       </section>
     </PageShell>

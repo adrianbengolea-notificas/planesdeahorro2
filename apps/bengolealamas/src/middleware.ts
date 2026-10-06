@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 308);
   }
 
-  // 2) Redirects legacy Wix (vacío hasta migración)
+  // 2) Redirects legacy Wix (/single-post → /publicaciones)
   const legacy = resolveLegacyRedirect(pathname);
   if (legacy) {
     const url = request.nextUrl.clone();

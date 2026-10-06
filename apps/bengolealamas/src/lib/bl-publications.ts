@@ -66,6 +66,15 @@ export function publicationPath(slug: string): string {
   return `/publicaciones/${encodeSlug(slug)}`;
 }
 
+const RULING_PATTERN =
+  /fallo|jurisprudenc|medida cautelar|autosatisfactiva|suprema corte|scba|cámara de apelaciones/i;
+
+/** Notas que comentan una sentencia o medida; alimentan /jurisprudencia sin duplicar el listado general. */
+export function publicationLooksLikeRuling(pub: Pick<BlPublication, 'title' | 'tags'>): boolean {
+  const haystack = `${pub.title}\n${(pub.tags ?? []).join(' ')}`;
+  return RULING_PATTERN.test(haystack);
+}
+
 export function formatPublicationDate(iso: string): string {
   if (!iso) return '';
   try {
