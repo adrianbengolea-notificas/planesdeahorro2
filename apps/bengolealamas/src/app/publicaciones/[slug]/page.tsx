@@ -11,11 +11,13 @@ import {
   encodeSlug,
   formatPublicationDate,
   getBlPublications,
+  publicationLooksLikeRuling,
   publicationPath,
   readPublicationHtml,
 } from '@/lib/bl-publications';
 import { getBlSiteSeoConfig } from '@/config/seo';
 import { blPageMetadata } from '@/lib/page-metadata';
+import { practiceAreasRelatedToPublication } from '@/lib/related-content';
 import { articleJsonLd } from '@/lib/schema';
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -102,6 +104,34 @@ export default async function PublicacionDetailPage({ params }: PageProps) {
             </div>
           </>
         )}
+        {(() => {
+          const relatedAreas = practiceAreasRelatedToPublication(pub);
+          if (!relatedAreas.length && !publicationLooksLikeRuling(pub)) return null;
+          return (
+            <nav className="mt-10 border-t border-border pt-6" aria-label="Temas relacionados">
+              {relatedAreas.length ? (
+                <p className="text-sm text-muted-foreground">
+                  Áreas relacionadas:{' '}
+                  {relatedAreas.map((area, i) => (
+                    <span key={area.id}>
+                      {i > 0 ? ' · ' : null}
+                      <Link href={area.path} className="font-medium text-accent hover:underline">
+                        {area.title}
+                      </Link>
+                    </span>
+                  ))}
+                </p>
+              ) : null}
+              {publicationLooksLikeRuling(pub) ? (
+                <p className="mt-3 text-sm">
+                  <Link href="/jurisprudencia" className="font-medium text-accent hover:underline">
+                    Más jurisprudencia del estudio
+                  </Link>
+                </p>
+              ) : null}
+            </nav>
+          );
+        })()}
         <p className="mt-8 text-sm">
           <Link href="/publicaciones" className="text-accent hover:underline">
             ← Volver a publicaciones

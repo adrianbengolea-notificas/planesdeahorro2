@@ -32,6 +32,34 @@ export default function PreguntasFrecuentesPage() {
           <section key={faq.question} className="border-b border-border pb-8 last:border-b-0">
             <h2 className="font-headline text-xl font-normal text-foreground">{faq.question}</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{faq.answer}</p>
+            {faq.question.includes('materias') ? (
+              <p className="mt-3 text-sm">
+                <Link href="/areas-de-practica" className="font-medium text-accent hover:underline">
+                  Ver áreas de práctica
+                </Link>
+              </p>
+            ) : null}
+            {faq.question.includes('integran') ? (
+              <p className="mt-3 text-sm">
+                <Link href="/profesionales" className="font-medium text-accent hover:underline">
+                  Ver profesionales
+                </Link>
+              </p>
+            ) : null}
+            {faq.question.includes('empresas') ? (
+              <p className="mt-3 text-sm">
+                <Link href="/empresas" className="font-medium text-accent hover:underline">
+                  Ficha de empresas
+                </Link>
+              </p>
+            ) : null}
+            {faq.question.includes('planes de ahorro') ? (
+              <p className="mt-3 text-sm">
+                <Link href="/planes-de-ahorro" className="font-medium text-accent hover:underline">
+                  Hub institucional de planes de ahorro
+                </Link>
+              </p>
+            ) : null}
           </section>
         ))}
         <p className="text-sm text-muted-foreground">

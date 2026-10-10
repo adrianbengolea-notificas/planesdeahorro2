@@ -18,6 +18,7 @@ export const BL_STATIC_SITEMAP_PATHS: string[] = [
   '/preguntas-frecuentes',
   '/contacto',
   '/consultas-online',
+  '/contanos-tu-caso',
   '/privacidad',
   '/planes-de-ahorro',
 ];
@@ -62,6 +63,7 @@ function priorityFor(path: string): number {
     return 0.8;
   }
   if (path.startsWith('/bancos/')) return 0.7;
+  if (path === '/contanos-tu-caso' || path === '/consultas-online') return 0.55;
   if (path === '/publicaciones') return 0.65;
   if (path.startsWith('/publicaciones/')) return 0.6;
   if (path === '/planes-de-ahorro') return 0.55;

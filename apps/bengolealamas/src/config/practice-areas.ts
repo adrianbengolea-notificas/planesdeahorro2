@@ -182,9 +182,9 @@ export const HOME_FEATURED_AREAS = [
   'defensa-consumidor',
   'bancos',
   'civil',
-  'comercial',
   'danos',
+  'salud',
+  'laboral',
   'seguros',
   'empresas',
-  'colectivas',
 ] as const;

@@ -1,57 +1,79 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { PageShell } from '@/components/page-shell';
+import { STUDIO_HOURS } from '@/config/gbp';
+import { PRACTICE_AREAS } from '@/config/practice-areas';
+import { formatStudioAddressLine, STUDIO_EMAIL, STUDIO_WHATSAPP_URL } from '@/config/wix-brand';
 import { blPageMetadata } from '@/lib/page-metadata';
-import { STUDIO_EMAIL, STUDIO_WHATSAPP_URL } from '@/config/wix-brand';
 
 export const metadata: Metadata = blPageMetadata({
   title: 'Consultas online',
-  description: 'Consultas jurídicas online con el Estudio Bengolea & Lamas.',
+  description:
+    'Consulta jurídica online con Bengolea & Lamas desde cualquier lugar del país. Chat inicial, formulario, WhatsApp y correo del estudio en San Nicolás.',
   path: '/consultas-online',
+  keywords: ['consulta jurídica online', 'abogados San Nicolás consulta', 'consulta online Bengolea Lamas'],
 });
+
+const featured = PRACTICE_AREAS.filter((area) =>
+  ['defensa-consumidor', 'bancos', 'civil', 'danos', 'salud', 'laboral'].includes(area.id),
+);
 
 export default function ConsultasOnlinePage() {
   return (
-    <article className="mx-auto max-w-3xl px-4 py-12 md:px-8 md:py-16">
-      <h1 className="font-headline text-3xl font-normal text-foreground">Consultas online</h1>
-      <p className="mt-6 text-muted-foreground leading-relaxed">
-        Podés evacuar una consulta o solicitar turnos desde cualquier lugar del país. Un abogado del estudio se
-        comunicará a la brevedad.
-      </p>
-      <div className="mt-8 rounded-lg border border-border bg-muted/40 p-6">
-        <h2 className="font-headline text-lg font-normal text-foreground">Asistente con inteligencia artificial</h2>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Contanos qué pasó en una conversación guiada. El asistente ordena los datos y prepara un resumen para que un
-          abogado del estudio lo revise. No reemplaza el asesoramiento profesional.
+    <PageShell
+      title="Consultas online"
+      description="Canal remoto del estudio: una consulta inicial para ordenar el conflicto y, si corresponde, un turno con un abogado."
+      path="/consultas-online"
+      breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Consultas online' }]}
+    >
+      <article className="max-w-3xl space-y-6 text-sm leading-relaxed text-muted-foreground md:text-base">
+        <p>
+          Podés evacuar una consulta o pedir un turno desde cualquier lugar del país. El estudio está en{' '}
+          {formatStudioAddressLine()}. Atención {STUDIO_HOURS.display.toLowerCase()}, con turno previo.
         </p>
-        <Link
-          href="/contanos-tu-caso"
-          className="mt-4 inline-flex border border-foreground bg-foreground px-6 py-2.5 text-xs font-medium uppercase tracking-[0.12em] text-background transition hover:bg-foreground/90"
-        >
-          Iniciar consulta con IA
-        </Link>
-      </div>
-      <ul className="mt-8 space-y-3 text-sm md:text-base">
-        <li>
-          <Link href="/contanos-tu-caso" className="font-medium text-accent underline-offset-2 hover:underline">
-            Contanos tu caso (chat con IA)
+        <p>
+          El canal más ágil es{' '}
+          <Link href="/contanos-tu-caso" className="font-medium text-accent hover:underline">
+            Contanos tu caso
           </Link>
-        </li>
-        <li>
-          <Link href="/contacto" className="font-medium text-accent underline-offset-2 hover:underline">
-            Formulario de contacto
+          : un asistente ordena los hechos y deja un resumen para que lo revise un abogado. No reemplaza el
+          asesoramiento profesional. También podés usar el{' '}
+          <Link href="/contacto" className="font-medium text-accent hover:underline">
+            formulario de contacto
           </Link>
-        </li>
-        <li>
-          <a href={STUDIO_WHATSAPP_URL} className="font-medium text-accent underline-offset-2 hover:underline" rel="noopener noreferrer" target="_blank">
+          ,{' '}
+          <a href={STUDIO_WHATSAPP_URL} className="font-medium text-accent hover:underline" rel="noopener noreferrer" target="_blank">
             WhatsApp
-          </a>
-        </li>
-        <li>
-          <a href={`mailto:${STUDIO_EMAIL}`} className="font-medium text-accent underline-offset-2 hover:underline">
+          </a>{' '}
+          o el correo{' '}
+          <a href={`mailto:${STUDIO_EMAIL}`} className="font-medium text-accent hover:underline">
             {STUDIO_EMAIL}
           </a>
-        </li>
-      </ul>
-    </article>
+          .
+        </p>
+
+        <section className="border-t border-border pt-8" aria-labelledby="consultas-areas">
+          <h2 id="consultas-areas" className="font-headline text-xl font-normal text-foreground md:text-2xl">
+            Materias frecuentes
+          </h2>
+          <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
+            {featured.map((area) => (
+              <li key={area.id}>
+                <Link href={area.path} className="font-medium text-accent hover:underline">
+                  {area.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4">
+            El mapa completo está en{' '}
+            <Link href="/areas-de-practica" className="font-medium text-accent hover:underline">
+              Áreas de práctica
+            </Link>
+            .
+          </p>
+        </section>
+      </article>
+    </PageShell>
   );
 }

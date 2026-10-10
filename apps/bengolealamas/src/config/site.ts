@@ -8,7 +8,7 @@ export const SHORT_NAME = 'Bengolea & Lamas';
 export const SITE_TAGLINE = 'Derecho civil, comercial y defensa del consumidor';
 
 export const DEFAULT_DESCRIPTION =
-  'Estudio jurídico en San Nicolás de los Arroyos especializado en derecho civil, comercial y defensa del consumidor.';
+  'Estudio jurídico en Belgrano 174, San Nicolás de los Arroyos. Derecho civil, comercial, defensa del consumidor, daños, bancos y seguros.';
 
 /** Host canónico (sin www, sin protocolo). */
 export const CANONICAL_HOST = 'bengolealamas.com.ar';

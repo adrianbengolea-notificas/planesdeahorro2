@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageShell } from '@/components/page-shell';
+import { STUDIO_HOURS } from '@/config/gbp';
+import { PRACTICE_AREAS } from '@/config/practice-areas';
 import { FOUNDERS, INFORMACION_BODY, INFORMACION_LEAD, formatStudioAddressLine } from '@/config/wix-brand';
 import { blPageMetadata } from '@/lib/page-metadata';
 
@@ -26,16 +28,45 @@ export default function EstudioPage() {
           <p key={p}>{p}</p>
         ))}
         <p>
-          El domicilio es {formatStudioAddressLine()}. El equipo y las áreas de trabajo se detallan en{' '}
+          El domicilio es {formatStudioAddressLine()}. Atención {STUDIO_HOURS.display.toLowerCase()}, con turno
+          previo. El equipo y las áreas de trabajo se detallan en{' '}
           <Link href="/profesionales" className="font-medium text-accent hover:underline">
             Profesionales
-          </Link>{' '}
-          y{' '}
+          </Link>
+          ,{' '}
           <Link href="/servicios" className="font-medium text-accent hover:underline">
             Servicios
+          </Link>{' '}
+          y{' '}
+          <Link href="/areas-de-practica" className="font-medium text-accent hover:underline">
+            Áreas de práctica
           </Link>
           .
         </p>
+        <p>
+          Para una consulta inicial:{' '}
+          <Link href="/contacto" className="font-medium text-accent hover:underline">
+            Contacto
+          </Link>
+          {' · '}
+          <Link href="/consultas-online" className="font-medium text-accent hover:underline">
+            Consultas online
+          </Link>
+          {' · '}
+          <Link href="/contanos-tu-caso" className="font-medium text-accent hover:underline">
+            Contanos tu caso
+          </Link>
+          .
+        </p>
+        <ul className="flex flex-wrap gap-x-4 gap-y-2">
+          {PRACTICE_AREAS.filter((area) => area.published && !area.path.startsWith('/bancos/')).map((area) => (
+            <li key={area.id}>
+              <Link href={area.path} className="font-medium text-accent hover:underline">
+                {area.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
 
         <section className="border-t border-border pt-8" aria-labelledby="fundadores-heading">
           <h2 id="fundadores-heading" className="font-headline text-xl font-normal text-foreground md:text-2xl">

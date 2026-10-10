@@ -67,11 +67,12 @@ export const HOME_SLIDES: HomeSlide[] = [
 ];
 
 export const WIX_NAV = [
-  { href: '/contacto', label: 'Contacto' },
-  { href: '/consultas-online', label: 'Consultas online' },
-  { href: '/publicaciones', label: 'Publicaciones' },
+  { href: '/estudio', label: 'El estudio' },
+  { href: '/areas-de-practica', label: 'Áreas' },
   { href: '/servicios', label: 'Servicios' },
   { href: '/profesionales', label: 'Profesionales' },
+  { href: '/publicaciones', label: 'Publicaciones' },
+  { href: '/contacto', label: 'Contacto' },
 ] as const;
 
 export const FOUNDERS = [

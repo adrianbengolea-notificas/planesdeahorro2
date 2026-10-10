@@ -63,7 +63,11 @@ export function siteIdentityJsonLd() {
         url: origin,
         image: absoluteUrl(site, '/opengraph-image'),
         logo: absoluteUrl(site, '/opengraph-image'),
-        sameAs: [...SITE_SAME_AS],
+        sameAs: [...SITE_SAME_AS, studioMapsSearchUrl()],
+        foundingLocation: {
+          '@type': 'City',
+          name: STUDIO_ADDRESS.city,
+        },
         areaServed: [
           {
             '@type': 'City',
@@ -241,6 +245,8 @@ export function articleJsonLd(pub: BlPublication) {
       name: SITE_NAME,
     },
     mainEntityOfPage: url,
+    isPartOf: { '@id': `${origin}#website` },
+    about: { '@id': legalServiceId(origin) },
     ...(pub.heroImage
       ? { image: pub.heroImage.startsWith('http') ? pub.heroImage : absoluteUrl(site, pub.heroImage) }
       : {}),
@@ -266,6 +272,36 @@ export function professionalsItemListJsonLd() {
         name: person.name,
         url: absoluteUrl(site, `/profesionales/${person.slug}`),
         description: person.teaser,
+      })),
+    },
+  };
+}
+
+export function collectionPageJsonLd(options: {
+  path: string;
+  name: string;
+  description: string;
+  items: { name: string; path: string; description?: string }[];
+}) {
+  const site = getBlSiteSeoConfig();
+  const origin = absoluteUrl(site, '/');
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: options.name,
+    description: options.description,
+    url: absoluteUrl(site, options.path),
+    inLanguage: 'es-AR',
+    isPartOf: { '@id': `${origin}#website` },
+    about: { '@id': legalServiceId(origin) },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: options.items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        url: absoluteUrl(site, item.path),
+        ...(item.description ? { description: item.description } : {}),
       })),
     },
   };

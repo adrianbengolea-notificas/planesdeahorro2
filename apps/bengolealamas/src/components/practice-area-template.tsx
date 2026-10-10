@@ -3,6 +3,7 @@ import { JsonLd } from '@repo/shared/components/json-ld';
 import { absoluteUrl } from '@repo/shared/seo';
 import { CaseIntakePromo } from '@/components/case-intake/case-intake-promo';
 import { PageShell } from '@/components/page-shell';
+import { RelatedPublications } from '@/components/related-publications';
 import { getPracticeAreaPage } from '@/config/practice-area-pages';
 import { PRACTICE_AREAS } from '@/config/practice-areas';
 import { getProfessionalBySlug } from '@/config/professionals';
@@ -115,6 +116,8 @@ export function PracticeAreaPage({ areaId }: { areaId: string }) {
           </ul>
         </nav>
       ) : null}
+
+      <RelatedPublications areaId={areaId} />
 
       {professionals.length > 0 ? (
         <p className="mt-8 max-w-3xl text-sm text-muted-foreground">

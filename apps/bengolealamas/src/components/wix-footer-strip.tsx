@@ -54,8 +54,8 @@ export function WixFooterStrip() {
       </p>
       <p className="mt-2 px-4 text-xs text-muted-foreground">{STUDIO_HOURS.display}</p>
       <p className="mt-3 px-4 text-xs text-muted-foreground">
-        <Link href="/privacidad" className="hover:text-foreground hover:underline">
-          Privacidad
+        <Link href="/estudio" className="hover:text-foreground hover:underline">
+          El estudio
         </Link>
         {' · '}
         <Link href="/areas-de-practica" className="hover:text-foreground hover:underline">
@@ -64,6 +64,14 @@ export function WixFooterStrip() {
         {' · '}
         <Link href="/publicaciones" className="hover:text-foreground hover:underline">
           Publicaciones
+        </Link>
+        {' · '}
+        <Link href="/contacto" className="hover:text-foreground hover:underline">
+          Contacto
+        </Link>
+        {' · '}
+        <Link href="/privacidad" className="hover:text-foreground hover:underline">
+          Privacidad
         </Link>
       </p>
     </footer>

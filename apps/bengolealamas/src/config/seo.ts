@@ -24,6 +24,8 @@ export function getBlSiteSeoConfig(): SiteSeoConfig {
       'derecho civil',
       'derecho comercial',
       'daños y perjuicios',
+      'abogados bancos San Nicolás',
+      'abogados seguros San Nicolás',
       'abogados Belgrano 174',
     ],
   };

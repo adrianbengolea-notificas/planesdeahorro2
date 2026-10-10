@@ -32,7 +32,7 @@ export function SiteHeader() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'flex items-center border-y border-foreground/90 px-6 py-3 text-xs font-medium uppercase tracking-[0.2em] transition-colors md:px-8 md:text-sm',
+                  'flex items-center border-y border-foreground/90 px-4 py-3 text-xs font-medium uppercase tracking-[0.16em] transition-colors xl:px-6 xl:text-sm',
                   active ? 'text-accent' : 'text-foreground hover:text-accent',
                 )}
               >

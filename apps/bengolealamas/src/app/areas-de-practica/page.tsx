@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { JsonLd } from '@repo/shared/components/json-ld';
 import { PageShell } from '@/components/page-shell';
 import { PRACTICE_AREAS } from '@/config/practice-areas';
 import { blPageMetadata } from '@/lib/page-metadata';
+import { collectionPageJsonLd } from '@/lib/schema';
 
 export const metadata: Metadata = blPageMetadata({
   title: 'Áreas de práctica',
@@ -20,6 +22,18 @@ export default function AreasDePracticaPage() {
       path="/areas-de-practica"
       breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Áreas de práctica' }]}
     >
+      <JsonLd
+        data={collectionPageJsonLd({
+          path: '/areas-de-practica',
+          name: 'Áreas de práctica',
+          description: 'Especialidades del Estudio Bengolea & Lamas en San Nicolás de los Arroyos.',
+          items: PRACTICE_AREAS.filter((area) => area.published).map((area) => ({
+            name: area.title,
+            path: area.path,
+            description: area.description,
+          })),
+        })}
+      />
       <ul className="grid gap-4 md:grid-cols-2">
         {PRACTICE_AREAS.map((area) => (
           <li key={area.id} id={area.id} className="scroll-mt-24 rounded-lg border border-border p-5">

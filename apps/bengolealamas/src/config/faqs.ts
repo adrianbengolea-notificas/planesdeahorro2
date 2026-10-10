@@ -44,6 +44,11 @@ export const STUDIO_FAQS: StudioFaq[] = [
       'Sí. El estudio atiende esos conflictos. El contenido especializado (problemas frecuentes, fallos y consultas dedicadas) se publica en adrianbengolea.com.ar, para no duplicar el mismo material en ambos dominios. En este sitio, la página institucional es /planes-de-ahorro.',
   },
   {
+    question: '¿Asesoran a empresas de la región?',
+    answer:
+      'Sí. El estudio brinda asesoramiento y litigio a personas y a pequeñas y medianas empresas de San Nicolás y la zona. Cuando el caso lo requiere, trabaja con alianzas en otras especialidades.',
+  },
+  {
     question: '¿La información del sitio reemplaza un dictamen jurídico?',
     answer:
       'No. El contenido es divulgativo y describe el enfoque del estudio. Cada caso requiere evaluación concreta; la consulta se canaliza por contacto o por Contanos tu caso.',
