@@ -4,8 +4,8 @@ import path from 'path';
 const nextConfig: NextConfig = {
   /* Monorepo local: forzar trazado al root de esta app (evita lockfile del repo padre). */
   outputFileTracingRoot: path.join(__dirname),
-  /* Evita empaquetar pdf.js en el bundle del servidor. */
-  serverExternalPackages: ['pdf-parse', 'pdfjs-dist'],
+  /* Evita empaquetar pdf.js y su implementación nativa de canvas en el bundle del servidor. */
+  serverExternalPackages: ['pdf-parse', 'pdfjs-dist', '@napi-rs/canvas'],
   /* config options here */
   typescript: {
     ignoreBuildErrors: false,
