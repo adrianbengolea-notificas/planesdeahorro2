@@ -29,9 +29,7 @@ async function main() {
     process.exit(1);
   }
 
-  const existing = (listed.data?.data ?? listed.data ?? []).find(
-    (d: { name?: string }) => d.name === DOMAIN,
-  ) as { id: string; name: string; status: string } | undefined;
+  const existing = listed.data?.data.find((domain) => domain.name === DOMAIN);
 
   let domainId = existing?.id;
   if (existing) {
@@ -54,7 +52,7 @@ async function main() {
 
   console.log(`Estado: ${detail.data.status}`);
   console.log('Registros DNS (cargar en Wix, nameservers ns10/ns11.wixdns.net):');
-  const records = (detail.data as { records?: Array<Record<string, unknown>> }).records ?? [];
+  const records = detail.data.records;
   for (const rec of records) {
     console.log(
       JSON.stringify({
